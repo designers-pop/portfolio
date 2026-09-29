@@ -18,7 +18,12 @@ Until a file exists, that spot shows a brand-colour fill instead.
 
 | File | Where it shows |
 | --- | --- |
-| `bumzee.jpg`, `majestey.jpg`, `momstore.jpg` | the round photo in the middle of each brand card (replaces the letter) |
-| `bumzee-1.jpg`, `bumzee-2.jpg` (same for `majestey-` and `momstore-`) | the two small floating tiles beside each card |
+| `bumzee-1.webp` | Bumzee card, main portrait (added) |
+| `bumzee-2.webp` | Bumzee card, floating photo beside it; click it to swap (added) |
+| `majestey.jpg`, `momstore.jpg` | main portrait on those cards (shows the brand letter until added) |
 
-Landscape JPGs around 1600px wide work well; square crops suit the brand tiles.
+To give Majestey or The Mom Store a floating photo like Bumzee, copy Bumzee's
+`<span class="tile-float tf-1 tf-photo" ...>` line into that card in `index.html`
+and point `data-img` at the new file.
+
+JPG or WebP both work; portrait crops (3:4) suit the brand cards.

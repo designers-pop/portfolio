@@ -39,59 +39,76 @@
 
   <main id="top">
 
-    <!-- ============ HERO: Who we are ============ -->
+    <!-- ============ HERO: Who we are — a stack of folders ============
+         Each folder opens its own page in roles/. -->
     <section class="hero" id="who">
-      <p class="eyebrow">Who we are</p>
-
-      <div class="wheel" id="wheel" aria-live="off">
-        <ul class="wheel__list">
-          <li>Designers</li>
-          <li>Category Builders</li>
-          <li>Sourcing Specialists</li>
-          <li>Production Experts</li>
-          <li>Technology Builders</li>
-          <li>Brand Partners</li>
-        </ul>
+      <div class="hero__head">
+        <p class="eyebrow">Popstation · The Fashion Foundry</p>
+        <h1 class="hero__title">Who we are</h1>
       </div>
 
-      <div class="hero__foot">
-        <p>Popstation<br><strong>The Fashion Foundry</strong></p>
-        <a class="scroll-cue" href="#build">Scroll <span aria-hidden="true">↓</span></a>
-      </div>
+      <nav class="folders" aria-label="Who we are">
+        <a class="folder" style="--i:0" href="roles/designers.html">
+          <svg class="folder__clip" viewBox="0 0 24 64" aria-hidden="true"><path d="M8 58V14a6 6 0 0 1 12 0v40a9 9 0 0 1-18 0V10" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+          <span class="folder__tab"><span class="folder__title">Designers</span></span>
+          <span class="folder__desc">Collections designed around your brand, from moodboard to tech pack.</span>
+        </a>
+        <a class="folder" style="--i:1" href="roles/category-builders.html">
+          
+          <span class="folder__tab"><span class="folder__title">Category Builders</span></span>
+          <span class="folder__desc">We plan the range and grow new categories for your brand.</span>
+        </a>
+        <a class="folder" style="--i:2" href="roles/sourcing-specialists.html">
+          <svg class="folder__clip" viewBox="0 0 24 64" aria-hidden="true"><path d="M8 58V14a6 6 0 0 1 12 0v40a9 9 0 0 1-18 0V10" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+          <span class="folder__tab"><span class="folder__title">Sourcing Specialists</span></span>
+          <span class="folder__desc">Fabrics, trims and materials from a network of 300+ vendors.</span>
+        </a>
+        <a class="folder" style="--i:3" href="roles/production-experts.html">
+          <svg class="folder__clip" viewBox="0 0 24 64" aria-hidden="true"><path d="M8 58V14a6 6 0 0 1 12 0v40a9 9 0 0 1-18 0V10" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+          <span class="folder__tab"><span class="folder__title">Production Experts</span></span>
+          <span class="folder__desc">35 years of manufacturing behind every order we run.</span>
+        </a>
+        <a class="folder" style="--i:4" href="roles/technology-builders.html">
+          
+          <span class="folder__tab"><span class="folder__title">Technology Builders</span></span>
+          <span class="folder__desc">Popstation OS and AI-powered workflows connect every step.</span>
+        </a>
+        <a class="folder" style="--i:5" href="roles/brand-partners.html">
+          <svg class="folder__clip" viewBox="0 0 24 64" aria-hidden="true"><path d="M8 58V14a6 6 0 0 1 12 0v40a9 9 0 0 1-18 0V10" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+          <span class="folder__tab"><span class="folder__title">Brand Partners</span></span>
+          <span class="folder__desc">One team that stays with you from first sketch to shelf.</span>
+        </a>
+      </nav>
     </section>
 
-    <!-- ============ HOW WE BUILD → BY THE NUMBERS (one pinned screen) ============
-         While this section is pinned, scrolling morphs the image-filled
-         words of the headline into the number tiles (see main.js). -->
+    <!-- ============ HOW WE BUILD → BY THE NUMBERS (one screen) ============
+         When this screen comes into view it plays by itself: the filled
+         words of the headline grow into the number tiles (see main.js). -->
     <section class="morph" id="build">
       <span class="morph__anchor" id="numbers" aria-hidden="true"></span>
       <div class="morph__pin">
         <div class="morph__text">
-          <h2 class="build__title" data-reveal>
+          <h2 class="build__title">
             <span class="line">
-              <span class="chip" style="--d:0" data-morph="c" data-img="assets/img/sketch.jpg"></span>
-              <span class="word">Built</span> <span class="word">with</span>
-              <span class="chip" style="--d:1" data-morph="b" data-img="assets/img/fabric.jpg"></span>
-            </span>
-            <span class="line">
-              <span class="word boxed" style="--d:2">your</span>
-              <span class="word boxed" style="--d:3">brand.</span>
-              <span class="chip" style="--d:4" data-morph="d" data-img="assets/img/store.jpg"></span>
+              <span class="word boxed" style="--d:0" data-morph="b" data-img="assets/img/sketch.jpg">Built</span>
+              <span class="word">with</span>
+              <span class="word boxed" style="--d:1" data-morph="d" data-img="assets/img/fabric.jpg">your</span>
+              <span class="word boxed" style="--d:2" data-morph="c" data-img="assets/img/store.jpg">brand.</span>
             </span>
             <span class="line">
               <span class="word">From</span>
-              <span class="word boxed" style="--d:5" data-morph="a">first sketch</span>
+              <span class="word boxed" style="--d:3" data-morph="a" data-img="assets/img/manufacturing.jpg">first sketch</span>
               <span class="word">to</span>
-              <span class="word boxed" style="--d:6" data-morph="e">shelf.</span>
+              <span class="word boxed" style="--d:4" data-morph="e" data-img="assets/img/retail.jpg">shelf.</span>
             </span>
           </h2>
 
-          <p class="build__lede" data-reveal>
+          <p class="build__lede">
             Popstation OS connects design, sourcing, production and delivery.<br>
             One team stays with you through the build.
           </p>
 
-          <ul class="build__facts" data-reveal>
+          <ul class="build__facts">
             <li>35 years in manufacturing</li>
             <li>40+ brands incubated</li>
             <li>AI-powered workflows</li>
@@ -127,7 +144,6 @@
           </div>
         </div>
 
-        <div class="progress" aria-hidden="true"><span class="progress__knob"></span></div>
       </div>
     </section>
 
@@ -163,7 +179,7 @@
             <div class="bcard__flip">
               <div class="bcard__face">
                 <span class="bcard__top">Bumzee</span>
-                <div class="bcard__disc" data-img="assets/img/brands/bumzee.jpg"><span>B</span></div>
+                <div class="bcard__disc" data-img="assets/img/brands/bumzee-1.webp" role="img" aria-label="Bumzee block-print co-ord set"><span>B</span></div>
                 <span class="bcard__bottom">End-to-end</span>
               </div>
               <div class="bcard__back"></div>
@@ -171,8 +187,7 @@
             <span class="chip-float cf-1">Infant &amp; kidswear</span>
             <span class="chip-float cf-2"><i></i>Design</span>
             <span class="chip-float cf-3"><i></i>Production</span>
-            <span class="tile-float tf-1" data-img="assets/img/brands/bumzee-1.jpg"></span>
-            <span class="tile-float tf-2" data-img="assets/img/brands/bumzee-2.jpg"></span>
+            <span class="tile-float tf-1 tf-photo" data-img="assets/img/brands/bumzee-2.webp" role="img" aria-label="Bumzee strawberry co-ord set"></span>
           </article>
 
           <article class="bcard" data-brand="majestey"
@@ -191,8 +206,6 @@
             <span class="chip-float cf-1">Design &amp; packaging</span>
             <span class="chip-float cf-2"><i></i>Design</span>
             <span class="chip-float cf-3"><i></i>Packaging</span>
-            <span class="tile-float tf-1" data-img="assets/img/brands/majestey-1.jpg"></span>
-            <span class="tile-float tf-2" data-img="assets/img/brands/majestey-2.jpg"></span>
           </article>
 
           <article class="bcard" data-brand="momstore"
@@ -211,8 +224,6 @@
             <span class="chip-float cf-1">Maternity &amp; baby</span>
             <span class="chip-float cf-2"><i></i>Garment production</span>
             <span class="chip-float cf-3"><i></i>Apparel</span>
-            <span class="tile-float tf-1" data-img="assets/img/brands/momstore-1.jpg"></span>
-            <span class="tile-float tf-2" data-img="assets/img/brands/momstore-2.jpg"></span>
           </article>
         </div>
       </div>

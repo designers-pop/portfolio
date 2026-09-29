@@ -140,45 +140,34 @@
     runIntro().catch(finishIntro);
   }
 
-  /* ---------------- Hero: rolling wheel ---------------- */
+  /* ---------------- Hero: folder stack ----------------
+     Folders slide up once the intro has gone. Clicking one pulls it out
+     of the stack, then opens its page. */
 
-  const wheel = document.getElementById("wheel");
-  if (wheel) {
-    const arrow =
-      '<span class="wheel__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 5l7 7-7 7"/></svg></span>';
-
-    const items = [...wheel.querySelectorAll("li")];
-    items.forEach((li) => {
-      li.classList.add("wheel__item");
-      li.innerHTML = `${arrow}<span>${li.textContent}</span>`;
-    });
-
-    const n = items.length;
-    let active = 0;
-
-    const layout = () => {
-      items.forEach((li, i) => {
-        // signed offset in the range [-n/2, n/2)
-        let o = (i - active + n) % n;
-        if (o >= n / 2) o -= n;
-
-        const prev = Number(li.style.getPropertyValue("--o") || 0);
-        // an item jumping from one end to the other is invisible — move it without a transition
-        li.classList.toggle("is-wrapping", Math.abs(o - prev) > 1);
-
-        li.style.setProperty("--o", o);
-        li.dataset.dist = Math.min(Math.abs(o), 3);
-        li.classList.toggle("is-active", o === 0);
+  const hero = document.getElementById("who");
+  if (hero) {
+    const showFolders = () => hero.classList.add("is-in");
+    if (!intro || introFinished) showFolders();
+    else {
+      const watch = new MutationObserver(() => {
+        if (intro.classList.contains("is-done")) { watch.disconnect(); showFolders(); }
       });
-    };
-
-    layout();
-    if (!reduceMotion) {
-      setInterval(() => {
-        active = (active + 1) % n;
-        layout();
-      }, 1400);
+      watch.observe(intro, { attributes: true, attributeFilter: ["class"] });
     }
+
+    hero.querySelectorAll(".folder").forEach((folder) => {
+      folder.addEventListener("click", (e) => {
+        // let new-tab clicks behave normally
+        if (reduceMotion || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+        e.preventDefault();
+        folder.classList.add("is-opening");
+        setTimeout(() => { window.location.href = folder.href; }, 480);
+      });
+    });
+    // coming back with the browser's back button: put the folder back
+    window.addEventListener("pageshow", () => {
+      hero.querySelectorAll(".is-opening").forEach((f) => f.classList.remove("is-opening"));
+    });
   }
 
   /* ---------------- Nav background on scroll ---------------- */
@@ -195,7 +184,9 @@
   document.querySelectorAll("[data-img]").forEach((el) => {
     const src = el.dataset.img;
     const img = new Image();
-    img.onload = () => el.style.setProperty("--img", `url("${src}")`);
+    // absolute URL: a relative one inside a CSS variable would resolve
+    // against the stylesheet's folder (css/) instead of the page
+    img.onload = () => el.style.setProperty("--img", `url("${img.src}")`);
     img.src = src;
   });
 
@@ -239,31 +230,31 @@
   };
 
   /* ---------------- How we build → By the numbers ----------------
-     The section is tall and its screen is pinned. Scroll progress p:
-       0–0.18  the headline, with its image-filled words
-       0.18–0.6  each image word grows and slides into its tile
-       0.6–1   the numbers bento, counting up */
+     One screen that plays by itself when it comes into view:
+       1. the headline rises in; the image shows through the key words,
+          then fills the box behind each one
+       2. each filled box grows and slides into its tile
+       3. the numbers count up
+     It resets once the screen is fully out of view, so it replays. */
 
   const morph = document.getElementById("build");
   if (morph) {
+    const title = morph.querySelector(".build__title");
     const text = morph.querySelector(".morph__text");
     const grid = morph.querySelector(".morph__grid");
     const bento = morph.querySelector(".bento");
-    const progress = morph.querySelector(".progress");
     const pairs = [...morph.querySelectorAll(".tile")].map((tile) => ({
       tile,
       src: morph.querySelector(`[data-morph="${tile.dataset.from}"]`),
     }));
+    const counters = [...morph.querySelectorAll("[data-count]")];
     const clamp = (v) => Math.min(1, Math.max(0, v));
     const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-    let counted = false;
+    const HOLD = 2600;  // headline on screen before the morph
+    const MORPH = 1200; // boxes growing into tiles
 
-    const update = () => {
-      const r = morph.getBoundingClientRect();
-      const p = clamp(-r.top / (r.height - window.innerHeight));
-      progress.style.setProperty("--p", p.toFixed(4));
-
-      const t = clamp((p - 0.18) / 0.42);
+    // t = 0: headline only · t = 1: bento in place
+    const render = (t) => {
       const e = easeInOut(t);
       text.style.opacity = String(1 - clamp(t * 1.8));
       text.style.transform = `scale(${1 - 0.08 * e})`;
@@ -275,10 +266,11 @@
         if (!src) return;
         if (t <= 0) {
           tile.style.opacity = "0";
+          tile.style.transform = "";
           src.style.visibility = "";
           return;
         }
-        // tile sits at its grid spot; transform it back onto its headline word
+        // the tile sits at its grid spot; transform it back onto its word
         const s = src.getBoundingClientRect();
         const x = g.left + tile.offsetLeft;
         const y = g.top + tile.offsetTop;
@@ -288,28 +280,49 @@
         const sx = s.width / w + (1 - s.width / w) * e;
         const sy = s.height / h + (1 - s.height / h) * e;
         tile.style.opacity = "1";
-        tile.style.transform = `translate(${(s.left - x) * k}px, ${(s.top - y) * k}px) scale(${sx}, ${sy})`;
+        tile.style.transform = t >= 1 ? "" : `translate(${(s.left - x) * k}px, ${(s.top - y) * k}px) scale(${sx}, ${sy})`;
         src.style.visibility = "hidden";
       });
-
-      if (!counted && t >= 0.9) {
-        counted = true;
-        morph.querySelectorAll("[data-count]").forEach(runCounter);
-      }
     };
 
-    if (reduceMotion) {
-      morph.querySelectorAll("[data-count]").forEach(runCounter);
+    let timers = [];
+    let raf = 0;
+    const reset = () => {
+      timers.forEach(clearTimeout);
+      timers = [];
+      cancelAnimationFrame(raf);
+      morph.classList.remove("is-playing");
+      title.classList.remove("is-in");
+      counters.forEach((el) => { el.textContent = "0"; });
+      render(0);
+    };
+
+    const play = () => {
+      if (morph.classList.contains("is-playing")) return;
+      morph.classList.add("is-playing");
+      title.classList.add("is-in");
+      timers.push(setTimeout(() => {
+        const start = performance.now();
+        const tick = (now) => {
+          const t = clamp((now - start) / MORPH);
+          render(t);
+          if (t < 1) raf = requestAnimationFrame(tick);
+          else counters.forEach(runCounter);
+        };
+        raf = requestAnimationFrame(tick);
+      }, HOLD));
+    };
+
+    if (reduceMotion || !("IntersectionObserver" in window)) {
+      title.classList.add("is-in");
+      counters.forEach(runCounter);
     } else {
-      let queued = false;
-      const onScroll = () => {
-        if (queued) return;
-        queued = true;
-        requestAnimationFrame(() => { queued = false; update(); });
-      };
-      window.addEventListener("scroll", onScroll, { passive: true });
-      window.addEventListener("resize", onScroll);
-      update();
+      render(0);
+      new IntersectionObserver(([entry]) => { if (entry.isIntersecting) play(); }, { threshold: 0.55 }).observe(morph);
+      new IntersectionObserver(([entry]) => { if (!entry.isIntersecting) reset(); }, { threshold: 0 }).observe(morph);
+      window.addEventListener("resize", () => {
+        if (morph.classList.contains("is-grid")) render(1);
+      });
     }
   }
 

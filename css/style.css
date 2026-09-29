@@ -165,120 +165,186 @@ a { color: inherit; }
 .nav__links a:hover { background: var(--white); color: var(--black); }
 
 /* ==========================================================================
-   HERO — rolling "who we are" wheel
+   HERO — "Who we are" as a stack of folders
+   Each folder is a link; tabs alternate position like a filing drawer.
    ========================================================================== */
 
 .hero {
+  --paper: #f4f1ea;
   position: relative;
+  min-height: 100vh;
   min-height: 100svh;
   display: grid;
-  grid-template-rows: auto 1fr auto;
-  padding: 104px var(--gutter) var(--gutter);
-  background: var(--jonquil);
+  grid-template-rows: auto 1fr;
+  padding-top: 96px;
+  overflow: hidden;
+  /* soft paper texture */
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    var(--paper);
   color: var(--black);
 }
 
-.hero .eyebrow { opacity: 0.7; }
+.hero__head {
+  padding: clamp(4px, 1.5vh, 24px) var(--gutter) clamp(16px, 3vh, 36px);
+  text-align: center;
+}
+.hero__head .eyebrow { opacity: 0.55; }
+.hero__title {
+  margin: 10px 0 0;
+  color: #9e1216;
+  font-size: clamp(44px, 6.6vw, 104px);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+}
 
-.wheel {
-  --lh: clamp(52px, 8.4vw, 132px);
+/* --- the stack --- */
+
+.folders {
+  --tab-h: clamp(42px, 5.4vh, 56px);
+  --strip: clamp(36px, 5.2vh, 56px);
+  --overlap: 26px;
+  align-self: end;
+  display: flex;
+  flex-direction: column;
+  padding-top: 8px;
+}
+
+.folder {
+  --shade: #9e1216;
+  /* felt texture laid over each folder's colour */
+  --felt: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   position: relative;
-  align-self: center;
-  height: calc(var(--lh) * 5);
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 22%, #000 78%, transparent);
-          mask-image: linear-gradient(to bottom, transparent, #000 22%, #000 78%, transparent);
+  display: block;
+  height: calc(var(--tab-h) + var(--strip) + var(--overlap));
+  margin-top: calc(var(--overlap) * -1);
+  color: var(--white);
+  text-decoration: none;
+  outline: none;
+  transform: translateY(110vh) rotate(-2deg);
+  transition: transform 900ms var(--ease-out) calc(var(--i) * 110ms);
 }
+.folder:first-child { margin-top: 0; }
+/* the last folder runs to the bottom of the screen */
+.folder:last-child { height: calc(var(--tab-h) + var(--strip) * 1.6); }
 
-.wheel__list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
+.hero.is-in .folder { transform: none; }
 
-.wheel__item {
-  --o: 0;               /* offset from the active line */
+/* body of the folder */
+.folder::before {
+  content: "";
   position: absolute;
-  left: 0;
-  top: 50%;
+  /* runs on behind the next folder, so no paper shows between them */
+  inset: var(--tab-h) 0 calc(var(--tab-h) * -1) 0;
+  border-radius: 16px 16px 0 0;
+  background: var(--felt), var(--shade);
+  box-shadow: 0 -10px 24px -14px rgba(0, 0, 0, 0.45);
+}
+
+.folder__tab {
+  position: absolute;
+  top: 0;
+  left: var(--tab-x);
+  width: var(--tab-w);
+  height: calc(var(--tab-h) + 2px);
   display: flex;
   align-items: center;
-  height: var(--lh);
-  font-size: clamp(34px, 6.4vw, 104px);
+  justify-content: center;
+  border-radius: 16px 16px 0 0;
+  background: var(--felt), var(--shade);
+}
+/* sloped shoulder on the tab's right side, like a manila folder */
+.folder__tab::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -34px;
+  width: 44px;
+  height: 100%;
+  background: var(--shade);
+  background: var(--felt), var(--shade);
+  clip-path: polygon(0 0, 22% 0, 100% 100%, 0 100%);
+  border-top-right-radius: 16px;
+}
+
+.folder__title {
+  position: relative;
+  padding: 0 16px;
+  z-index: 1;
+  font-size: clamp(20px, 2.4vw, 32px);
   font-weight: 700;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.02em;
   white-space: nowrap;
-  transform: translateY(calc(-50% + var(--o) * var(--lh)));
-  opacity: 0.4;
-  transition:
-    transform 700ms var(--ease-out),
-    opacity 700ms var(--ease-out),
-    color 700ms var(--ease-out);
 }
 
-.wheel__item.is-wrapping { transition: none; }
-
-.wheel__arrow {
-  display: inline-block;
-  width: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition: width 700ms var(--ease-out), opacity 500ms;
-}
-.wheel__arrow svg { width: 0.85em; height: 0.85em; display: block; }
-
-.wheel__item.is-active { opacity: 1; }
-.wheel__item.is-active .wheel__arrow { width: 1.05em; opacity: 1; }
-
-.wheel__item[data-dist="1"] { opacity: 0.42; }
-.wheel__item[data-dist="2"] { opacity: 0.18; }
-.wheel__item[data-dist="3"] { opacity: 0; }
-
-.hero__foot {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.hero__foot p {
-  margin: 0;
-  font-size: 15px;
-  line-height: 1.4;
-}
-
-.scroll-cue {
-  font-size: 13px;
+.folder__desc {
+  position: absolute;
+  z-index: 1;
+  top: calc(var(--tab-h) + 8px);
+  left: var(--tab-x);
+  width: var(--tab-w);
+  padding: 0 34px;
+  text-align: center;
+  font-size: clamp(12px, 1.1vw, 15px);
   font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  text-decoration: none;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.72);
 }
-.scroll-cue span { display: inline-block; animation: bob 1.6s ease-in-out infinite; }
-@keyframes bob { 50% { transform: translateY(5px); } }
+
+.folder__clip {
+  position: absolute;
+  z-index: 2;
+  top: calc(var(--tab-h) - 10px);
+  left: calc(var(--tab-x) + 14px);
+  width: 20px;
+  height: 54px;
+  color: #b9bcc2;
+  transform: rotate(18deg);
+  filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.35));
+}
+
+/* shades and tab positions, top to bottom */
+.folder:nth-child(1) { --shade: #7e0d11; --tab-x: 16%; }
+.folder:nth-child(2) { --shade: #d4191b; --tab-x: 50%; }
+.folder:nth-child(3) { --shade: #b3151a; --tab-x: 6%; }
+.folder:nth-child(4) { --shade: #e8393b; --tab-x: 30%; }
+.folder:nth-child(5) { --shade: #c0171b; --tab-x: 54%; }
+.folder:nth-child(6) { --shade: #92101a; --tab-x: 22%; }
+.folder { --tab-w: 40%; }
+
+/* pull a folder up on hover; click pulls it out (main.js) */
+.hero.is-in .folder:hover,
+.hero.is-in .folder:focus-visible { transform: translateY(-14px); transition-delay: 0ms; transition-duration: 350ms; }
+.folder:focus-visible .folder__title { text-decoration: underline; text-underline-offset: 6px; }
+.hero.is-in .folder.is-opening {
+  transform: translateY(-60vh);
+  transition: transform 550ms cubic-bezier(0.7, 0, 0.3, 1);
+  z-index: 5;
+}
 
 /* ==========================================================================
    HOW WE BUILD → BY THE NUMBERS
-   One tall section with a pinned screen. main.js reads the scroll position
-   and morphs the image-filled words of the headline into the number tiles.
+   One screen that plays by itself when it comes into view: main.js grows
+   the filled words of the headline into the number tiles.
    ========================================================================== */
 
 .morph {
   position: relative;
-  height: 320vh;
   background: var(--black);
+  scroll-margin-top: 0;
 }
 
 .morph__anchor {
   position: absolute;
-  top: 62%;
+  top: 0;
 }
 
 .morph__pin {
-  position: sticky;
-  top: 0;
+  position: relative;
   height: 100vh;
   height: 100svh;
+  min-height: 600px;
   overflow: hidden;
   display: grid;
   place-items: center;
@@ -326,28 +392,21 @@ a { color: inherit; }
   gap: 0.08em 0.22em;
 }
 
-/* fills shared by each headline word and the tile it becomes;
-   swapped for a photo when one is supplied */
-.build__title [style*="--d"] { --fill: linear-gradient(135deg, var(--jonquil), var(--rojo)); }
-.build__title [data-morph="a"], .tile--a { --fill: linear-gradient(140deg, var(--steel), #0b2a4d); }
-.build__title [data-morph="b"], .tile--b { --fill: linear-gradient(140deg, var(--jonquil), #e8a800); }
-.build__title [data-morph="c"], .tile--c { --fill: linear-gradient(140deg, var(--rojo), #7a0c0d); }
-.build__title [data-morph="d"], .tile--d { --fill: linear-gradient(140deg, #ffffff, #d9d4c7); }
-.build__title [data-morph="e"], .tile--e { --fill: linear-gradient(140deg, var(--rojo), var(--jonquil)); }
+/* fill and text colour shared by each headline word and the tile it
+   becomes; the fill is swapped for a photo when one is supplied */
+.build__title [data-morph="a"], .tile--a { --fill: linear-gradient(140deg, var(--steel), #0b2a4d); --ink: var(--white); }
+.build__title [data-morph="b"], .tile--b { --fill: linear-gradient(140deg, var(--jonquil), #e8a800); --ink: var(--black); }
+.build__title [data-morph="c"], .tile--c { --fill: linear-gradient(140deg, var(--rojo), #7a0c0d); --ink: var(--white); }
+.build__title [data-morph="d"], .tile--d { --fill: linear-gradient(140deg, #ffffff, #d9d4c7); --ink: var(--black); }
+.build__title [data-morph="e"], .tile--e { --fill: linear-gradient(140deg, var(--rojo), var(--jonquil)); --ink: var(--white); }
+.build__title .boxed[style*="--img"] { --ink: var(--white); }
 
-.chip {
-  display: inline-block;
-  width: 0;
-  height: 0.78em;
-  border-radius: 0.14em;
-  background: var(--img, var(--fill)) center / cover;
-  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.18);
-  transition: width 900ms var(--ease-out) calc(var(--d) * 110ms + 200ms);
-}
-
+/* each key word sits in a box: first the image shows through the letters,
+   then it fills the box behind them */
 .boxed {
   position: relative;
-  padding: 0 0.12em 0.04em;
+  z-index: 0;
+  padding: 0 0.14em 0.04em;
   border-radius: 0.14em;
   color: transparent;
   background: var(--img, var(--fill)) center / cover;
@@ -372,6 +431,7 @@ a { color: inherit; }
     opacity 700ms var(--ease-out) calc(var(--d) * 120ms + 900ms),
     transform 700ms var(--ease-out) calc(var(--d) * 120ms + 900ms);
 }
+.boxed[style*="--img"]::before { filter: brightness(0.7); }
 
 .word {
   display: inline-block;
@@ -381,12 +441,18 @@ a { color: inherit; }
 }
 
 .build__title.is-in .word { opacity: 1; transform: none; }
-.build__title.is-in .chip { width: 1.7em; }
-.build__title.is-in .boxed {
-  color: var(--white);
-  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.55);
+.build__title.is-in .boxed { color: var(--ink, var(--white)); }
+.build__title.is-in .boxed::before { opacity: 1; transform: none; }
+
+/* lede and facts follow the headline in */
+.build__lede,
+.build__facts {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 800ms var(--ease-out) 700ms, transform 800ms var(--ease-out) 700ms;
 }
-.build__title.is-in .boxed::before { opacity: 0.55; transform: none; }
+.morph.is-playing .build__lede,
+.morph.is-playing .build__facts { opacity: 1; transform: none; }
 
 .build__lede {
   margin: clamp(28px, 4vw, 48px) auto 0;
@@ -429,35 +495,6 @@ a { color: inherit; }
 }
 [data-reveal].is-in:not(.build__title) { opacity: 1; transform: none; }
 
-.progress {
-  position: absolute;
-  left: 50%;
-  bottom: 28px;
-  width: min(720px, calc(100% - 2 * var(--gutter)));
-  height: 6px;
-  transform: translateX(-50%);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.16);
-}
-.progress::before {
-  content: "";
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: calc(var(--p, 0) * 100%);
-  border-radius: inherit;
-  background: var(--white);
-}
-.progress__knob {
-  position: absolute;
-  top: 50%;
-  left: calc(var(--p, 0) * 100%);
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--white);
-  box-shadow: 0 0 0 5px rgba(255, 203, 14, 0.25);
-  transform: translate(-50%, -50%);
-}
 
 /* --- the bento the words become --- */
 
@@ -837,6 +874,13 @@ a { color: inherit; }
   line-height: 1;
 }
 .bcard__disc[style*="--img"] span { display: none; }
+/* with a photo, the circle becomes a portrait frame */
+.bcard__disc[style*="--img"] {
+  width: 64%;
+  aspect-ratio: 3 / 4;
+  border-radius: 22px;
+  background-position: center top;
+}
 
 /* floating chips and tiles sit in front of the card */
 .chip-float,
@@ -895,6 +939,8 @@ a { color: inherit; }
 .bcard[data-brand="majestey"] .tile-float { background-color: var(--jonquil); }
 .bcard[data-brand="momstore"] .tile-float { background-color: var(--rojo); }
 .tf-1 { top: -7%; right: -14%; }
+/* a photo tile is a small portrait rather than a square */
+.tile-float.tf-photo { width: 36%; aspect-ratio: 3 / 4; top: -9%; right: -20%; }
 .tile-float[style*="--img"] { background-size: cover; background-position: center; }
 .tf-2 { bottom: 20%; left: -12%; width: 22%; }
 
@@ -938,6 +984,62 @@ a { color: inherit; }
 .deck-nav__dots button[aria-selected="true"] { width: 28px; background: var(--black); }
 
 /* ==========================================================================
+   ROLE PAGES (roles/*.html) — one page per "Who we are" folder
+   ========================================================================== */
+
+.role-page {
+  min-height: 100vh;
+  background: var(--shade, var(--rojo));
+  color: var(--white);
+}
+
+.role {
+  max-width: 980px;
+  padding: 160px var(--gutter) 96px;
+  animation: role-in 800ms var(--ease-out) both;
+}
+@keyframes role-in {
+  from { opacity: 0; transform: translateY(60px); }
+  to   { opacity: 1; transform: none; }
+}
+.role .eyebrow { opacity: 0.7; }
+.role__title {
+  margin: 14px 0 0;
+  font-size: clamp(52px, 10vw, 150px);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.05em;
+}
+.role__lede {
+  max-width: 620px;
+  margin: 28px 0 0;
+  font-size: clamp(18px, 2vw, 24px);
+  line-height: 1.45;
+}
+.role__soon {
+  margin: 40px 0 0;
+  font-size: 15px;
+  opacity: 0.7;
+}
+.role__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 48px;
+}
+.role__links a {
+  padding: 12px 20px;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 200ms, color 200ms;
+}
+.role__links a:hover { background: var(--white); color: var(--black); }
+.role-page .nav__links { display: flex; }
+
+/* ==========================================================================
    FOOTER
    ========================================================================== */
 
@@ -962,17 +1064,22 @@ a { color: inherit; }
 @media (max-width: 760px) {
   .nav__links { display: none; }
 
+  .folders { --tab-h: 40px; --strip: 52px; }
+  .folder { --tab-w: 72%; }
+  .folder:nth-child(odd) { --tab-x: 4%; }
+  .folder:nth-child(even) { --tab-x: 20%; }
+  .folder__tab::after { right: -26px; width: 34px; }
+  .folder__clip { display: none; }
+
   .brandpolio__body { grid-template-columns: 1fr; }
   .brand-info { order: 2; }
   .deck { height: 520px; }
   .cf-1 { left: -8%; }
   .cf-2 { right: -8%; }
-  .cf-3 { right: -6%; }
+  .cf-3 { right: -6%; bottom: -4%; }
   .tf-2 { left: -4%; }
   .tf-1 { right: -6%; }
 
-  .wheel { --lh: 13vw; }
-  .wheel__item { font-size: 7vw; letter-spacing: -0.03em; }
 
   .build__facts { flex-direction: column; gap: 10px; }
   .build__facts li + li::before { display: none; }
@@ -993,16 +1100,16 @@ a { color: inherit; }
 
 @media (prefers-reduced-motion: reduce) {
   .intro { display: none; }
-  .morph { height: auto; padding: 120px 0 64px; }
+  .morph { padding: 120px 0 64px; }
+  .build__lede, .build__facts { opacity: 1; transform: none; }
   .morph__pin { position: static; height: auto; display: block; overflow: visible; }
   .morph__grid { position: relative; inset: auto; height: 80vh; margin: 64px var(--gutter) 0; pointer-events: auto; }
   .morph .tile > *, .morph__label { opacity: 1; }
-  .progress { display: none; }
   *, *::before, *::after {
     animation-duration: 1ms !important;
     animation-delay: 0ms !important;
     transition-duration: 1ms !important;
     transition-delay: 0ms !important;
   }
-  .scroll-cue span { animation: none; }
+  .folder { transform: none; }
 }
