@@ -48,62 +48,69 @@ a { color: inherit; }
 }
 
 /* ==========================================================================
-   INTRO — logo reveal, one glyph at a time
-   main.js runs the timeline: each letter of the logo gets its own
-   brand-colour panel and draws itself in, then the full logo assembles
-   on black and the curtain lifts.
+   INTRO — popcorn pops, then Pop Station comes up
+   Soft pastel versions of the brand colours, like scalloped paper badges.
+   main.js runs the timeline.
    ========================================================================== */
 
 .intro {
   position: fixed;
   inset: 0;
   z-index: 100;
-  background: var(--black);
   overflow: hidden;
+  background: #fff6dc;
 }
 
 .intro.is-done { display: none; }
 
-.intro__panel {
+/* small badges scattered round the edges */
+.intro__badges {
   position: absolute;
   inset: 0;
-  z-index: 2;
-  display: grid;
-  place-items: center;
-  padding: 12vmin;
-  background: var(--panel-bg, var(--black));
+  pointer-events: none;
 }
-.intro__panel[hidden] { display: none; }
-
-/* one glyph, whole and centred, as large as the screen allows */
-.intro__glyph {
-  width: 100%;
-  height: 100%;
-  max-width: 900px;
-  max-height: 72vh;
-  overflow: visible;
+.intro-badge {
+  position: absolute;
+  width: clamp(80px, 12vw, 150px);
+  height: auto;
+  opacity: 0.85;
+  filter: drop-shadow(0 6px 10px rgba(120, 80, 0, 0.08));
 }
-.intro__glyph { transform-origin: center; }
 
+/* the big badge with the logo on it */
 .intro__stage {
   position: absolute;
   inset: 0;
-  z-index: 1;
   display: grid;
   place-items: center;
-  padding: var(--gutter);
 }
+.intro-bigbadge,
+.intro-logo-holder {
+  grid-area: 1 / 1;
+}
+.intro-bigbadge {
+  width: min(92vw, 84vh, 700px);
+  height: auto;
+  filter: drop-shadow(0 18px 30px rgba(120, 30, 20, 0.12));
+  transform: scale(0);
+}
+/* positioned so it paints above the (transformed) badge */
+.intro-logo-holder { position: relative; z-index: 1; width: min(54vw, 48vh, 400px); }
 
 .intro-logo {
-  width: min(80vw, 640px);
+  display: block;
+  width: 100%;
   height: auto;
   overflow: visible;
 }
 .intro-logo path,
-.intro-logo g { transform-box: fill-box; transform-origin: center; }
+.intro-logo g,
+.intro-logo ellipse,
+.intro-logo circle { transform-box: fill-box; transform-origin: center; }
 
-/* hidden until slide 3 */
-.intro__stage .intro-logo { opacity: 0; }
+/* on pastel paper the wordmark turns rojo and the tagline steel */
+.intro-logo .logo-word { fill: var(--rojo); }
+.intro-logo .logo-tag path:first-child { fill: var(--steel); }
 
 .intro__skip {
   position: absolute;
