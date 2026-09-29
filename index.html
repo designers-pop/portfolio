@@ -8,16 +8,14 @@
   <link rel="icon" href="assets/popstation-logo.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="is-loading">
 
-  <!-- ============ INTRO: popcorn pops, then Pop Station comes up (driven by main.js) ============ -->
+  <!-- ============ INTRO: three kernels, then the logo scribbles in (driven by main.js) ============ -->
   <div class="intro" id="intro" aria-hidden="true">
-    <!-- pastel scalloped badges drifting at the edges -->
-    <div class="intro__badges" id="introBadges"></div>
-    <!-- the big badge and the logo are injected here -->
+    <!-- the logo is injected here -->
     <div class="intro__stage" id="introStage"></div>
     <button class="intro__skip" type="button">Skip</button>
   </div>
@@ -195,13 +193,14 @@
                    data-url="https://majestey.com">
             <div class="bcard__flip">
               <div class="bcard__face">
-                <span class="bcard__top">Majestey</span>
-                <div class="bcard__disc" data-img="assets/img/brands/majestey.jpg"><span>M</span></div>
-                <span class="bcard__bottom">London</span>
+                <span class="bcard__top mj-wordmark" role="img" aria-label="Majestey London">MAJESTEY<small>LONDON</small></span>
+                <div class="bcard__disc" data-img="assets/img/brands/majestey-1.webp" role="img" aria-label="Majestey London crown-print hoodie"><span>M</span></div>
+                <span class="bcard__bottom">Streetwear</span>
               </div>
               <div class="bcard__back"></div>
             </div>
             <span class="chip-float cf-1">Design &amp; packaging</span>
+            <span class="tile-float tf-1 tf-photo" data-img="assets/img/brands/majestey-2.webp" role="img" aria-label="Majestey London flame-print tee"></span>
             <span class="chip-float cf-2"><i></i>Design</span>
             <span class="chip-float cf-3"><i></i>Packaging</span>
           </article>

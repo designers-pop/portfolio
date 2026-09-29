@@ -1,22 +1,22 @@
 (() => {
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* ---------------- Intro: popcorn pops, then Pop Station comes up ----------------
-     Soft pastel take on the brand colours, like scalloped paper badges:
-       1. three kernels wobble, then pop one by one into the popcorn's loops
-       2. a big scalloped badge grows behind them, its wavy line drawing in
-       3. "Pop Station" bounces up letter by letter, then the tagline
+  /* ---------------- Intro: three kernels, then the logo scribbles in ----------------
+     After the reference: on a plain lighter-blue screen
+       1. three white kernels pop in where the popcorn will be, and wobble
+       2. each kernel turns into its popcorn loop, drawn round like a pen
+       3. meanwhile "Pop Station" scribbles in letter by letter (outline, then fill)
+       4. the tagline rises in, the logo holds, then the page lifts in
      Runs in JS with a failsafe so it always ends. */
 
   const intro = document.getElementById("intro");
   const SVG_NS = "http://www.w3.org/2000/svg";
 
-  // centre of each popcorn loop in logo coordinates (where its kernel sits)
-  const KERNELS = [[511, 140], [597, 174], [523, 220]];
-  const PASTELS = [
-    { fill: "#fbe9a6", line: "#2d7dd2" }, // soft jonquil, steel line
-    { fill: "#f8d3d1", line: "#e01d1e" }, // soft rojo, rojo line
-    { fill: "#cfe0f5", line: "#e01d1e" }, // soft steel, rojo line
+  // each popcorn loop (logo coordinates): its circle, and the angle its tail starts at
+  const LOOPS = [
+    { cx: 511, cy: 140, r: 68, start: 70 },  // top-left loop
+    { cx: 597, cy: 174, r: 69, start: 190 }, // right loop
+    { cx: 523, cy: 220, r: 71, start: 325 }, // bottom loop
   ];
 
   let introFinished = false;
@@ -36,138 +36,92 @@
   const spring = "cubic-bezier(0.34, 1.56, 0.64, 1)";
   const easeOut = "cubic-bezier(0.16, 1, 0.3, 1)";
 
-  // scalloped circle: radius wobbles `waves` times around
-  const scallop = (cx, cy, r, waves, depth) => {
-    let d = "";
-    for (let i = 0; i <= 360; i += 2) {
-      const a = (i * Math.PI) / 180;
-      const rr = r + depth * Math.sin(a * waves);
-      d += `${i ? "L" : "M"}${(cx + rr * Math.cos(a)).toFixed(1)} ${(cy + rr * Math.sin(a)).toFixed(1)}`;
-    }
-    return d + "Z";
-  };
+  // pen sweep: a thick circle in a mask whose dash grows round the loop.
+  // Driven frame by frame so it works in every browser.
+  let uid = 0;
+  const drawLoop = (logo, i, ms) => {
+    const loop = LOOPS[i];
+    const id = `loopmask${uid++}`;
+    const reach = loop.r + 30;
+    const mask = svgEl("mask", { id, maskUnits: "userSpaceOnUse", x: 0, y: 0, width: 776, height: 507 });
+    const pen = svgEl("circle", {
+      cx: loop.cx, cy: loop.cy, r: reach / 2, fill: "none", stroke: "#fff", "stroke-width": reach,
+      pathLength: 100, "stroke-dasharray": "0 100", transform: `rotate(${loop.start} ${loop.cx} ${loop.cy})`,
+    });
+    mask.appendChild(pen);
+    let defs = logo.querySelector("defs");
+    if (!defs) { defs = svgEl("defs"); logo.prepend(defs); }
+    defs.appendChild(mask);
 
-  // a paper badge: scalloped disc with a wavy line just inside the edge
-  const badgeSvg = ({ fill, line }, size) => {
-    const svg = svgEl("svg", { viewBox: "0 0 200 200", width: size, height: size });
-    svg.append(
-      svgEl("path", { d: scallop(100, 100, 94, 14, 4), fill }),
-      svgEl("path", { d: scallop(100, 100, 80, 14, 3), fill: "none", stroke: line, "stroke-width": 2.6, class: "badge-line" })
-    );
-    return svg;
-  };
-
-  // small badges scattered round the edges, drifting slowly
-  const scatterBadges = () => {
-    const holder = document.getElementById("introBadges");
-    const spots = [[-4, 8], [86, -6], [92, 58], [-8, 70], [30, 92], [64, 96], [12, 38], [78, 26]];
-    spots.forEach(([x, y], i) => {
-      const b = badgeSvg(PASTELS[i % 3], 100);
-      b.classList.add("intro-badge");
-      b.style.left = `${x}%`;
-      b.style.top = `${y}%`;
-      b.style.setProperty("--s", (0.9 + (i % 3) * 0.35).toFixed(2));
-      holder.appendChild(b);
-      b.animate(
-        [{ transform: "scale(0) rotate(-40deg)", opacity: 0 }, { transform: "scale(var(--s)) rotate(0)", opacity: 1 }],
-        { duration: 900, delay: 80 * i, easing: spring, fill: "both" }
-      );
-      b.animate(
-        [{ translate: "0 0", rotate: "0deg" }, { translate: `${i % 2 ? 10 : -10}px ${i % 3 ? -14 : 12}px`, rotate: `${i % 2 ? 8 : -8}deg` }],
-        { duration: 3200, delay: 900, easing: "ease-in-out", direction: "alternate", iterations: Infinity }
-      );
+    const group = logo.querySelector(`.logo-loop[data-loop="${i}"]`);
+    group.setAttribute("mask", `url(#${id})`);
+    group.style.opacity = "1";
+    const start = performance.now();
+    return new Promise((done) => {
+      const tick = (now) => {
+        const t = Math.min(1, (now - start) / ms);
+        pen.setAttribute("stroke-dasharray", `${((1 - Math.pow(1 - t, 3)) * 100).toFixed(2)} 100`);
+        if (t < 1) requestAnimationFrame(tick);
+        else { group.removeAttribute("mask"); done(); }
+      };
+      requestAnimationFrame(tick);
     });
   };
 
-  // one kernel wobbles, then pops into its loop with a spray of crumbs
-  const popKernel = async (logo, i) => {
-    const [cx, cy] = KERNELS[i];
-    const loop = logo.querySelector(`.logo-loop[data-loop="${i}"]`);
-    const kernel = svgEl("ellipse", { cx, cy, rx: 11, ry: 14, fill: "#e0a100", class: "kernel" });
-    logo.appendChild(kernel);
-    kernel.animate(
-      [{ transform: "scale(0)" }, { transform: "scale(1.15)", offset: 0.35 }, { transform: "scale(1) rotate(-14deg)", offset: 0.55 },
-       { transform: "scale(1) rotate(12deg)", offset: 0.75 }, { transform: "scale(1.25) rotate(0)" }],
-      { duration: 420, easing: "ease-in-out", fill: "both" }
+  // a letter scribbles in: its outline is drawn, then it fills
+  const scribble = (path, delay) => {
+    const len = path.getTotalLength();
+    path.style.stroke = "currentColor";
+    path.style.strokeWidth = "3";
+    path.style.strokeDasharray = len;
+    path.animate(
+      [{ strokeDashoffset: len, fillOpacity: 0, opacity: 1 }, { strokeDashoffset: len * 0.2, fillOpacity: 0, opacity: 1, offset: 0.55 },
+       { strokeDashoffset: 0, fillOpacity: 1, opacity: 1 }],
+      { duration: 650, delay, easing: "ease-out", fill: "both" }
     );
-    await wait(420);
-    kernel.remove();
-
-    loop.animate(
-      [{ transform: "scale(0.15) rotate(-60deg)", opacity: 0 }, { transform: "scale(1.12) rotate(6deg)", opacity: 1, offset: 0.6 }, { transform: "none", opacity: 1 }],
-      { duration: 650, easing: spring, fill: "both" }
-    );
-    // crumbs fly out and fade
-    for (let k = 0; k < 7; k++) {
-      const a = (k / 7) * Math.PI * 2 + i;
-      const crumb = svgEl("circle", { cx, cy, r: 4 + (k % 3), fill: ["#e01d1e", "#2d7dd2", "#e0a100"][k % 3] });
-      logo.appendChild(crumb);
-      const dist = 70 + (k % 3) * 18;
-      crumb.animate(
-        [{ transform: "translate(0,0) scale(1)", opacity: 1 }, { transform: `translate(${Math.cos(a) * dist}px, ${Math.sin(a) * dist}px) scale(0.2)`, opacity: 0 }],
-        { duration: 700, easing: easeOut, fill: "forwards" }
-      ).finished.then(() => crumb.remove());
-    }
   };
 
   const runIntro = async () => {
     const res = await fetch("assets/popstation-logo.svg");
     if (!res.ok) throw new Error("logo not found");
     const stage = document.getElementById("introStage");
-
-    // the big badge sits behind the logo
-    const big = badgeSvg(PASTELS[1], "100%");
-    big.classList.add("intro-bigbadge");
-    stage.appendChild(big);
-    const holder = document.createElement("div");
-    holder.className = "intro-logo-holder";
-    holder.innerHTML = await res.text();
-    stage.appendChild(holder);
-    const logo = holder.querySelector("svg");
+    stage.innerHTML = await res.text();
+    const logo = stage.querySelector("svg");
     logo.classList.add("intro-logo");
     logo.removeAttribute("role");
     logo.querySelectorAll(".logo-loop, .logo-word path, .logo-tag").forEach((el) => { el.style.opacity = "0"; });
 
-    // start zoomed in on the popcorn, centred on screen (its centre sits
-    // 21.5% right of and 13.5% above the logo's centre)
-    const ZOOM = "scale(1.8) translate(-21.5%, 13.5%)";
-    holder.style.transform = ZOOM;
-
-    scatterBadges();
-    await wait(450);
-
-    // 1. kernels pop, one after another
-    for (let i = 0; i < 3; i++) {
-      if (introFinished) return;
-      popKernel(logo, i);
-      await wait(300);
-    }
-    await wait(350);
+    // 1. three kernels pop in and wobble
+    const kernels = LOOPS.map(({ cx, cy }, i) => {
+      const k = svgEl("circle", { cx, cy, r: 13, fill: "#fff", class: "kernel" });
+      logo.appendChild(k);
+      k.animate(
+        [{ transform: "scale(0)" }, { transform: "scale(1)" }],
+        { duration: 500, delay: 150 + i * 140, easing: spring, fill: "both" }
+      );
+      return k;
+    });
+    await wait(1000);
+    kernels.forEach((k, i) => k.animate(
+      [{ translate: "0 0" }, { translate: `${[-6, 6, 0][i]}px ${[4, -4, 6][i]}px` }, { translate: "0 0" }],
+      { duration: 380, easing: "ease-in-out" }
+    ));
+    await wait(380);
     if (introFinished) return;
 
-    // 2. pull back to the whole logo while the badge grows behind, its wavy line drawing round
-    holder.animate([{ transform: ZOOM }, { transform: "none" }], { duration: 900, easing: easeOut, fill: "forwards" });
-    big.animate(
-      [{ transform: "scale(0) rotate(-90deg)" }, { transform: "none" }],
-      { duration: 900, easing: spring, fill: "both" }
-    );
-    const line = big.querySelector(".badge-line");
-    const len = line.getTotalLength();
-    line.style.strokeDasharray = len;
-    line.animate([{ strokeDashoffset: len }, { strokeDashoffset: 0 }], { duration: 1100, delay: 250, easing: easeOut, fill: "both" });
-
-    // 3. Pop Station bounces up letter by letter, then the tagline
-    logo.querySelectorAll(".logo-word path").forEach((path, i) => {
-      path.animate(
-        [{ transform: "translateY(60%) scale(0.4)", opacity: 0 }, { transform: "none", opacity: 1 }],
-        { duration: 650, delay: 250 + i * 55, easing: spring, fill: "both" }
-      );
+    // 2 + 3. kernels turn into loops while the letters scribble in
+    kernels.forEach((k, i) => {
+      k.animate([{ transform: "scale(1)" }, { transform: "scale(0)" }], { duration: 260, delay: i * 120, easing: "ease-in", fill: "forwards" });
+      setTimeout(() => drawLoop(logo, i, 620), i * 120);
     });
+    logo.querySelectorAll(".logo-word path").forEach((path, i) => scribble(path, 120 + i * 45));
+
+    // 4. tagline rises in
     logo.querySelector(".logo-tag").animate(
       [{ transform: "translateY(40%)", opacity: 0 }, { transform: "none", opacity: 1 }],
-      { duration: 700, delay: 950, easing: easeOut, fill: "both" }
+      { duration: 700, delay: 900, easing: easeOut, fill: "both" }
     );
-    await wait(2400); // assembly, then a beat to take it in
+    await wait(2700); // finish drawing, then a beat to take it in
 
     const lift = intro.animate(
       [{ clipPath: "inset(0 0 0 0)" }, { clipPath: "inset(0 0 100% 0)" }],

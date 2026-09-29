@@ -48,8 +48,8 @@ a { color: inherit; }
 }
 
 /* ==========================================================================
-   INTRO — popcorn pops, then Pop Station comes up
-   Soft pastel versions of the brand colours, like scalloped paper badges.
+   INTRO — three kernels, then the logo scribbles in
+   A plain screen in a shade lighter than the brand's steel blue.
    main.js runs the timeline.
    ========================================================================== */
 
@@ -58,59 +58,31 @@ a { color: inherit; }
   inset: 0;
   z-index: 100;
   overflow: hidden;
-  background: #fff6dc;
+  background: #4d94e0; /* steel blue, one shade lighter */
 }
 
 .intro.is-done { display: none; }
 
-/* small badges scattered round the edges */
-.intro__badges {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-.intro-badge {
-  position: absolute;
-  width: clamp(80px, 12vw, 150px);
-  height: auto;
-  opacity: 0.85;
-  filter: drop-shadow(0 6px 10px rgba(120, 80, 0, 0.08));
-}
-
-/* the big badge with the logo on it */
 .intro__stage {
   position: absolute;
   inset: 0;
   display: grid;
   place-items: center;
+  padding: var(--gutter);
 }
-.intro-bigbadge,
-.intro-logo-holder {
-  grid-area: 1 / 1;
-}
-.intro-bigbadge {
-  width: min(92vw, 84vh, 700px);
-  height: auto;
-  filter: drop-shadow(0 18px 30px rgba(120, 30, 20, 0.12));
-  transform: scale(0);
-}
-/* positioned so it paints above the (transformed) badge */
-.intro-logo-holder { position: relative; z-index: 1; width: min(54vw, 48vh, 400px); }
 
 .intro-logo {
-  display: block;
-  width: 100%;
+  width: min(78vw, 64vh, 560px);
   height: auto;
   overflow: visible;
+  color: var(--white); /* stroke colour while letters scribble in */
 }
 .intro-logo path,
 .intro-logo g,
-.intro-logo ellipse,
 .intro-logo circle { transform-box: fill-box; transform-origin: center; }
 
-/* on pastel paper the wordmark turns rojo and the tagline steel */
-.intro-logo .logo-word { fill: var(--rojo); }
-.intro-logo .logo-tag path:first-child { fill: var(--steel); }
+/* on blue, "Fashion" in the tagline reads better in jonquil than rojo */
+.intro-logo .logo-tag path:last-child { fill: var(--jonquil); }
 
 .intro__skip {
   position: absolute;
@@ -642,7 +614,7 @@ a { color: inherit; }
 
 /* each card carries its own colours, so a leaving card never takes on the next brand's */
 .bcard[data-brand="bumzee"]   { --card: var(--jonquil); --card-ink: var(--black); --disc: rgba(255, 255, 255, 0.6); }
-.bcard[data-brand="majestey"] { --card: var(--black);   --card-ink: var(--jonquil); --disc: rgba(255, 203, 14, 0.14); }
+.bcard[data-brand="majestey"] { --card: var(--black);   --card-ink: var(--white); --disc: rgba(255, 255, 255, 0.1); }
 .bcard[data-brand="momstore"] { --card: var(--steel);   --card-ink: var(--white); --disc: rgba(255, 255, 255, 0.22); }
 
 .brandpolio__head {
@@ -880,6 +852,23 @@ a { color: inherit; }
   letter-spacing: -0.03em;
 }
 
+/* Majestey London wordmark, set in type to match their logo */
+.mj-wordmark {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Montserrat", "Inter", sans-serif;
+  font-size: clamp(20px, 2.1vw, 28px);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1;
+}
+.mj-wordmark small {
+  margin-top: 6px;
+  font-size: 0.5em;
+  letter-spacing: 0.32em;
+}
+
 .bcard__disc {
   display: grid;
   place-items: center;
@@ -945,7 +934,7 @@ a { color: inherit; }
 
 .cf-1 { top: 16%; left: -24%; }
 .cf-2 { top: 50%; right: -26%; }
-.cf-3 { bottom: 6%; right: -20%; }
+.cf-3 { bottom: -5%; right: -20%; }
 
 .tile-float {
   width: 30%;

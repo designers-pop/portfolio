@@ -20,9 +20,11 @@ Until a file exists, that spot shows a brand-colour fill instead.
 | --- | --- |
 | `bumzee-1.webp` | Bumzee card, main portrait (added) |
 | `bumzee-2.webp` | Bumzee card, floating photo beside it; click it to swap (added) |
-| `majestey.jpg`, `momstore.jpg` | main portrait on those cards (shows the brand letter until added) |
+| `majestey-1.webp` | Majestey card, main portrait (added) |
+| `majestey-2.webp` | Majestey card, floating photo beside it; click it to swap (added) |
+| `momstore.jpg` | main portrait on The Mom Store card (shows the brand letter until added) |
 
-To give Majestey or The Mom Store a floating photo like Bumzee, copy Bumzee's
+To give The Mom Store a floating photo like Bumzee, copy Bumzee's
 `<span class="tile-float tf-1 tf-photo" ...>` line into that card in `index.html`
 and point `data-img` at the new file.
 
