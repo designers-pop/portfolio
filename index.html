@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Popstation — The Fashion Foundry</title>
+  <meta name="description" content="Popstation builds fashion brands from first sketch to shelf: design, sourcing, production and delivery.">
+  <link rel="icon" href="assets/popstation-logo.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="is-loading">
+
+  <!-- ============ INTRO: logo reveal ============ -->
+  <div class="intro" id="intro" aria-hidden="true">
+    <!-- Flash panels: zoomed fragments of the logo sweep across brand colours -->
+    <div class="flash flash--jonquil"><div class="frag frag--loop"></div></div>
+    <div class="flash flash--rojo"><div class="frag frag--p"></div></div>
+    <div class="flash flash--steel"><div class="frag frag--s"></div></div>
+
+    <!-- Final assembly: logo pieces land one by one -->
+    <div class="intro__stage">
+      <div class="logo-build">
+        <span class="piece piece--pop"></span>
+        <span class="piece piece--station"></span>
+        <span class="piece piece--icon"></span>
+        <span class="piece piece--tagline"></span>
+      </div>
+    </div>
+    <button class="intro__skip" type="button">Skip</button>
+  </div>
+
+  <!-- ============ NAV ============ -->
+  <header class="nav">
+    <a class="nav__logo" href="#top" aria-label="Popstation home">
+      <img src="assets/popstation-logo.webp" alt="Popstation — The Fashion Foundry" width="776" height="507">
+    </a>
+    <nav class="nav__links" aria-label="Sections">
+      <a href="#who">Who we are</a>
+      <a href="#build">How we build</a>
+      <a href="#numbers">By the numbers</a>
+    </nav>
+  </header>
+
+  <main id="top">
+
+    <!-- ============ HERO: Who we are ============ -->
+    <section class="hero" id="who">
+      <p class="eyebrow">Who we are</p>
+
+      <div class="wheel" id="wheel" aria-live="off">
+        <ul class="wheel__list">
+          <li>Designers</li>
+          <li>Category Builders</li>
+          <li>Sourcing Specialists</li>
+          <li>Production Experts</li>
+          <li>Technology Builders</li>
+          <li>Brand Partners</li>
+        </ul>
+      </div>
+
+      <div class="hero__foot">
+        <p>Popstation<br><strong>The Fashion Foundry</strong></p>
+        <a class="scroll-cue" href="#build">Scroll <span aria-hidden="true">↓</span></a>
+      </div>
+    </section>
+
+    <!-- ============ BUILT WITH YOUR BRAND ============ -->
+    <section class="build" id="build">
+      <h2 class="build__title" data-reveal>
+        <span class="line">
+          <span class="chip" style="--d:0" data-img="assets/img/sketch.jpg"></span>
+          <span class="word">Built</span> <span class="word">with</span>
+          <span class="chip" style="--d:1" data-img="assets/img/fabric.jpg"></span>
+        </span>
+        <span class="line">
+          <span class="word boxed" style="--d:2">your</span>
+          <span class="word boxed" style="--d:3">brand.</span>
+          <span class="chip" style="--d:4" data-img="assets/img/store.jpg"></span>
+        </span>
+        <span class="line">
+          <span class="word">From</span>
+          <span class="word boxed" style="--d:5">first sketch</span>
+          <span class="word">to</span>
+          <span class="word boxed" style="--d:6">shelf.</span>
+        </span>
+      </h2>
+
+      <p class="build__lede" data-reveal>
+        Popstation OS connects design, sourcing, production and delivery.<br>
+        One team stays with you through the build.
+      </p>
+
+      <ul class="build__facts" data-reveal>
+        <li>35 years in manufacturing</li>
+        <li>40+ brands incubated</li>
+        <li>AI-powered workflows</li>
+      </ul>
+
+      <div class="progress" aria-hidden="true"><span class="progress__knob"></span></div>
+    </section>
+
+    <!-- ============ BY THE NUMBERS ============ -->
+    <section class="numbers" id="numbers">
+      <p class="eyebrow eyebrow--light">By the numbers</p>
+
+      <div class="bento">
+        <article class="tile tile--a" data-img="assets/img/manufacturing.jpg" data-pattern="dots">
+          <div class="tile__num"><span data-count="35">0</span>+</div>
+          <div class="tile__big">Years</div>
+          <div class="tile__label">Manufacturing heritage</div>
+        </article>
+        <article class="tile tile--b" data-img="assets/img/incubation.jpg" data-pattern="grid">
+          <div class="tile__num"><span data-count="7">0</span>+</div>
+          <div class="tile__big">Years</div>
+          <div class="tile__label">Brand incubation</div>
+        </article>
+        <article class="tile tile--c" data-img="assets/img/brands.jpg" data-pattern="rings">
+          <div class="tile__num"><span data-count="40">0</span>+</div>
+          <div class="tile__big">Brands</div>
+          <div class="tile__label">Launched</div>
+        </article>
+        <article class="tile tile--d" data-img="assets/img/vendors.jpg" data-pattern="dots">
+          <div class="tile__num"><span data-count="300">0</span>+</div>
+          <div class="tile__label">Vendors</div>
+        </article>
+        <article class="tile tile--e" data-img="assets/img/retail.jpg" data-pattern="bars">
+          <div class="tile__num">₹<span data-count="2000" data-format="in">0</span>+ Cr</div>
+          <div class="tile__label">ARR impacted</div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <img src="assets/popstation-logo.webp" alt="Popstation — The Fashion Foundry" width="776" height="507" loading="lazy">
+    <p>© <span id="year"></span> Popstation. All rights reserved.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
