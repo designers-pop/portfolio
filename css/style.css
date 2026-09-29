@@ -49,153 +49,63 @@ a { color: inherit; }
 
 /* ==========================================================================
    INTRO — logo reveal, one glyph at a time
-   Each letter of the logo gets its own colour panel for one --step,
-   then the full logo assembles on black and the curtain lifts.
+   main.js runs the timeline: each letter of the logo gets its own
+   brand-colour panel and draws itself in, then the full logo assembles
+   on black and the curtain lifts.
    ========================================================================== */
 
 .intro {
-  --step: 300ms;                         /* time each glyph panel is on screen */
-  --glyphs: 11;                          /* P o p S t a t ı o n + popcorn */
-  --t: calc(var(--step) * var(--glyphs)); /* when the full logo starts landing */
   position: fixed;
   inset: 0;
   z-index: 100;
   background: var(--black);
   overflow: hidden;
-  animation: intro-out 750ms var(--ease-out) calc(var(--t) + 1800ms) forwards;
 }
 
 .intro.is-done { display: none; }
 
-/* hold every intro animation until the logo image is ready (see main.js) */
-.intro:not(.is-playing),
-.intro:not(.is-playing) * { animation-play-state: paused !important; }
-
-@keyframes intro-out {
-  to { clip-path: inset(0 0 100% 0); }
-}
-
-/* --- glyph panels (built by main.js) --- */
-
-.glyph-panel {
+.intro__panel {
   position: absolute;
   inset: 0;
-  z-index: calc(50 - var(--i));          /* earlier panels sit on top */
+  z-index: 2;
   display: grid;
   place-items: center;
-  background: var(--bg);
-  animation: panel-hide 1ms linear calc((var(--i) + 1) * var(--step)) forwards;
+  padding: 12vmin;
+  background: var(--panel-bg, var(--black));
 }
+.intro__panel[hidden] { display: none; }
 
-@keyframes panel-hide { to { visibility: hidden; } }
-
-/* a single letter cut from the logo image, whole and centred */
-.glyph {
-  width: min(62vw, calc(56vh * var(--ar)));
-  aspect-ratio: var(--ar);
-  background: var(--fg);
-  -webkit-mask: url("../assets/popstation-logo.webp") no-repeat;
-          mask: url("../assets/popstation-logo.webp") no-repeat;
-  -webkit-mask-size: var(--ms);
-          mask-size: var(--ms);
-  -webkit-mask-position: var(--mp);
-          mask-position: var(--mp);
-  animation: var(--anim) calc(var(--step) * 0.85) var(--ease-out) calc(var(--i) * var(--step)) both;
+/* one glyph, whole and centred, as large as the screen allows */
+.intro__glyph {
+  width: 100%;
+  height: 100%;
+  max-width: 900px;
+  max-height: 72vh;
+  overflow: visible;
 }
-
-/* the popcorn keeps its own colours */
-.glyph--icon {
-  background: url("../assets/popstation-logo.webp") no-repeat;
-  background-size: var(--ms);
-  background-position: var(--mp);
-  -webkit-mask: none;
-          mask: none;
-}
-
-/* sweeps, echoing the strokes being drawn in the reference */
-@keyframes g-wipe-right {
-  from { clip-path: inset(0 100% 0 0); transform: translateX(-10%) rotate(-6deg); filter: blur(8px); }
-  to   { clip-path: inset(0 0 0 0);    transform: none;                          filter: blur(0); }
-}
-@keyframes g-wipe-up {
-  from { clip-path: inset(100% 0 0 0); transform: translateY(12%); filter: blur(8px); }
-  to   { clip-path: inset(0 0 0 0);    transform: none;            filter: blur(0); }
-}
-@keyframes g-wipe-down {
-  from { clip-path: inset(0 0 100% 0); transform: translateY(-12%); filter: blur(8px); }
-  to   { clip-path: inset(0 0 0 0);    transform: none;             filter: blur(0); }
-}
-@keyframes g-spin {
-  from { transform: rotate(-160deg) scale(0.4); filter: blur(10px); }
-  to   { transform: none;                       filter: blur(0); }
-}
-@keyframes g-drop {
-  0%   { transform: translateY(-70vh); }
-  70%  { transform: translateY(4%); }
-  100% { transform: none; }
-}
-
-/* --- final logo assembly --- */
+.intro__glyph path { transform-box: fill-box; transform-origin: center; }
 
 .intro__stage {
   position: absolute;
   inset: 0;
+  z-index: 1;
   display: grid;
   place-items: center;
   padding: var(--gutter);
 }
 
-.logo-build {
-  position: relative;
-  width: min(80vw, 620px);
-  aspect-ratio: var(--logo-ratio);
-  animation: logo-settle 1400ms var(--ease-out) var(--t) both;
+.intro-logo {
+  width: min(80vw, 640px);
+  height: auto;
+  overflow: visible;
 }
+.intro-logo path,
+.intro-logo g { transform-box: fill-box; transform-origin: center; }
 
-@keyframes logo-settle {
-  from { transform: scale(1.18); }
-  to   { transform: none; }
-}
-
-.piece {
-  position: absolute;
-  inset: 0;
-  background: url("../assets/popstation-logo.webp") center / 100% 100% no-repeat;
-  opacity: 0;
-}
-
-/* regions of the logo image, as clip insets (top right bottom left) */
-.piece--pop {
-  clip-path: inset(22% 45.6% 44% 0);
-  animation: piece-rise 600ms var(--ease-out) var(--t) forwards;
-}
-.piece--station {
-  clip-path: polygon(0 56%, 54.5% 56%, 54.5% 61%, 100% 61%, 100% 88%, 0 88%);
-  animation: piece-rise 600ms var(--ease-out) calc(var(--t) + 120ms) forwards;
-}
-.piece--icon {
-  clip-path: inset(11% 8.5% 39% 54.5%);
-  transform-origin: 71.5% 36.5%;
-  animation: piece-pop 800ms var(--ease-spring) calc(var(--t) + 300ms) forwards;
-}
-.piece--tagline {
-  clip-path: inset(91% 50% 0 50%);
-  opacity: 1;
-  animation: piece-wipe 700ms var(--ease-out) calc(var(--t) + 700ms) forwards;
-}
-
-@keyframes piece-rise {
-  from { opacity: 0; transform: translateY(14%); filter: blur(8px); }
-  to   { opacity: 1; transform: translateY(0);   filter: blur(0); }
-}
-@keyframes piece-pop {
-  0%   { opacity: 0; transform: scale(0) rotate(-220deg); }
-  60%  { opacity: 1; }
-  100% { opacity: 1; transform: scale(1) rotate(0); }
-}
-@keyframes piece-wipe {
-  to { clip-path: inset(91% 0 0 0); }
-}
+/* hidden until its turn in the timeline */
+.intro__stage .logo-word path,
+.intro__stage .logo-icon,
+.intro__stage .logo-tag { opacity: 0; }
 
 .intro__skip {
   position: absolute;
@@ -628,6 +538,289 @@ a { color: inherit; }
 }
 
 /* ==========================================================================
+   BRANDPOLIO — tilted brand cards with floating chips
+   The section tint and card colour follow the active brand.
+   ========================================================================== */
+
+.brandpolio {
+  --tint: #fff6d6;
+  --card: var(--jonquil);
+  --card-ink: var(--black);
+  --disc: rgba(255, 255, 255, 0.55);
+  position: relative;
+  overflow: hidden;
+  padding: clamp(80px, 10vw, 140px) var(--gutter) clamp(56px, 7vw, 96px);
+  background: var(--tint);
+  color: var(--black);
+  transition: background 900ms var(--ease-out);
+  scroll-margin-top: 40px;
+}
+
+.brandpolio[data-active="bumzee"]   { --tint: #fff4cc; --card: var(--jonquil); --card-ink: var(--black); --disc: rgba(255, 255, 255, 0.6); }
+.brandpolio[data-active="majestey"] { --tint: #ecebe6; --card: var(--black);   --card-ink: var(--jonquil); --disc: rgba(255, 203, 14, 0.14); }
+.brandpolio[data-active="momstore"] { --tint: #e2edf9; --card: var(--steel);   --card-ink: var(--white); --disc: rgba(255, 255, 255, 0.22); }
+
+.brandpolio__head {
+  max-width: 1320px;
+  margin: 0 auto clamp(24px, 4vw, 48px);
+}
+.brandpolio .eyebrow { opacity: 0.6; }
+.brandpolio__title {
+  margin: 12px 0 0;
+  font-size: clamp(40px, 6.4vw, 96px);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+}
+
+.brandpolio__body {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: center;
+  gap: clamp(24px, 4vw, 64px);
+  max-width: 1320px;
+  margin: 0 auto;
+}
+
+/* --- details for the active brand --- */
+
+.brand-info__count {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  opacity: 0.55;
+}
+.brand-info__name {
+  margin: 14px 0 0;
+  font-size: clamp(34px, 4.4vw, 64px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+.brand-info__what {
+  max-width: 440px;
+  margin: 16px 0 0;
+  font-size: clamp(16px, 1.4vw, 19px);
+  line-height: 1.5;
+  opacity: 0.78;
+}
+.brand-info.is-swapping > * { animation: info-in 700ms var(--ease-out) both; }
+.brand-info.is-swapping > :nth-child(2) { animation-delay: 60ms; }
+.brand-info.is-swapping > :nth-child(3) { animation-delay: 120ms; }
+.brand-info.is-swapping > :nth-child(4) { animation-delay: 180ms; }
+.brand-info.is-swapping > :nth-child(5) { animation-delay: 240ms; }
+@keyframes info-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* the four things Popstation can deliver; filled = done for this brand */
+.stages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.stages li {
+  padding: 8px 14px;
+  border: 1.5px solid rgba(0, 0, 0, 0.18);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.4);
+  transition: background 400ms, color 400ms, border-color 400ms;
+}
+.stages li.is-on {
+  border-color: var(--black);
+  background: var(--black);
+  color: var(--white);
+}
+
+.brand-info__link {
+  display: inline-flex;
+  gap: 6px;
+  margin-top: 28px;
+  padding-bottom: 3px;
+  border-bottom: 2px solid currentColor;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* --- the deck --- */
+
+.deck {
+  position: relative;
+  height: clamp(480px, 50vw, 640px);
+  perspective: 1600px;
+  touch-action: pan-y;
+}
+
+.bcard {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: min(340px, 64vw);
+  height: calc(min(340px, 64vw) * 1.38);
+  transform-style: preserve-3d;
+  transition:
+    transform 1000ms var(--ease-out),
+    opacity 700ms var(--ease-out);
+  opacity: 0;
+  pointer-events: none;
+}
+.bcard.is-prev { transform: translateX(-80%) rotateY(70deg) scale(0.8); }
+.bcard.is-next { transform: translateX(80%) rotateY(-70deg) scale(0.8); }
+.bcard.is-active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: rotateY(-14deg) rotateX(5deg);
+}
+
+/* idle drift, like the reference card turning in space */
+.bcard.is-active .bcard__face,
+.bcard.is-active .chip-float,
+.bcard.is-active .tile-float { animation: drift 6s ease-in-out 1s infinite alternate; }
+@keyframes drift {
+  from { translate: 0 0; }
+  to   { translate: 0 -10px; }
+}
+
+.bcard__face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 26px 22px;
+  border-radius: 30px;
+  background: var(--card);
+  color: var(--card-ink);
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.45);
+  transition: background 900ms var(--ease-out), color 900ms var(--ease-out);
+}
+
+.bcard__top,
+.bcard__bottom {
+  font-size: clamp(24px, 2.6vw, 34px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.bcard__disc {
+  display: grid;
+  place-items: center;
+  width: 68%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--img, var(--disc)) center / cover;
+  overflow: hidden;
+}
+.bcard__disc span {
+  font-size: clamp(90px, 10vw, 140px);
+  font-weight: 900;
+  letter-spacing: -0.06em;
+  line-height: 1;
+}
+.bcard__disc[style*="--img"] span { display: none; }
+
+/* floating chips and tiles sit in front of the card */
+.chip-float,
+.tile-float {
+  position: absolute;
+  opacity: 0;
+  transform: translateZ(70px) scale(0.5);
+  transition:
+    opacity 500ms var(--ease-out),
+    transform 800ms var(--ease-spring);
+}
+.bcard.is-active .chip-float,
+.bcard.is-active .tile-float { opacity: 1; transform: translateZ(70px) scale(1); }
+.bcard.is-active .cf-1 { transition-delay: 350ms; }
+.bcard.is-active .cf-2 { transition-delay: 450ms; }
+.bcard.is-active .cf-3 { transition-delay: 550ms; }
+.bcard.is-active .tf-1 { transition-delay: 250ms; }
+.bcard.is-active .tf-2 { transition-delay: 650ms; }
+
+.chip-float {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: var(--white);
+  color: var(--black);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 16px 36px -14px rgba(0, 0, 0, 0.35);
+}
+.chip-float i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--rojo);
+}
+.cf-3 i { background: var(--steel); }
+
+.cf-1 { top: 16%; left: -24%; }
+.cf-2 { top: 50%; right: -26%; }
+.cf-3 { bottom: 6%; right: -20%; }
+
+.tile-float {
+  width: 30%;
+  aspect-ratio: 1;
+  border-radius: 20px;
+  /* dot pattern until a photo is supplied */
+  background-color: var(--card);
+  background-image: var(--img, radial-gradient(circle, rgba(255, 255, 255, 0.9) 0 26%, transparent 29%));
+  background-size: 16px 16px;
+  border: 4px solid var(--white);
+  box-shadow: 0 18px 40px -16px rgba(0, 0, 0, 0.4);
+}
+.bcard[data-brand="majestey"] .tile-float { background-color: var(--jonquil); }
+.bcard[data-brand="momstore"] .tile-float { background-color: var(--rojo); }
+.tf-1 { top: -7%; right: -14%; }
+.tile-float[style*="--img"] { background-size: cover; background-position: center; }
+.tf-2 { bottom: 20%; left: -12%; width: 22%; }
+
+.deck-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-top: clamp(16px, 3vw, 36px);
+}
+.deck-nav__btn {
+  width: 44px;
+  height: 44px;
+  border: 1.5px solid rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--black);
+  font-size: 18px;
+  cursor: pointer;
+  transition: background 200ms, color 200ms;
+}
+.deck-nav__btn:hover { background: var(--black); color: var(--white); }
+.deck-nav__dots { display: flex; gap: 10px; }
+.deck-nav__dots button {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: width 400ms var(--ease-out), background 400ms;
+}
+.deck-nav__dots button[aria-selected="true"] { width: 28px; background: var(--black); }
+
+/* ==========================================================================
    FOOTER
    ========================================================================== */
 
@@ -651,6 +844,15 @@ a { color: inherit; }
 
 @media (max-width: 760px) {
   .nav__links { display: none; }
+
+  .brandpolio__body { grid-template-columns: 1fr; }
+  .brand-info { order: 2; }
+  .deck { height: 520px; }
+  .cf-1 { left: -8%; }
+  .cf-2 { right: -8%; }
+  .cf-3 { right: -6%; }
+  .tf-2 { left: -4%; }
+  .tf-1 { right: -6%; }
 
   .wheel { --lh: 13vw; }
   .wheel__item { font-size: 7vw; letter-spacing: -0.03em; }

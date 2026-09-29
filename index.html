@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Popstation — The Fashion Foundry</title>
   <meta name="description" content="Popstation builds fashion brands from first sketch to shelf: design, sourcing, production and delivery.">
-  <link rel="icon" href="assets/popstation-logo.webp">
+  <link rel="icon" href="assets/popstation-logo.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -13,32 +13,27 @@
 </head>
 <body class="is-loading">
 
-  <!-- ============ INTRO: logo reveal ============ -->
+  <!-- ============ INTRO: logo reveal (driven by main.js) ============ -->
   <div class="intro" id="intro" aria-hidden="true">
-    <!-- One panel per glyph, built by main.js -->
-    <div class="glyphs" id="glyphs"></div>
-
-    <!-- Final assembly: logo pieces land one by one -->
-    <div class="intro__stage">
-      <div class="logo-build">
-        <span class="piece piece--pop"></span>
-        <span class="piece piece--station"></span>
-        <span class="piece piece--icon"></span>
-        <span class="piece piece--tagline"></span>
-      </div>
+    <!-- one brand-colour panel per glyph; the glyph draws itself in -->
+    <div class="intro__panel" id="introPanel">
+      <svg class="intro__glyph" id="introGlyph" xmlns="http://www.w3.org/2000/svg"></svg>
     </div>
+    <!-- the full logo is injected here and assembles at the end -->
+    <div class="intro__stage" id="introStage"></div>
     <button class="intro__skip" type="button">Skip</button>
   </div>
 
   <!-- ============ NAV ============ -->
   <header class="nav">
     <a class="nav__logo" href="#top" aria-label="Popstation home">
-      <img src="assets/popstation-logo.webp" alt="Popstation — The Fashion Foundry" width="776" height="507">
+      <img src="assets/popstation-logo.svg" alt="Popstation — The Fashion Foundry" width="776" height="507">
     </a>
     <nav class="nav__links" aria-label="Sections">
       <a href="#who">Who we are</a>
       <a href="#build">How we build</a>
       <a href="#numbers">By the numbers</a>
+      <a href="#brandpolio">Brandpolio</a>
     </nav>
   </header>
 
@@ -130,10 +125,94 @@
         </article>
       </div>
     </section>
+
+    <!-- ============ BRANDPOLIO ============ -->
+    <section class="brandpolio" id="brandpolio" aria-roledescription="carousel" aria-label="Brandpolio">
+      <div class="brandpolio__head">
+        <p class="eyebrow">Brandpolio</p>
+        <h2 class="brandpolio__title">Brands we build with</h2>
+      </div>
+
+      <div class="brandpolio__body">
+        <!-- details for the active brand -->
+        <div class="brand-info" aria-live="polite">
+          <p class="brand-info__count"><span id="brandIndex">01</span> / <span id="brandTotal">03</span></p>
+          <h3 class="brand-info__name" id="brandName"></h3>
+          <p class="brand-info__what" id="brandWhat"></p>
+          <ol class="stages" id="brandStages" aria-label="What Popstation delivers">
+            <li data-stage="design">Design</li>
+            <li data-stage="sourcing">Sourcing</li>
+            <li data-stage="production">Production</li>
+            <li data-stage="packaging">Packaging</li>
+          </ol>
+          <a class="brand-info__link" id="brandLink" href="#" target="_blank" rel="noopener">Visit site <span aria-hidden="true">↗</span></a>
+        </div>
+
+        <!-- tilted brand cards with floating chips, one per brand -->
+        <div class="deck" id="deck">
+          <article class="bcard" data-brand="bumzee"
+                   data-name="Bumzee"
+                   data-what="Fun, comfy clothing for infants and kids. We run the whole build for them: design through production."
+                   data-stages="design sourcing production"
+                   data-url="https://www.bumzee.in">
+            <div class="bcard__face">
+              <span class="bcard__top">Bumzee</span>
+              <div class="bcard__disc" data-img="assets/img/brands/bumzee.jpg"><span>B</span></div>
+              <span class="bcard__bottom">End-to-end</span>
+            </div>
+            <span class="chip-float cf-1">Infant &amp; kidswear</span>
+            <span class="chip-float cf-2"><i></i>Design</span>
+            <span class="chip-float cf-3"><i></i>Production</span>
+            <span class="tile-float tf-1" data-img="assets/img/brands/bumzee-1.jpg"></span>
+            <span class="tile-float tf-2" data-img="assets/img/brands/bumzee-2.jpg"></span>
+          </article>
+
+          <article class="bcard" data-brand="majestey"
+                   data-name="Majestey London"
+                   data-what="We handle all of their design and packaging, so the brand looks the same from product to parcel."
+                   data-stages="design packaging"
+                   data-url="https://majestey.com">
+            <div class="bcard__face">
+              <span class="bcard__top">Majestey</span>
+              <div class="bcard__disc" data-img="assets/img/brands/majestey.jpg"><span>M</span></div>
+              <span class="bcard__bottom">London</span>
+            </div>
+            <span class="chip-float cf-1">Design &amp; packaging</span>
+            <span class="chip-float cf-2"><i></i>Design</span>
+            <span class="chip-float cf-3"><i></i>Packaging</span>
+            <span class="tile-float tf-1" data-img="assets/img/brands/majestey-1.jpg"></span>
+            <span class="tile-float tf-2" data-img="assets/img/brands/majestey-2.jpg"></span>
+          </article>
+
+          <article class="bcard" data-brand="momstore"
+                   data-name="The Mom Store"
+                   data-what="Maternity, baby and kids apparel. We produce their garments."
+                   data-stages="production"
+                   data-url="https://themomstore.in">
+            <div class="bcard__face">
+              <span class="bcard__top">The Mom</span>
+              <div class="bcard__disc" data-img="assets/img/brands/momstore.jpg"><span>M</span></div>
+              <span class="bcard__bottom">Store</span>
+            </div>
+            <span class="chip-float cf-1">Maternity &amp; baby</span>
+            <span class="chip-float cf-2"><i></i>Garment production</span>
+            <span class="chip-float cf-3"><i></i>Apparel</span>
+            <span class="tile-float tf-1" data-img="assets/img/brands/momstore-1.jpg"></span>
+            <span class="tile-float tf-2" data-img="assets/img/brands/momstore-2.jpg"></span>
+          </article>
+        </div>
+      </div>
+
+      <div class="deck-nav">
+        <button class="deck-nav__btn" id="deckPrev" type="button" aria-label="Previous brand">←</button>
+        <div class="deck-nav__dots" id="deckDots" role="tablist"></div>
+        <button class="deck-nav__btn" id="deckNext" type="button" aria-label="Next brand">→</button>
+      </div>
+    </section>
   </main>
 
   <footer class="footer">
-    <img src="assets/popstation-logo.webp" alt="Popstation — The Fashion Foundry" width="776" height="507" loading="lazy">
+    <img src="assets/popstation-logo.svg" alt="Popstation — The Fashion Foundry" width="776" height="507" loading="lazy">
     <p>© <span id="year"></span> Popstation. All rights reserved.</p>
   </footer>
 

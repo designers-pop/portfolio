@@ -1,86 +1,148 @@
 (() => {
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* ---------------- Intro: logo reveal ---------------- */
+  /* ---------------- Intro: logo reveal ----------------
+     Mirrors the reference: each glyph of the logo appears on its own
+     colour panel and draws itself in (outline, then fill), then the whole
+     logo assembles on black. The timeline runs in JS so it always
+     finishes, and a failsafe removes the intro whatever happens. */
 
   const intro = document.getElementById("intro");
+  const SVG_NS = "http://www.w3.org/2000/svg";
+  const STEP = 340; // ms each glyph panel is on screen
 
+  // glyph order with panel colour, glyph colour and entrance
+  const GLYPHS = [
+    { id: "P",  bg: "var(--jonquil)", fg: "#000000", enter: "draw" },
+    { id: "o1", bg: "var(--rojo)",    fg: "#ffcb0e", enter: "spin" },
+    { id: "p",  bg: "var(--steel)",   fg: "#ffffff", enter: "draw" },
+    { id: "S",  bg: "var(--black)",   fg: "#ffcb0e", enter: "draw" },
+    { id: "t1", bg: "var(--white)",   fg: "#e01d1e", enter: "draw" },
+    { id: "a",  bg: "var(--jonquil)", fg: "#2d7dd2", enter: "spin" },
+    { id: "t2", bg: "var(--rojo)",    fg: "#ffffff", enter: "draw" },
+    { id: "i",  bg: "var(--steel)",   fg: "#ffcb0e", enter: "drop" },
+    { id: "o2", bg: "var(--white)",   fg: "#000000", enter: "spin" },
+    { id: "n",  bg: "var(--black)",   fg: "#e01d1e", enter: "draw" },
+    { id: "icon", bg: "var(--steel)", enter: "spin" },
+  ];
+
+  let introFinished = false;
   const finishIntro = () => {
-    if (!intro || intro.classList.contains("is-done")) return;
+    if (!intro || introFinished) return;
+    introFinished = true;
     intro.classList.add("is-done");
     document.body.classList.remove("is-loading");
   };
 
-  // Each glyph: its box in the 776 x 507 logo image [x0, y0, x1, y1],
-  // panel colour, glyph colour and entrance.
-  const LOGO_W = 776;
-  const LOGO_H = 507;
-  const GLYPHS = [
-    { box: [1, 123, 126, 258],   bg: "var(--jonquil)", fg: "var(--black)",   anim: "g-wipe-right" },
-    { box: [140, 152, 267, 261], bg: "var(--rojo)",    fg: "var(--jonquil)", anim: "g-spin" },
-    { box: [285, 152, 425, 292], bg: "var(--steel)",   fg: "var(--white)",   anim: "g-wipe-down" },
-    { box: [1, 287, 120, 427],   bg: "var(--black)",   fg: "var(--jonquil)", anim: "g-wipe-up" },
-    { box: [132, 298, 222, 427], bg: "var(--white)",   fg: "var(--rojo)",    anim: "g-wipe-down" },
-    { box: [234, 319, 349, 427], bg: "var(--jonquil)", fg: "var(--steel)",   anim: "g-spin" },
-    { box: [360, 298, 450, 427], bg: "var(--rojo)",    fg: "var(--white)",   anim: "g-wipe-up" },
-    { box: [462, 322, 510, 427], bg: "var(--steel)",   fg: "var(--jonquil)", anim: "g-drop" },
-    { box: [518, 318, 646, 427], bg: "var(--white)",   fg: "var(--black)",   anim: "g-spin" },
-    { box: [658, 322, 775, 427], bg: "var(--black)",   fg: "var(--rojo)",    anim: "g-wipe-right" },
-    { box: [434, 60, 705, 305],  bg: "var(--steel)",   icon: true,           anim: "g-spin" },
-  ];
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
-  const buildGlyphs = () => {
-    const holder = document.getElementById("glyphs");
-    if (!holder) return;
-    const pad = 3;
-    GLYPHS.forEach((g, i) => {
-      const x = Math.max(0, g.box[0] - pad);
-      const y = Math.max(0, g.box[1] - pad);
-      const w = Math.min(LOGO_W, g.box[2] + pad + 1) - x;
-      const h = Math.min(LOGO_H, g.box[3] + pad + 1) - y;
+  // show one glyph on its panel and animate it in
+  const showGlyph = (logo, g) => {
+    const panel = document.getElementById("introPanel");
+    const svg = document.getElementById("introGlyph");
+    panel.style.setProperty("--panel-bg", g.bg);
+    svg.replaceChildren();
 
-      const panel = document.createElement("div");
-      panel.className = "glyph-panel";
-      panel.style.setProperty("--i", i);
-      panel.style.setProperty("--bg", g.bg);
+    let node;
+    if (g.id === "icon") {
+      node = logo.querySelector(".logo-icon").cloneNode(true);
+    } else {
+      node = logo.querySelector(`[data-glyph="${g.id}"]`).cloneNode(true);
+      node.setAttribute("fill", g.fg);
+      node.setAttribute("fill-rule", "evenodd");
+    }
+    svg.appendChild(node);
 
-      const glyph = document.createElement("div");
-      glyph.className = g.icon ? "glyph glyph--icon" : "glyph";
-      glyph.style.setProperty("--ar", (w / h).toFixed(4));
-      // scale the whole logo so this box fills the element, then shift it into view
-      glyph.style.setProperty("--ms", `${(LOGO_W / w) * 100}% ${(LOGO_H / h) * 100}%`);
-      glyph.style.setProperty("--mp", `${(x / (LOGO_W - w)) * 100}% ${(y / (LOGO_H - h)) * 100}%`);
-      glyph.style.setProperty("--anim", g.anim);
-      if (g.fg) glyph.style.setProperty("--fg", g.fg);
+    // frame the glyph exactly, with a little breathing room
+    const b = node.getBBox();
+    const pad = Math.max(b.width, b.height) * 0.08;
+    svg.setAttribute("viewBox", `${b.x - pad} ${b.y - pad} ${b.width + pad * 2} ${b.height + pad * 2}`);
+    node.style.transformBox = "fill-box";
+    node.style.transformOrigin = "center";
 
-      panel.appendChild(glyph);
-      holder.appendChild(panel);
-    });
+    const ease = "cubic-bezier(0.16, 1, 0.3, 1)";
+    if (g.enter === "draw" && node.getTotalLength) {
+      // the outline is drawn, then the letter floods with colour
+      const len = node.getTotalLength();
+      node.setAttribute("stroke", g.fg);
+      node.setAttribute("stroke-width", Math.max(b.width, b.height) * 0.025);
+      node.style.strokeDasharray = len;
+      node.animate(
+        [{ strokeDashoffset: len, fillOpacity: 0 }, { strokeDashoffset: len * 0.35, fillOpacity: 0, offset: 0.5 }, { strokeDashoffset: 0, fillOpacity: 1 }],
+        { duration: STEP * 0.85, easing: "ease-out", fill: "both" }
+      );
+      node.animate(
+        [{ transform: "scale(1.12) rotate(-6deg)" }, { transform: "none" }],
+        { duration: STEP * 0.9, easing: ease, fill: "both" }
+      );
+    } else if (g.enter === "drop") {
+      node.animate(
+        [{ transform: "translateY(-160%)" }, { transform: "translateY(6%)", offset: 0.7 }, { transform: "none" }],
+        { duration: STEP * 0.85, easing: "ease-out", fill: "both" }
+      );
+    } else {
+      node.animate(
+        [{ transform: "rotate(-170deg) scale(0.35)", opacity: 0 }, { transform: "none", opacity: 1 }],
+        { duration: STEP * 0.85, easing: ease, fill: "both" }
+      );
+    }
   };
 
-  if (!intro || reduceMotion) {
+  // the full logo assembles: letters rise in, popcorn spins in, tagline follows
+  const assembleLogo = (logo) => {
+    const spring = "cubic-bezier(0.34, 1.56, 0.64, 1)";
+    const ease = "cubic-bezier(0.16, 1, 0.3, 1)";
+    logo.animate([{ transform: "scale(1.2)" }, { transform: "none" }], { duration: 1500, easing: ease, fill: "both" });
+    logo.querySelectorAll(".logo-word path").forEach((path, i) => {
+      path.animate(
+        [{ transform: "translateY(45%) scale(0.7)", opacity: 0 }, { transform: "none", opacity: 1 }],
+        { duration: 600, delay: i * 45, easing: spring, fill: "both" }
+      );
+    });
+    logo.querySelector(".logo-icon").animate(
+      [{ transform: "rotate(-220deg) scale(0)", opacity: 0 }, { opacity: 1, offset: 0.4 }, { transform: "none", opacity: 1 }],
+      { duration: 900, delay: 350, easing: spring, fill: "both" }
+    );
+    logo.querySelector(".logo-tag").animate(
+      [{ transform: "translateY(40%)", opacity: 0 }, { transform: "none", opacity: 1 }],
+      { duration: 700, delay: 750, easing: ease, fill: "both" }
+    );
+  };
+
+  const runIntro = async () => {
+    const res = await fetch("assets/popstation-logo.svg");
+    if (!res.ok) throw new Error("logo not found");
+    const stage = document.getElementById("introStage");
+    stage.innerHTML = await res.text();
+    const logo = stage.querySelector("svg");
+    logo.classList.add("intro-logo");
+    logo.removeAttribute("role");
+
+    for (const g of GLYPHS) {
+      if (introFinished) return;
+      showGlyph(logo, g);
+      await wait(STEP);
+    }
+    if (introFinished) return;
+
+    document.getElementById("introPanel").hidden = true;
+    assembleLogo(logo);
+    await wait(1450 + 700); // assembly, then a beat to take it in
+
+    const lift = intro.animate(
+      [{ clipPath: "inset(0 0 0 0)" }, { clipPath: "inset(0 0 100% 0)" }],
+      { duration: 750, easing: "cubic-bezier(0.7, 0, 0.3, 1)", fill: "forwards" }
+    );
+    await lift.finished;
+    finishIntro();
+  };
+
+  if (!intro || reduceMotion || !("animate" in Element.prototype)) {
     finishIntro();
   } else {
-    buildGlyphs();
-
-    // the curtain animation (intro-out) ends the intro
-    intro.addEventListener("animationend", (e) => {
-      if (e.target === intro) finishIntro();
-    });
     intro.querySelector(".intro__skip").addEventListener("click", finishIntro);
-
-    // start only once the logo has loaded, so no piece lands blank
-    let started = false;
-    const play = () => {
-      if (started) return;
-      started = true;
-      intro.classList.add("is-playing");
-      setTimeout(finishIntro, 7500); // safety net
-    };
-    const logo = new Image();
-    logo.onload = logo.onerror = play;
-    logo.src = "assets/popstation-logo.webp";
-    setTimeout(play, 2500); // don't wait forever on a slow connection
+    setTimeout(finishIntro, 11000); // failsafe: never leave the intro up
+    runIntro().catch(finishIntro);
   }
 
   /* ---------------- Hero: rolling wheel ---------------- */
@@ -232,6 +294,98 @@
       tile.classList.toggle("is-alt");
       i += 2; // skip one each step so neighbouring tiles don't flip together
     }, 1300);
+  }
+
+  /* ---------------- Brandpolio deck ---------------- */
+
+  const brandpolio = document.getElementById("brandpolio");
+  if (brandpolio) {
+    const cards = [...brandpolio.querySelectorAll(".bcard")];
+    const dotsEl = document.getElementById("deckDots");
+    const info = brandpolio.querySelector(".brand-info");
+    const pad = (n) => String(n).padStart(2, "0");
+    document.getElementById("brandTotal").textContent = pad(cards.length);
+
+    const dots = cards.map((card, i) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.setAttribute("role", "tab");
+      b.setAttribute("aria-label", card.dataset.name);
+      b.addEventListener("click", () => { show(i); restart(); });
+      dotsEl.appendChild(b);
+      return b;
+    });
+
+    let current = -1;
+    const show = (i) => {
+      const n = cards.length;
+      i = (i + n) % n;
+      if (i === current) return;
+      current = i;
+      cards.forEach((card, k) => {
+        card.classList.toggle("is-active", k === i);
+        card.classList.toggle("is-prev", k === (i - 1 + n) % n);
+        card.classList.toggle("is-next", k !== i && k !== (i - 1 + n) % n);
+        card.setAttribute("aria-hidden", k !== i);
+      });
+      dots.forEach((d, k) => d.setAttribute("aria-selected", k === i));
+
+      const card = cards[i];
+      brandpolio.dataset.active = card.dataset.brand;
+      document.getElementById("brandIndex").textContent = pad(i + 1);
+      document.getElementById("brandName").textContent = card.dataset.name;
+      document.getElementById("brandWhat").textContent = card.dataset.what;
+      const link = document.getElementById("brandLink");
+      link.href = card.dataset.url;
+      link.setAttribute("aria-label", `Visit ${card.dataset.name}`);
+      const on = card.dataset.stages.split(" ");
+      brandpolio.querySelectorAll("#brandStages li").forEach((li) => {
+        li.classList.toggle("is-on", on.includes(li.dataset.stage));
+      });
+
+      // replay the text entrance
+      info.classList.remove("is-swapping");
+      void info.offsetWidth;
+      info.classList.add("is-swapping");
+    };
+
+    document.getElementById("deckPrev").addEventListener("click", () => { show(current - 1); restart(); });
+    document.getElementById("deckNext").addEventListener("click", () => { show(current + 1); restart(); });
+    brandpolio.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") { show(current - 1); restart(); }
+      if (e.key === "ArrowRight") { show(current + 1); restart(); }
+    });
+
+    // swipe on touch screens
+    const deck = document.getElementById("deck");
+    let startX = null;
+    deck.addEventListener("pointerdown", (e) => { startX = e.clientX; });
+    deck.addEventListener("pointerup", (e) => {
+      if (startX === null) return;
+      const dx = e.clientX - startX;
+      startX = null;
+      if (Math.abs(dx) > 40) { show(current + (dx < 0 ? 1 : -1)); restart(); }
+    });
+
+    // autoplay only while the section is on screen and not hovered
+    let timer = null;
+    let inView = false;
+    let hovered = false;
+    const stop = () => { clearInterval(timer); timer = null; };
+    const restart = () => {
+      stop();
+      if (inView && !hovered && !reduceMotion) timer = setInterval(() => show(current + 1), 4500);
+    };
+    brandpolio.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") { hovered = true; stop(); } });
+    brandpolio.addEventListener("pointerleave", () => { hovered = false; restart(); });
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(([entry]) => {
+        inView = entry.isIntersecting;
+        restart();
+      }, { threshold: 0.35 }).observe(brandpolio);
+    }
+
+    show(0);
   }
 
   /* ---------------- Footer year ---------------- */
