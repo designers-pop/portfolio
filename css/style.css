@@ -48,18 +48,21 @@ a { color: inherit; }
 }
 
 /* ==========================================================================
-   INTRO — logo reveal
-   Timeline: jonquil flash 0–450ms · rojo 450–900 · steel 900–1350
-             pieces land 1400–2600 · hold · curtain lifts at 3300
+   INTRO — logo reveal, one glyph at a time
+   Each letter of the logo gets its own colour panel for one --step,
+   then the full logo assembles on black and the curtain lifts.
    ========================================================================== */
 
 .intro {
+  --step: 300ms;                         /* time each glyph panel is on screen */
+  --glyphs: 11;                          /* P o p S t a t ı o n + popcorn */
+  --t: calc(var(--step) * var(--glyphs)); /* when the full logo starts landing */
   position: fixed;
   inset: 0;
   z-index: 100;
   background: var(--black);
   overflow: hidden;
-  animation: intro-out 750ms var(--ease-out) 3300ms forwards;
+  animation: intro-out 750ms var(--ease-out) calc(var(--t) + 1800ms) forwards;
 }
 
 .intro.is-done { display: none; }
@@ -72,62 +75,64 @@ a { color: inherit; }
   to { clip-path: inset(0 0 100% 0); }
 }
 
-/* --- colour flashes with zoomed logo fragments --- */
+/* --- glyph panels (built by main.js) --- */
 
-.flash {
+.glyph-panel {
   position: absolute;
   inset: 0;
-  overflow: hidden;
-  animation: hide 1ms linear forwards;
-}
-.flash--jonquil { z-index: 3; background: var(--jonquil); animation-delay: 450ms; }
-.flash--rojo    { z-index: 2; background: var(--rojo);    animation-delay: 900ms; }
-.flash--steel   { z-index: 1; background: var(--steel);   animation-delay: 1350ms; }
-
-@keyframes hide { to { visibility: hidden; } }
-
-.frag {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 340vmax;
-  aspect-ratio: var(--logo-ratio);
-  background: url("../assets/popstation-logo.webp") center / 100% 100% no-repeat;
-  will-change: transform, filter;
+  z-index: calc(50 - var(--i));          /* earlier panels sit on top */
+  display: grid;
+  place-items: center;
+  background: var(--bg);
+  animation: panel-hide 1ms linear calc((var(--i) + 1) * var(--step)) forwards;
 }
 
-/* popcorn loop, recoloured black on jonquil */
-.frag--loop {
-  width: 300vmax;
-  translate: -71.5% -36.5%;
-  transform-origin: 71.5% 36.5%;
-  filter: brightness(0);
-  animation: frag-spin 450ms var(--ease-out) both;
-}
-/* the "P" of Pop */
-.frag--p {
-  translate: -8.4% -41.4%;
-  transform-origin: 8.4% 41.4%;
-  animation: frag-sweep 450ms var(--ease-out) 450ms both;
-}
-/* the "S" of Station */
-.frag--s {
-  translate: -5% -72%;
-  transform-origin: 5% 72%;
-  animation: frag-sweep-up 450ms var(--ease-out) 900ms both;
+@keyframes panel-hide { to { visibility: hidden; } }
+
+/* a single letter cut from the logo image, whole and centred */
+.glyph {
+  width: min(62vw, calc(56vh * var(--ar)));
+  aspect-ratio: var(--ar);
+  background: var(--fg);
+  -webkit-mask: url("../assets/popstation-logo.webp") no-repeat;
+          mask: url("../assets/popstation-logo.webp") no-repeat;
+  -webkit-mask-size: var(--ms);
+          mask-size: var(--ms);
+  -webkit-mask-position: var(--mp);
+          mask-position: var(--mp);
+  animation: var(--anim) calc(var(--step) * 0.85) var(--ease-out) calc(var(--i) * var(--step)) both;
 }
 
-@keyframes frag-spin {
-  from { transform: rotate(-140deg) scale(0.55); filter: brightness(0) blur(14px); }
-  to   { transform: rotate(0) scale(0.8);        filter: brightness(0) blur(0); }
+/* the popcorn keeps its own colours */
+.glyph--icon {
+  background: url("../assets/popstation-logo.webp") no-repeat;
+  background-size: var(--ms);
+  background-position: var(--mp);
+  -webkit-mask: none;
+          mask: none;
 }
-@keyframes frag-sweep {
-  from { transform: translateX(60vw) rotate(25deg) scale(1.2); filter: blur(16px); }
-  to   { transform: translateX(0) rotate(0) scale(1);          filter: blur(0); }
+
+/* sweeps, echoing the strokes being drawn in the reference */
+@keyframes g-wipe-right {
+  from { clip-path: inset(0 100% 0 0); transform: translateX(-10%) rotate(-6deg); filter: blur(8px); }
+  to   { clip-path: inset(0 0 0 0);    transform: none;                          filter: blur(0); }
 }
-@keyframes frag-sweep-up {
-  from { transform: translateY(70vh) rotate(-30deg); filter: blur(16px); }
-  to   { transform: translateY(0) rotate(0);         filter: blur(0); }
+@keyframes g-wipe-up {
+  from { clip-path: inset(100% 0 0 0); transform: translateY(12%); filter: blur(8px); }
+  to   { clip-path: inset(0 0 0 0);    transform: none;            filter: blur(0); }
+}
+@keyframes g-wipe-down {
+  from { clip-path: inset(0 0 100% 0); transform: translateY(-12%); filter: blur(8px); }
+  to   { clip-path: inset(0 0 0 0);    transform: none;             filter: blur(0); }
+}
+@keyframes g-spin {
+  from { transform: rotate(-160deg) scale(0.4); filter: blur(10px); }
+  to   { transform: none;                       filter: blur(0); }
+}
+@keyframes g-drop {
+  0%   { transform: translateY(-70vh); }
+  70%  { transform: translateY(4%); }
+  100% { transform: none; }
 }
 
 /* --- final logo assembly --- */
@@ -142,8 +147,14 @@ a { color: inherit; }
 
 .logo-build {
   position: relative;
-  width: min(72vw, 620px);
+  width: min(80vw, 620px);
   aspect-ratio: var(--logo-ratio);
+  animation: logo-settle 1400ms var(--ease-out) var(--t) both;
+}
+
+@keyframes logo-settle {
+  from { transform: scale(1.18); }
+  to   { transform: none; }
 }
 
 .piece {
@@ -156,25 +167,25 @@ a { color: inherit; }
 /* regions of the logo image, as clip insets (top right bottom left) */
 .piece--pop {
   clip-path: inset(22% 45.6% 44% 0);
-  animation: piece-rise 700ms var(--ease-out) 1400ms forwards;
+  animation: piece-rise 600ms var(--ease-out) var(--t) forwards;
 }
 .piece--station {
   clip-path: polygon(0 56%, 54.5% 56%, 54.5% 61%, 100% 61%, 100% 88%, 0 88%);
-  animation: piece-rise 700ms var(--ease-out) 1550ms forwards;
+  animation: piece-rise 600ms var(--ease-out) calc(var(--t) + 120ms) forwards;
 }
 .piece--icon {
   clip-path: inset(11% 8.5% 39% 54.5%);
   transform-origin: 71.5% 36.5%;
-  animation: piece-pop 900ms var(--ease-spring) 1750ms forwards;
+  animation: piece-pop 800ms var(--ease-spring) calc(var(--t) + 300ms) forwards;
 }
 .piece--tagline {
   clip-path: inset(91% 50% 0 50%);
   opacity: 1;
-  animation: piece-wipe 800ms var(--ease-out) 2250ms forwards;
+  animation: piece-wipe 700ms var(--ease-out) calc(var(--t) + 700ms) forwards;
 }
 
 @keyframes piece-rise {
-  from { opacity: 0; transform: translateY(18%); filter: blur(10px); }
+  from { opacity: 0; transform: translateY(14%); filter: blur(8px); }
   to   { opacity: 1; transform: translateY(0);   filter: blur(0); }
 }
 @keyframes piece-pop {

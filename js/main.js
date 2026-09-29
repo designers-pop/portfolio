@@ -11,10 +11,59 @@
     document.body.classList.remove("is-loading");
   };
 
+  // Each glyph: its box in the 776 x 507 logo image [x0, y0, x1, y1],
+  // panel colour, glyph colour and entrance.
+  const LOGO_W = 776;
+  const LOGO_H = 507;
+  const GLYPHS = [
+    { box: [1, 123, 126, 258],   bg: "var(--jonquil)", fg: "var(--black)",   anim: "g-wipe-right" },
+    { box: [140, 152, 267, 261], bg: "var(--rojo)",    fg: "var(--jonquil)", anim: "g-spin" },
+    { box: [285, 152, 425, 292], bg: "var(--steel)",   fg: "var(--white)",   anim: "g-wipe-down" },
+    { box: [1, 287, 120, 427],   bg: "var(--black)",   fg: "var(--jonquil)", anim: "g-wipe-up" },
+    { box: [132, 298, 222, 427], bg: "var(--white)",   fg: "var(--rojo)",    anim: "g-wipe-down" },
+    { box: [234, 319, 349, 427], bg: "var(--jonquil)", fg: "var(--steel)",   anim: "g-spin" },
+    { box: [360, 298, 450, 427], bg: "var(--rojo)",    fg: "var(--white)",   anim: "g-wipe-up" },
+    { box: [462, 322, 510, 427], bg: "var(--steel)",   fg: "var(--jonquil)", anim: "g-drop" },
+    { box: [518, 318, 646, 427], bg: "var(--white)",   fg: "var(--black)",   anim: "g-spin" },
+    { box: [658, 322, 775, 427], bg: "var(--black)",   fg: "var(--rojo)",    anim: "g-wipe-right" },
+    { box: [434, 60, 705, 305],  bg: "var(--steel)",   icon: true,           anim: "g-spin" },
+  ];
+
+  const buildGlyphs = () => {
+    const holder = document.getElementById("glyphs");
+    if (!holder) return;
+    const pad = 3;
+    GLYPHS.forEach((g, i) => {
+      const x = Math.max(0, g.box[0] - pad);
+      const y = Math.max(0, g.box[1] - pad);
+      const w = Math.min(LOGO_W, g.box[2] + pad + 1) - x;
+      const h = Math.min(LOGO_H, g.box[3] + pad + 1) - y;
+
+      const panel = document.createElement("div");
+      panel.className = "glyph-panel";
+      panel.style.setProperty("--i", i);
+      panel.style.setProperty("--bg", g.bg);
+
+      const glyph = document.createElement("div");
+      glyph.className = g.icon ? "glyph glyph--icon" : "glyph";
+      glyph.style.setProperty("--ar", (w / h).toFixed(4));
+      // scale the whole logo so this box fills the element, then shift it into view
+      glyph.style.setProperty("--ms", `${(LOGO_W / w) * 100}% ${(LOGO_H / h) * 100}%`);
+      glyph.style.setProperty("--mp", `${(x / (LOGO_W - w)) * 100}% ${(y / (LOGO_H - h)) * 100}%`);
+      glyph.style.setProperty("--anim", g.anim);
+      if (g.fg) glyph.style.setProperty("--fg", g.fg);
+
+      panel.appendChild(glyph);
+      holder.appendChild(panel);
+    });
+  };
+
   if (!intro || reduceMotion) {
     finishIntro();
   } else {
-    // the curtain animation ends the intro (intro-out, starts at 3300ms)
+    buildGlyphs();
+
+    // the curtain animation (intro-out) ends the intro
     intro.addEventListener("animationend", (e) => {
       if (e.target === intro) finishIntro();
     });
@@ -26,7 +75,7 @@
       if (started) return;
       started = true;
       intro.classList.add("is-playing");
-      setTimeout(finishIntro, 4500); // safety net
+      setTimeout(finishIntro, 7500); // safety net
     };
     const logo = new Image();
     logo.onload = logo.onerror = play;
