@@ -83,7 +83,7 @@ a { color: inherit; }
   max-height: 72vh;
   overflow: visible;
 }
-.intro__glyph path { transform-box: fill-box; transform-origin: center; }
+.intro__glyph { transform-origin: center; }
 
 .intro__stage {
   position: absolute;
@@ -102,10 +102,8 @@ a { color: inherit; }
 .intro-logo path,
 .intro-logo g { transform-box: fill-box; transform-origin: center; }
 
-/* hidden until its turn in the timeline */
-.intro__stage .logo-word path,
-.intro__stage .logo-icon,
-.intro__stage .logo-tag { opacity: 0; }
+/* hidden until slide 3 */
+.intro__stage .intro-logo { opacity: 0; }
 
 .intro__skip {
   position: absolute;
@@ -260,15 +258,56 @@ a { color: inherit; }
 @keyframes bob { 50% { transform: translateY(5px); } }
 
 /* ==========================================================================
-   BUILT WITH YOUR BRAND — words filled with imagery
+   HOW WE BUILD → BY THE NUMBERS
+   One tall section with a pinned screen. main.js reads the scroll position
+   and morphs the image-filled words of the headline into the number tiles.
    ========================================================================== */
 
-.build {
+.morph {
   position: relative;
-  padding: clamp(96px, 14vw, 180px) var(--gutter) clamp(72px, 10vw, 120px);
-  text-align: center;
+  height: 320vh;
   background: var(--black);
 }
+
+.morph__anchor {
+  position: absolute;
+  top: 62%;
+}
+
+.morph__pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+
+.morph__text {
+  padding: 0 var(--gutter);
+  text-align: center;
+  will-change: opacity, transform;
+}
+
+.morph__grid {
+  position: absolute;
+  inset: 92px var(--gutter) 64px;
+  display: flex;
+  flex-direction: column;
+  max-width: 1320px;
+  margin: 0 auto;
+  pointer-events: none;
+}
+.morph.is-grid .morph__grid { pointer-events: auto; }
+
+.morph__label {
+  margin: 0 0 16px;
+  opacity: var(--c, 0);
+}
+
+/* tile content appears once the tiles have landed */
+.morph .tile > * { opacity: var(--c, 0); }
 
 .build__title {
   margin: 0 auto;
@@ -287,13 +326,14 @@ a { color: inherit; }
   gap: 0.08em 0.22em;
 }
 
-/* fill used by chips and boxed words — swapped for a photo when one is supplied */
+/* fills shared by each headline word and the tile it becomes;
+   swapped for a photo when one is supplied */
 .build__title [style*="--d"] { --fill: linear-gradient(135deg, var(--jonquil), var(--rojo)); }
-.build__title [style*="--d:1"],
-.build__title [style*="--d:5"] { --fill: linear-gradient(135deg, var(--steel), #0b2a4d); }
-.build__title [style*="--d:2"],
-.build__title [style*="--d:6"] { --fill: linear-gradient(135deg, var(--rojo), #4a0a0b); }
-.build__title [style*="--d:4"] { --fill: linear-gradient(135deg, var(--jonquil), #8a6a00); }
+.build__title [data-morph="a"], .tile--a { --fill: linear-gradient(140deg, var(--steel), #0b2a4d); }
+.build__title [data-morph="b"], .tile--b { --fill: linear-gradient(140deg, var(--jonquil), #e8a800); }
+.build__title [data-morph="c"], .tile--c { --fill: linear-gradient(140deg, var(--rojo), #7a0c0d); }
+.build__title [data-morph="d"], .tile--d { --fill: linear-gradient(140deg, #ffffff, #d9d4c7); }
+.build__title [data-morph="e"], .tile--e { --fill: linear-gradient(140deg, var(--rojo), var(--jonquil)); }
 
 .chip {
   display: inline-block;
@@ -390,10 +430,12 @@ a { color: inherit; }
 [data-reveal].is-in:not(.build__title) { opacity: 1; transform: none; }
 
 .progress {
-  position: relative;
-  max-width: 720px;
+  position: absolute;
+  left: 50%;
+  bottom: 28px;
+  width: min(720px, calc(100% - 2 * var(--gutter)));
   height: 6px;
-  margin: 40px auto 0;
+  transform: translateX(-50%);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.16);
 }
@@ -417,25 +459,16 @@ a { color: inherit; }
   transform: translate(-50%, -50%);
 }
 
-/* ==========================================================================
-   BY THE NUMBERS — bento
-   ========================================================================== */
-
-.numbers {
-  scroll-margin-top: 40px;
-  padding: clamp(72px, 10vw, 140px) var(--gutter);
-  background: var(--rojo);
-}
-
-.eyebrow--light { margin-bottom: 24px; }
+/* --- the bento the words become --- */
 
 .bento {
+  position: relative;
+  flex: 1;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  grid-auto-rows: clamp(200px, 23vw, 320px);
+  grid-template-rows: repeat(2, minmax(0, 1fr));
   gap: clamp(8px, 1vw, 14px);
-  max-width: 1320px;
-  margin: 0 auto;
+  width: 100%;
 }
 
 .tile--a { grid-column: span 8; }
@@ -452,17 +485,17 @@ a { color: inherit; }
   padding: clamp(16px, 2vw, 28px);
   overflow: hidden;
   border-radius: clamp(14px, 1.6vw, 22px);
-  background: var(--black);
-  clip-path: inset(100% 0 0 0 round 22px);
-  transition: clip-path 1000ms var(--ease-out) var(--stagger, 0ms);
+  color: var(--ink, var(--white));
+  transform-origin: 0 0;
+  will-change: transform;
+  transition: color 600ms var(--ease-out);
 }
-.tile.is-in { clip-path: inset(0 0 0 0 round 22px); }
 
-.tile--a { --stagger: 0ms;   --fill: linear-gradient(140deg, #3a2a10, var(--black) 70%); --pat: var(--jonquil); }
-.tile--b { --stagger: 120ms; --fill: linear-gradient(140deg, #0e2f55, var(--black) 75%); --pat: var(--steel); }
-.tile--c { --stagger: 240ms; --fill: linear-gradient(140deg, #4d0b0c, var(--black) 75%); --pat: var(--rojo); }
-.tile--d { --stagger: 360ms; --fill: linear-gradient(140deg, #3a2a10, var(--black) 75%); --pat: var(--white); }
-.tile--e { --stagger: 480ms; --fill: linear-gradient(140deg, #0e2f55, var(--black) 75%); --pat: var(--jonquil); }
+.tile--a { --pat: var(--jonquil); }
+.tile--b { --pat: var(--black); --ink: var(--black); }
+.tile--c { --pat: var(--white); }
+.tile--d { --pat: var(--rojo); --ink: var(--black); }
+.tile--e { --pat: var(--white); }
 
 /* two faces: imagery and a brand pattern, which trade places on a loop */
 .tile::before,
@@ -473,13 +506,14 @@ a { color: inherit; }
   z-index: 0;
   transition: opacity 900ms var(--ease-out), transform 1200ms var(--ease-out);
 }
-.tile::before {
+.tile::before { background: var(--fill); }
+/* with a photo, darken the bottom so the numbers stay readable */
+.tile[style*="--img"] { --ink: var(--white); }
+.tile[style*="--img"]::before {
   background:
     linear-gradient(to top, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.05) 60%),
-    var(--img, var(--fill)) center / cover;
-  transform: scale(1.12);
+    var(--img) center / cover;
 }
-.tile.is-in::before { transform: scale(1); }
 
 .tile::after {
   opacity: 0;
@@ -490,6 +524,8 @@ a { color: inherit; }
 }
 .tile.is-alt::after { opacity: 1; transform: scale(1); }
 .tile.is-alt::before { opacity: 0.15; }
+.tile.is-alt { --ink: var(--white); }
+.tile--b.is-alt { --pat: var(--jonquil); }
 
 .tile[data-pattern="dots"]::after {
   background: radial-gradient(circle, var(--pat) 0 28%, transparent 31%) 0 0 / 22px 22px;
@@ -677,8 +713,82 @@ a { color: inherit; }
 .bcard.is-active {
   opacity: 1;
   pointer-events: auto;
-  transform: rotateY(-14deg) rotateX(5deg);
+  cursor: pointer;
+  /* resting tilt, plus whatever the pointer adds (--rx / --ry from main.js) */
+  transform: rotateY(calc(-14deg + var(--ry, 0deg))) rotateX(calc(5deg + var(--rx, 0deg)));
 }
+.bcard.is-tilting { transition: transform 180ms linear, opacity 700ms var(--ease-out); }
+
+/* click to flip: the face turns over to show what Popstation delivers */
+.bcard__flip {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform 900ms var(--ease-out);
+}
+.bcard.is-flipped .bcard__flip { transform: rotateY(180deg); }
+.bcard__face,
+.bcard__back {
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+}
+.bcard__back {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 28px 24px;
+  border-radius: 30px;
+  background: var(--black);
+  color: var(--white);
+  transform: rotateY(180deg);
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.45);
+}
+.bcard__back h4 {
+  margin: 0;
+  font-size: clamp(24px, 2.4vw, 32px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--card-accent, var(--jonquil));
+}
+.bcard__back p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  opacity: 0.8;
+}
+.bcard__back ul {
+  display: grid;
+  gap: 8px;
+  margin: auto 0 0;
+  padding: 0;
+  list-style: none;
+}
+.bcard__back li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.07);
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.4;
+}
+.bcard__back li.is-on { opacity: 1; background: rgba(255, 255, 255, 0.14); }
+.bcard__back li.is-on::after { content: "✓"; color: var(--card-accent, var(--jonquil)); }
+.bcard__back a {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--white);
+}
+.bcard[data-brand="majestey"] { --card-accent: var(--jonquil); }
+.bcard[data-brand="momstore"] { --card-accent: #7fb5ee; }
+
+.bcard.is-active.is-flipped .chip-float,
+.bcard.is-active.is-flipped .tile-float { opacity: 0; transform: translateZ(70px) scale(0.5); transition-delay: 0ms; }
+.tile-float { cursor: pointer; }
 
 /* idle drift, like the reference card turning in space */
 .bcard.is-active .bcard__face,
@@ -788,6 +898,13 @@ a { color: inherit; }
 .tile-float[style*="--img"] { background-size: cover; background-position: center; }
 .tf-2 { bottom: 20%; left: -12%; width: 22%; }
 
+.deck-hint {
+  margin: clamp(8px, 2vw, 20px) 0 0;
+  text-align: center;
+  font-size: 13px;
+  opacity: 0.55;
+}
+
 .deck-nav {
   display: flex;
   align-items: center;
@@ -860,7 +977,8 @@ a { color: inherit; }
   .build__facts { flex-direction: column; gap: 10px; }
   .build__facts li + li::before { display: none; }
 
-  .bento { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 190px; }
+  .bento { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, minmax(0, 1fr)); }
+  .morph__grid { inset: 84px var(--gutter) 56px; }
   .tile--a { grid-column: span 2; }
   .tile--b, .tile--c, .tile--d, .tile--e { grid-column: span 1; }
   .tile__num { font-size: 44px; }
@@ -875,6 +993,11 @@ a { color: inherit; }
 
 @media (prefers-reduced-motion: reduce) {
   .intro { display: none; }
+  .morph { height: auto; padding: 120px 0 64px; }
+  .morph__pin { position: static; height: auto; display: block; overflow: visible; }
+  .morph__grid { position: relative; inset: auto; height: 80vh; margin: 64px var(--gutter) 0; pointer-events: auto; }
+  .morph .tile > *, .morph__label { opacity: 1; }
+  .progress { display: none; }
   *, *::before, *::after {
     animation-duration: 1ms !important;
     animation-delay: 0ms !important;

@@ -60,69 +60,74 @@
       </div>
     </section>
 
-    <!-- ============ BUILT WITH YOUR BRAND ============ -->
-    <section class="build" id="build">
-      <h2 class="build__title" data-reveal>
-        <span class="line">
-          <span class="chip" style="--d:0" data-img="assets/img/sketch.jpg"></span>
-          <span class="word">Built</span> <span class="word">with</span>
-          <span class="chip" style="--d:1" data-img="assets/img/fabric.jpg"></span>
-        </span>
-        <span class="line">
-          <span class="word boxed" style="--d:2">your</span>
-          <span class="word boxed" style="--d:3">brand.</span>
-          <span class="chip" style="--d:4" data-img="assets/img/store.jpg"></span>
-        </span>
-        <span class="line">
-          <span class="word">From</span>
-          <span class="word boxed" style="--d:5">first sketch</span>
-          <span class="word">to</span>
-          <span class="word boxed" style="--d:6">shelf.</span>
-        </span>
-      </h2>
+    <!-- ============ HOW WE BUILD → BY THE NUMBERS (one pinned screen) ============
+         While this section is pinned, scrolling morphs the image-filled
+         words of the headline into the number tiles (see main.js). -->
+    <section class="morph" id="build">
+      <span class="morph__anchor" id="numbers" aria-hidden="true"></span>
+      <div class="morph__pin">
+        <div class="morph__text">
+          <h2 class="build__title" data-reveal>
+            <span class="line">
+              <span class="chip" style="--d:0" data-morph="c" data-img="assets/img/sketch.jpg"></span>
+              <span class="word">Built</span> <span class="word">with</span>
+              <span class="chip" style="--d:1" data-morph="b" data-img="assets/img/fabric.jpg"></span>
+            </span>
+            <span class="line">
+              <span class="word boxed" style="--d:2">your</span>
+              <span class="word boxed" style="--d:3">brand.</span>
+              <span class="chip" style="--d:4" data-morph="d" data-img="assets/img/store.jpg"></span>
+            </span>
+            <span class="line">
+              <span class="word">From</span>
+              <span class="word boxed" style="--d:5" data-morph="a">first sketch</span>
+              <span class="word">to</span>
+              <span class="word boxed" style="--d:6" data-morph="e">shelf.</span>
+            </span>
+          </h2>
 
-      <p class="build__lede" data-reveal>
-        Popstation OS connects design, sourcing, production and delivery.<br>
-        One team stays with you through the build.
-      </p>
+          <p class="build__lede" data-reveal>
+            Popstation OS connects design, sourcing, production and delivery.<br>
+            One team stays with you through the build.
+          </p>
 
-      <ul class="build__facts" data-reveal>
-        <li>35 years in manufacturing</li>
-        <li>40+ brands incubated</li>
-        <li>AI-powered workflows</li>
-      </ul>
+          <ul class="build__facts" data-reveal>
+            <li>35 years in manufacturing</li>
+            <li>40+ brands incubated</li>
+            <li>AI-powered workflows</li>
+          </ul>
+        </div>
 
-      <div class="progress" aria-hidden="true"><span class="progress__knob"></span></div>
-    </section>
+        <div class="morph__grid">
+          <p class="eyebrow morph__label">By the numbers</p>
+          <div class="bento">
+            <article class="tile tile--a" data-from="a" data-img="assets/img/manufacturing.jpg" data-pattern="dots">
+              <div class="tile__num"><span data-count="35">0</span>+</div>
+              <div class="tile__big">Years</div>
+              <div class="tile__label">Manufacturing heritage</div>
+            </article>
+            <article class="tile tile--b" data-from="b" data-img="assets/img/incubation.jpg" data-pattern="grid">
+              <div class="tile__num"><span data-count="7">0</span>+</div>
+              <div class="tile__big">Years</div>
+              <div class="tile__label">Brand incubation</div>
+            </article>
+            <article class="tile tile--c" data-from="c" data-img="assets/img/brands.jpg" data-pattern="rings">
+              <div class="tile__num"><span data-count="40">0</span>+</div>
+              <div class="tile__big">Brands</div>
+              <div class="tile__label">Launched</div>
+            </article>
+            <article class="tile tile--d" data-from="d" data-img="assets/img/vendors.jpg" data-pattern="dots">
+              <div class="tile__num"><span data-count="300">0</span>+</div>
+              <div class="tile__label">Vendors</div>
+            </article>
+            <article class="tile tile--e" data-from="e" data-img="assets/img/retail.jpg" data-pattern="bars">
+              <div class="tile__num">₹<span data-count="2000" data-format="in">0</span>+ Cr</div>
+              <div class="tile__label">ARR impacted</div>
+            </article>
+          </div>
+        </div>
 
-    <!-- ============ BY THE NUMBERS ============ -->
-    <section class="numbers" id="numbers">
-      <p class="eyebrow eyebrow--light">By the numbers</p>
-
-      <div class="bento">
-        <article class="tile tile--a" data-img="assets/img/manufacturing.jpg" data-pattern="dots">
-          <div class="tile__num"><span data-count="35">0</span>+</div>
-          <div class="tile__big">Years</div>
-          <div class="tile__label">Manufacturing heritage</div>
-        </article>
-        <article class="tile tile--b" data-img="assets/img/incubation.jpg" data-pattern="grid">
-          <div class="tile__num"><span data-count="7">0</span>+</div>
-          <div class="tile__big">Years</div>
-          <div class="tile__label">Brand incubation</div>
-        </article>
-        <article class="tile tile--c" data-img="assets/img/brands.jpg" data-pattern="rings">
-          <div class="tile__num"><span data-count="40">0</span>+</div>
-          <div class="tile__big">Brands</div>
-          <div class="tile__label">Launched</div>
-        </article>
-        <article class="tile tile--d" data-img="assets/img/vendors.jpg" data-pattern="dots">
-          <div class="tile__num"><span data-count="300">0</span>+</div>
-          <div class="tile__label">Vendors</div>
-        </article>
-        <article class="tile tile--e" data-img="assets/img/retail.jpg" data-pattern="bars">
-          <div class="tile__num">₹<span data-count="2000" data-format="in">0</span>+ Cr</div>
-          <div class="tile__label">ARR impacted</div>
-        </article>
+        <div class="progress" aria-hidden="true"><span class="progress__knob"></span></div>
       </div>
     </section>
 
@@ -155,10 +160,13 @@
                    data-what="Fun, comfy clothing for infants and kids. We run the whole build for them: design through production."
                    data-stages="design sourcing production"
                    data-url="https://www.bumzee.in">
-            <div class="bcard__face">
-              <span class="bcard__top">Bumzee</span>
-              <div class="bcard__disc" data-img="assets/img/brands/bumzee.jpg"><span>B</span></div>
-              <span class="bcard__bottom">End-to-end</span>
+            <div class="bcard__flip">
+              <div class="bcard__face">
+                <span class="bcard__top">Bumzee</span>
+                <div class="bcard__disc" data-img="assets/img/brands/bumzee.jpg"><span>B</span></div>
+                <span class="bcard__bottom">End-to-end</span>
+              </div>
+              <div class="bcard__back"></div>
             </div>
             <span class="chip-float cf-1">Infant &amp; kidswear</span>
             <span class="chip-float cf-2"><i></i>Design</span>
@@ -172,10 +180,13 @@
                    data-what="We handle all of their design and packaging, so the brand looks the same from product to parcel."
                    data-stages="design packaging"
                    data-url="https://majestey.com">
-            <div class="bcard__face">
-              <span class="bcard__top">Majestey</span>
-              <div class="bcard__disc" data-img="assets/img/brands/majestey.jpg"><span>M</span></div>
-              <span class="bcard__bottom">London</span>
+            <div class="bcard__flip">
+              <div class="bcard__face">
+                <span class="bcard__top">Majestey</span>
+                <div class="bcard__disc" data-img="assets/img/brands/majestey.jpg"><span>M</span></div>
+                <span class="bcard__bottom">London</span>
+              </div>
+              <div class="bcard__back"></div>
             </div>
             <span class="chip-float cf-1">Design &amp; packaging</span>
             <span class="chip-float cf-2"><i></i>Design</span>
@@ -189,10 +200,13 @@
                    data-what="Maternity, baby and kids apparel. We produce their garments."
                    data-stages="production"
                    data-url="https://themomstore.in">
-            <div class="bcard__face">
-              <span class="bcard__top">The Mom</span>
-              <div class="bcard__disc" data-img="assets/img/brands/momstore.jpg"><span>M</span></div>
-              <span class="bcard__bottom">Store</span>
+            <div class="bcard__flip">
+              <div class="bcard__face">
+                <span class="bcard__top">The Mom</span>
+                <div class="bcard__disc" data-img="assets/img/brands/momstore.jpg"><span>M</span></div>
+                <span class="bcard__bottom">Store</span>
+              </div>
+              <div class="bcard__back"></div>
             </div>
             <span class="chip-float cf-1">Maternity &amp; baby</span>
             <span class="chip-float cf-2"><i></i>Garment production</span>
@@ -202,6 +216,8 @@
           </article>
         </div>
       </div>
+
+      <p class="deck-hint">Tap a card to flip it · drag or use the arrows to see more</p>
 
       <div class="deck-nav">
         <button class="deck-nav__btn" id="deckPrev" type="button" aria-label="Previous brand">←</button>
