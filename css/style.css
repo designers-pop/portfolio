@@ -629,9 +629,14 @@ a { color: inherit; }
   scroll-margin-top: 40px;
 }
 
-.brandpolio[data-active="bumzee"]   { --tint: #fff4cc; --card: var(--jonquil); --card-ink: var(--black); --disc: rgba(255, 255, 255, 0.6); }
-.brandpolio[data-active="majestey"] { --tint: #ecebe6; --card: var(--black);   --card-ink: var(--jonquil); --disc: rgba(255, 203, 14, 0.14); }
-.brandpolio[data-active="momstore"] { --tint: #e2edf9; --card: var(--steel);   --card-ink: var(--white); --disc: rgba(255, 255, 255, 0.22); }
+.brandpolio[data-active="bumzee"]   { --tint: #fff4cc; }
+.brandpolio[data-active="majestey"] { --tint: #ecebe6; }
+.brandpolio[data-active="momstore"] { --tint: #e2edf9; }
+
+/* each card carries its own colours, so a leaving card never takes on the next brand's */
+.bcard[data-brand="bumzee"]   { --card: var(--jonquil); --card-ink: var(--black); --disc: rgba(255, 255, 255, 0.6); }
+.bcard[data-brand="majestey"] { --card: var(--black);   --card-ink: var(--jonquil); --disc: rgba(255, 203, 14, 0.14); }
+.bcard[data-brand="momstore"] { --card: var(--steel);   --card-ink: var(--white); --disc: rgba(255, 255, 255, 0.22); }
 
 .brandpolio__head {
   max-width: 1320px;
@@ -739,22 +744,32 @@ a { color: inherit; }
   width: min(340px, 64vw);
   height: calc(min(340px, 64vw) * 1.38);
   transform-style: preserve-3d;
+  /* leaving cards fade out fast, then are hidden completely, so only one
+     brand is ever on screen (opacity alone doesn't reach 3D children in
+     every browser, hence visibility too) */
   transition:
     transform 1000ms var(--ease-out),
-    opacity 700ms var(--ease-out);
+    opacity 350ms var(--ease-out),
+    visibility 0s linear 350ms;
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
 }
 .bcard.is-prev { transform: translateX(-80%) rotateY(70deg) scale(0.8); }
 .bcard.is-next { transform: translateX(80%) rotateY(-70deg) scale(0.8); }
 .bcard.is-active {
   opacity: 1;
+  visibility: visible;
+  transition:
+    transform 1000ms var(--ease-out),
+    opacity 600ms var(--ease-out) 150ms,
+    visibility 0s;
   pointer-events: auto;
   cursor: pointer;
   /* resting tilt, plus whatever the pointer adds (--rx / --ry from main.js) */
   transform: rotateY(calc(-14deg + var(--ry, 0deg))) rotateX(calc(5deg + var(--rx, 0deg)));
 }
-.bcard.is-tilting { transition: transform 180ms linear, opacity 700ms var(--ease-out); }
+.bcard.is-tilting { transition: transform 180ms linear, opacity 600ms var(--ease-out), visibility 0s; }
 
 /* click to flip: the face turns over to show what Popstation delivers */
 .bcard__flip {
