@@ -442,16 +442,24 @@
       });
     });
 
-    // clicking a floating photo swaps it into the card's main circle
-    brandpolio.querySelectorAll(".tile-float").forEach((tile) => {
-      tile.addEventListener("click", (e) => {
+    // clicking the floating photo panel swaps it (and its caption) with the circle
+    brandpolio.querySelectorAll(".fp-photo").forEach((panel) => {
+      panel.addEventListener("click", (e) => {
         e.stopPropagation();
-        const disc = tile.closest(".bcard").querySelector(".bcard__disc");
+        const disc = panel.closest(".bcard").querySelector(".bcard__disc");
+        const img = panel.querySelector(".fp-img");
+        const cap = panel.querySelector("figcaption b");
         const a = disc.style.getPropertyValue("--img");
-        const b = tile.style.getPropertyValue("--img");
+        const b = img.style.getPropertyValue("--img");
         if (!a || !b) return; // only once both photos exist
         disc.style.setProperty("--img", b);
-        tile.style.setProperty("--img", a);
+        img.style.setProperty("--img", a);
+        const discCap = disc.dataset.cap;
+        disc.dataset.cap = cap.textContent;
+        cap.textContent = discCap;
+        const discLabel = disc.getAttribute("aria-label");
+        disc.setAttribute("aria-label", img.getAttribute("aria-label"));
+        img.setAttribute("aria-label", discLabel);
       });
     });
 
@@ -464,8 +472,8 @@
         const x = (e.clientX - r.left) / r.width - 0.5;
         const y = (e.clientY - r.top) / r.height - 0.5;
         card.classList.add("is-tilting");
-        card.style.setProperty("--ry", `${(x * 22).toFixed(2)}deg`);
-        card.style.setProperty("--rx", `${(-y * 16).toFixed(2)}deg`);
+        card.style.setProperty("--ry", `${(x * 12).toFixed(2)}deg`);
+        card.style.setProperty("--rx", `${(-y * 8).toFixed(2)}deg`);
       });
       deck.addEventListener("pointerleave", () => {
         cards.forEach((card) => {

@@ -136,6 +136,7 @@ a { color: inherit; }
   padding: 9px 14px;
   border-radius: 999px;
   background: var(--black);
+  color: var(--white);
   font-size: 13px;
   font-weight: 600;
   text-decoration: none;
@@ -198,7 +199,7 @@ a { color: inherit; }
   display: block;
   height: calc(var(--tab-h) + var(--strip) + var(--overlap));
   margin-top: calc(var(--overlap) * -1);
-  color: var(--white);
+  color: var(--ink, var(--white));
   text-decoration: none;
   outline: none;
   transform: translateY(110vh) rotate(-2deg);
@@ -268,7 +269,7 @@ a { color: inherit; }
   font-size: clamp(12px, 1.1vw, 15px);
   font-weight: 600;
   line-height: 1.35;
-  color: rgba(255, 255, 255, 0.72);
+  opacity: 0.75;
 }
 
 .folder__clip {
@@ -283,13 +284,13 @@ a { color: inherit; }
   filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.35));
 }
 
-/* shades and tab positions, top to bottom */
-.folder:nth-child(1) { --shade: #7e0d11; --tab-x: 16%; }
-.folder:nth-child(2) { --shade: #d4191b; --tab-x: 50%; }
-.folder:nth-child(3) { --shade: #b3151a; --tab-x: 6%; }
-.folder:nth-child(4) { --shade: #e8393b; --tab-x: 30%; }
-.folder:nth-child(5) { --shade: #c0171b; --tab-x: 54%; }
-.folder:nth-child(6) { --shade: #92101a; --tab-x: 22%; }
+/* brand colours and tab positions, top to bottom */
+.folder:nth-child(1) { --shade: var(--black);   --tab-x: 16%; }
+.folder:nth-child(2) { --shade: var(--jonquil); --tab-x: 50%; --ink: var(--black); }
+.folder:nth-child(3) { --shade: var(--rojo);    --tab-x: 6%; }
+.folder:nth-child(4) { --shade: var(--steel);   --tab-x: 30%; }
+.folder:nth-child(5) { --shade: var(--white);   --tab-x: 54%; --ink: var(--black); }
+.folder:nth-child(6) { --shade: var(--black);   --tab-x: 22%; }
 .folder { --tab-w: 40%; }
 
 /* pull a folder up on hover; click pulls it out (main.js) */
@@ -618,7 +619,7 @@ a { color: inherit; }
 .bcard[data-brand="majestey"] { --card: #fbf6ea; --card-ink: #262d20; --disc: #efe4c8; --card-accent: #c9a85c; }
 .bcard[data-brand="majestey"] .chip-float i { background: #d93a36; }
 .bcard[data-brand="majestey"] .cf-3 i { background: #c9a85c; }
-.bcard[data-brand="majestey"] .bcard__disc[style*="--img"] { width: 56%; }
+.bcard[data-brand="majestey"] .bcard__disc { width: 64%; }
 .bcard[data-brand="momstore"] { --card: var(--steel);   --card-ink: var(--white); --disc: rgba(255, 255, 255, 0.22); }
 
 .brandpolio__head {
@@ -711,21 +712,25 @@ a { color: inherit; }
   text-decoration: none;
 }
 
-/* --- the deck --- */
+/* --- the deck ---
+   Modelled on the reference: a tall card that rests face-on, a round photo
+   in the middle, white info panels and chips overlapping its edges. The card
+   only swings in 3D while brands change. */
 
 .deck {
   position: relative;
-  height: clamp(480px, 50vw, 640px);
-  perspective: 1600px;
+  height: clamp(520px, 52vw, 660px);
+  perspective: 1800px;
   touch-action: pan-y;
 }
 
 .bcard {
+  --w: min(300px, 58vw);
   position: absolute;
   inset: 0;
   margin: auto;
-  width: min(340px, 64vw);
-  height: calc(min(340px, 64vw) * 1.38);
+  width: var(--w);
+  height: calc(var(--w) * 1.62);
   transform-style: preserve-3d;
   /* leaving cards fade out fast, then are hidden completely, so only one
      brand is ever on screen (opacity alone doesn't reach 3D children in
@@ -738,8 +743,8 @@ a { color: inherit; }
   visibility: hidden;
   pointer-events: none;
 }
-.bcard.is-prev { transform: translateX(-80%) rotateY(70deg) scale(0.8); }
-.bcard.is-next { transform: translateX(80%) rotateY(-70deg) scale(0.8); }
+.bcard.is-prev { transform: translateX(-70%) rotateY(75deg) scale(0.85); }
+.bcard.is-next { transform: translateX(70%) rotateY(-75deg) scale(0.85); }
 .bcard.is-active {
   opacity: 1;
   visibility: visible;
@@ -749,8 +754,8 @@ a { color: inherit; }
     visibility 0s;
   pointer-events: auto;
   cursor: pointer;
-  /* resting tilt, plus whatever the pointer adds (--rx / --ry from main.js) */
-  transform: rotateY(calc(-14deg + var(--ry, 0deg))) rotateX(calc(5deg + var(--rx, 0deg)));
+  /* face-on at rest; the pointer adds a gentle lean (--rx / --ry from main.js) */
+  transform: rotateY(var(--ry, 0deg)) rotateX(var(--rx, 0deg));
 }
 .bcard.is-tilting { transition: transform 180ms linear, opacity 600ms var(--ease-out), visibility 0s; }
 
@@ -821,17 +826,7 @@ a { color: inherit; }
 .bcard[data-brand="momstore"] { --card-accent: #7fb5ee; }
 
 .bcard.is-active.is-flipped .chip-float,
-.bcard.is-active.is-flipped .tile-float { opacity: 0; transform: translateZ(70px) scale(0.5); transition-delay: 0ms; }
-.tile-float { cursor: pointer; }
-
-/* idle drift, like the reference card turning in space */
-.bcard.is-active .bcard__face,
-.bcard.is-active .chip-float,
-.bcard.is-active .tile-float { animation: drift 6s ease-in-out 1s infinite alternate; }
-@keyframes drift {
-  from { translate: 0 0; }
-  to   { translate: 0 -10px; }
-}
+.bcard.is-active.is-flipped .fpanel { opacity: 0; transform: translateZ(60px) scale(0.6); transition-delay: 0ms; }
 
 .bcard__face {
   position: absolute;
@@ -840,76 +835,134 @@ a { color: inherit; }
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 26px 22px;
-  border-radius: 30px;
+  padding: 30px 20px 34px;
+  border-radius: 28px;
   background: var(--card);
   color: var(--card-ink);
-  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.45);
-  transition: background 900ms var(--ease-out), color 900ms var(--ease-out);
+  box-shadow: 0 40px 70px -34px rgba(0, 0, 0, 0.4);
 }
 
 .bcard__top,
 .bcard__bottom {
-  font-size: clamp(24px, 2.6vw, 34px);
-  font-weight: 800;
+  font-size: clamp(26px, 2.6vw, 36px);
+  font-weight: 700;
   letter-spacing: -0.03em;
+  line-height: 1;
 }
 
 /* a brand's own logo in place of its typed name */
 .bcard__logo {
   display: block;
   width: auto;
-  height: clamp(70px, 7vw, 92px);
+  height: clamp(70px, 7vw, 96px);
 }
 
+/* the round photo in the middle */
 .bcard__disc {
   display: grid;
   place-items: center;
-  width: 68%;
+  width: 74%;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: var(--img, var(--disc)) center / cover;
+  background: var(--img, var(--disc)) center 18% / cover;
+  box-shadow: 0 0 0 8px var(--disc);
   overflow: hidden;
 }
 .bcard__disc span {
-  font-size: clamp(90px, 10vw, 140px);
+  font-size: clamp(90px, 9vw, 130px);
   font-weight: 900;
   letter-spacing: -0.06em;
   line-height: 1;
 }
 .bcard__disc[style*="--img"] span { display: none; }
-/* with a photo, the circle becomes a portrait frame */
-.bcard__disc[style*="--img"] {
-  width: 64%;
-  aspect-ratio: 3 / 4;
-  border-radius: 22px;
-  background-position: center top;
-}
 
-/* floating chips and tiles sit in front of the card */
+/* --- items floating in front of the card --- */
+
 .chip-float,
-.tile-float {
+.fpanel {
   position: absolute;
+  z-index: 2;
   opacity: 0;
-  transform: translateZ(70px) scale(0.5);
+  transform: translateZ(60px) scale(0.6);
   transition:
     opacity 500ms var(--ease-out),
     transform 800ms var(--ease-spring);
 }
 .bcard.is-active .chip-float,
-.bcard.is-active .tile-float { opacity: 1; transform: translateZ(70px) scale(1); }
-.bcard.is-active .cf-1 { transition-delay: 350ms; }
-.bcard.is-active .cf-2 { transition-delay: 450ms; }
-.bcard.is-active .cf-3 { transition-delay: 550ms; }
-.bcard.is-active .tf-1 { transition-delay: 250ms; }
-.bcard.is-active .tf-2 { transition-delay: 650ms; }
+.bcard.is-active .fpanel { opacity: 1; transform: translateZ(60px) scale(1); }
+.bcard.is-active .fp-photo { transition-delay: 250ms; }
+.bcard.is-active .fp-info  { transition-delay: 350ms; }
+.bcard.is-active .cf-2     { transition-delay: 480ms; }
+.bcard.is-active .cf-3     { transition-delay: 580ms; }
+
+/* white panels, like the reference's info cards */
+.fpanel {
+  margin: 0;
+  border-radius: 16px;
+  background: var(--white);
+  color: var(--black);
+  box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.4);
+}
+
+.fp-info {
+  top: 24%;
+  left: -30%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px 10px 10px;
+  width: max-content;
+  max-width: 78%;
+}
+.fp-icon {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--card-accent, var(--card));
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+.fp-text { display: grid; gap: 2px; }
+.fp-text b { font-size: 13px; font-weight: 700; line-height: 1.2; white-space: nowrap; }
+.fp-text small { font-size: 11px; opacity: 0.6; }
+
+.fp-photo {
+  top: 6%;
+  right: -30%;
+  width: 46%;
+  padding: 7px;
+  cursor: pointer;
+}
+.fp-img {
+  display: block;
+  aspect-ratio: 4 / 5;
+  border-radius: 11px;
+  background: var(--img, var(--disc)) center 20% / cover;
+}
+.fp-photo figcaption {
+  display: grid;
+  gap: 1px;
+  padding: 8px 4px 3px;
+}
+.fp-photo figcaption b { font-size: 12px; font-weight: 700; }
+.fp-photo figcaption small { font-size: 10px; opacity: 0.55; }
+
+/* idle drift, like the reference's items floating in space */
+.bcard.is-active .fpanel,
+.bcard.is-active .chip-float { animation: drift 5s ease-in-out 1.2s infinite alternate; }
+.bcard.is-active .fp-info { animation-delay: 1.8s; }
+.bcard.is-active .cf-3 { animation-delay: 2.4s; }
+@keyframes drift {
+  from { translate: 0 0; }
+  to   { translate: 0 -8px; }
+}
 
 .chip-float {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 10px 14px;
-  border-radius: 14px;
+  border-radius: 999px;
   background: var(--white);
   color: var(--black);
   font-size: 13px;
@@ -925,28 +978,8 @@ a { color: inherit; }
 }
 .cf-3 i { background: var(--steel); }
 
-.cf-1 { top: 16%; left: -24%; }
-.cf-2 { top: 50%; right: -26%; }
-.cf-3 { bottom: -5%; right: -20%; }
-
-.tile-float {
-  width: 30%;
-  aspect-ratio: 1;
-  border-radius: 20px;
-  /* dot pattern until a photo is supplied */
-  background-color: var(--card);
-  background-image: var(--img, radial-gradient(circle, rgba(255, 255, 255, 0.9) 0 26%, transparent 29%));
-  background-size: 16px 16px;
-  border: 4px solid var(--white);
-  box-shadow: 0 18px 40px -16px rgba(0, 0, 0, 0.4);
-}
-.bcard[data-brand="majestey"] .tile-float { background-color: var(--jonquil); }
-.bcard[data-brand="momstore"] .tile-float { background-color: var(--rojo); }
-.tf-1 { top: -7%; right: -14%; }
-/* a photo tile is a small portrait rather than a square */
-.tile-float.tf-photo { width: 36%; aspect-ratio: 3 / 4; top: -9%; right: -20%; }
-.tile-float[style*="--img"] { background-size: cover; background-position: center; }
-.tf-2 { bottom: 20%; left: -12%; width: 22%; }
+.cf-2 { top: 58%; right: -22%; }
+.cf-3 { bottom: 20%; left: -18%; }
 
 .deck-hint {
   margin: clamp(8px, 2vw, 20px) 0 0;
@@ -994,7 +1027,7 @@ a { color: inherit; }
 .role-page {
   min-height: 100vh;
   background: var(--shade, var(--rojo));
-  color: var(--white);
+  color: var(--ink, var(--white));
 }
 
 .role {
@@ -1033,14 +1066,14 @@ a { color: inherit; }
 }
 .role__links a {
   padding: 12px 20px;
-  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  border: 1.5px solid currentColor;
   border-radius: 999px;
   font-size: 14px;
   font-weight: 700;
   text-decoration: none;
   transition: background 200ms, color 200ms;
 }
-.role__links a:hover { background: var(--white); color: var(--black); }
+.role__links a:hover { background: var(--ink, var(--white)); color: var(--shade, var(--black)); }
 .role-page .nav__links { display: flex; }
 
 /* ==========================================================================
@@ -1078,11 +1111,10 @@ a { color: inherit; }
   .brandpolio__body { grid-template-columns: 1fr; }
   .brand-info { order: 2; }
   .deck { height: 520px; }
-  .cf-1 { left: -8%; }
-  .cf-2 { right: -8%; }
-  .cf-3 { right: -6%; bottom: -4%; }
-  .tf-2 { left: -4%; }
-  .tf-1 { right: -6%; }
+  .fp-info { left: -8%; top: 52%; }
+  .fp-photo { right: -10%; width: 40%; }
+  .cf-2 { right: -8%; top: 72%; }
+  .cf-3 { left: -8%; }
 
 
   .build__facts { flex-direction: column; gap: 10px; }
