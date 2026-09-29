@@ -609,12 +609,16 @@ a { color: inherit; }
 }
 
 .brandpolio[data-active="bumzee"]   { --tint: #fff4cc; }
-.brandpolio[data-active="majestey"] { --tint: #ecebe6; }
+.brandpolio[data-active="majestey"] { --tint: #f1ead9; }
 .brandpolio[data-active="momstore"] { --tint: #e2edf9; }
 
 /* each card carries its own colours, so a leaving card never takes on the next brand's */
 .bcard[data-brand="bumzee"]   { --card: var(--jonquil); --card-ink: var(--black); --disc: rgba(255, 255, 255, 0.6); }
-.bcard[data-brand="majestey"] { --card: var(--black);   --card-ink: var(--white); --disc: rgba(255, 255, 255, 0.1); }
+/* Majestey takes its colours from its logo: cream, dark green, gold and red */
+.bcard[data-brand="majestey"] { --card: #fbf6ea; --card-ink: #262d20; --disc: #efe4c8; --card-accent: #c9a85c; }
+.bcard[data-brand="majestey"] .chip-float i { background: #d93a36; }
+.bcard[data-brand="majestey"] .cf-3 i { background: #c9a85c; }
+.bcard[data-brand="majestey"] .bcard__disc[style*="--img"] { width: 56%; }
 .bcard[data-brand="momstore"] { --card: var(--steel);   --card-ink: var(--white); --disc: rgba(255, 255, 255, 0.22); }
 
 .brandpolio__head {
@@ -814,7 +818,6 @@ a { color: inherit; }
   font-weight: 700;
   color: var(--white);
 }
-.bcard[data-brand="majestey"] { --card-accent: var(--jonquil); }
 .bcard[data-brand="momstore"] { --card-accent: #7fb5ee; }
 
 .bcard.is-active.is-flipped .chip-float,
@@ -852,21 +855,11 @@ a { color: inherit; }
   letter-spacing: -0.03em;
 }
 
-/* Majestey London wordmark, set in type to match their logo */
-.mj-wordmark {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-family: "Montserrat", "Inter", sans-serif;
-  font-size: clamp(20px, 2.1vw, 28px);
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  line-height: 1;
-}
-.mj-wordmark small {
-  margin-top: 6px;
-  font-size: 0.5em;
-  letter-spacing: 0.32em;
+/* a brand's own logo in place of its typed name */
+.bcard__logo {
+  display: block;
+  width: auto;
+  height: clamp(70px, 7vw, 92px);
 }
 
 .bcard__disc {
