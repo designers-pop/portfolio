@@ -1246,18 +1246,18 @@ a { color: inherit; }
   position: relative;
   z-index: 2;
   overflow: hidden;
-  border-block: 2.5px solid #111111;
+  border-block: 1px solid rgba(17, 17, 17, 0.5);
   background: var(--bg);
   color: var(--fg);
 }
-.marquee--jonquil { --bg: var(--jonquil); --fg: #111111; }
+.marquee--jonquil { --bg: #ffe27a; --fg: #111111; } /* lighter jonquil */
 .marquee--rojo    { --bg: var(--rojo);    --fg: var(--white); }
 .marquee--steel   { --bg: var(--steel);   --fg: var(--white); }
 
 .marquee__track {
   display: flex;
   width: max-content;
-  animation: marquee 32s linear infinite;
+  animation: marquee 45s linear infinite;
 }
 .marquee--rev .marquee__track { animation-direction: reverse; }
 .marquee:hover .marquee__track { animation-play-state: paused; }
@@ -1268,20 +1268,21 @@ a { color: inherit; }
   flex: none;
 }
 .marquee__set span {
-  padding: 14px 22px;
-  font-size: clamp(18px, 2vw, 28px);
-  font-weight: 800;
-  letter-spacing: -0.03em;
+  padding: 7px clamp(28px, 4vw, 56px);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   white-space: nowrap;
 }
 .marquee__set img {
-  width: clamp(22px, 2.2vw, 32px);
+  width: 15px;
   height: auto;
   animation: marquee-spin 6s linear infinite;
 }
 
 /* yellow popcorn on the yellow strip needs a dark backing */
-.marquee--jonquil .marquee__set img { padding: 4px; border-radius: 50%; background: #111111; }
+.marquee--jonquil .marquee__set img { padding: 2px; border-radius: 50%; background: #111111; }
 
 @keyframes marquee { to { transform: translateX(-50%); } }
 @keyframes marquee-spin { to { transform: rotate(360deg); } }
