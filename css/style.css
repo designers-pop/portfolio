@@ -172,12 +172,10 @@ a { color: inherit; }
   flex-wrap: wrap;
   gap: 0 0.25em;
   margin: 0;
-  font-family: "Anton", "Inter", sans-serif;
-  font-size: clamp(56px, 10vw, 150px);
-  font-weight: 400;
+  font-size: clamp(44px, 7vw, 104px);
+  font-weight: 800;
   line-height: 0.95;
-  letter-spacing: 0.005em;
-  text-transform: uppercase;
+  letter-spacing: -0.045em;
 }
 .hero__pop {
   width: 0.95em;
@@ -257,10 +255,9 @@ a { color: inherit; }
 .acc__label {
   writing-mode: vertical-rl;
   transform: rotate(180deg);
-  font-family: "Anton", "Inter", sans-serif;
-  font-size: clamp(18px, 1.6vw, 24px);
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
+  font-size: clamp(16px, 1.4vw, 20px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
   white-space: nowrap;
 }
 .acc__panel.is-open .acc__tab { opacity: 0; pointer-events: none; }
@@ -289,10 +286,10 @@ a { color: inherit; }
   top: 6%;
   left: 50%;
   translate: -50% 0;
-  font-family: "Anton", "Inter", sans-serif;
-  font-size: clamp(64px, 9vw, 150px);
+  font-size: clamp(56px, 7.5vw, 120px);
+  font-weight: 800;
   line-height: 0.9;
-  text-transform: uppercase;
+  letter-spacing: -0.045em;
   white-space: nowrap;
   color: transparent;
   -webkit-text-stroke: 2px currentColor;
@@ -312,11 +309,10 @@ a { color: inherit; }
 .acc__title {
   position: relative;
   margin: 0;
-  font-family: "Anton", "Inter", sans-serif;
-  font-size: clamp(32px, 3.6vw, 56px);
-  font-weight: 400;
+  font-size: clamp(28px, 3vw, 46px);
+  font-weight: 800;
   line-height: 1;
-  text-transform: uppercase;
+  letter-spacing: -0.04em;
 }
 .acc__desc {
   position: relative;
@@ -390,10 +386,10 @@ a { color: inherit; }
 
 .morph__label {
   margin: 0 0 14px;
-  font-family: "Anton", "Inter", sans-serif;
-  font-size: clamp(28px, 3vw, 44px);
-  font-weight: 400;
-  letter-spacing: 0.01em;
+  font-size: clamp(26px, 2.6vw, 40px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  text-transform: none;
   opacity: var(--c, 0);
 }
 
@@ -403,11 +399,10 @@ a { color: inherit; }
 .build__title {
   margin: 0 auto;
   max-width: 1320px;
-  font-family: "Anton", "Inter", sans-serif;
-  font-size: clamp(44px, 8vw, 128px);
-  font-weight: 400;
+  font-size: clamp(38px, 6.6vw, 104px);
+  font-weight: 800;
   line-height: 1.05;
-  text-transform: uppercase;
+  letter-spacing: -0.045em;
 }
 
 .build__title .line {
@@ -519,6 +514,7 @@ a { color: inherit; }
 .bento {
   position: relative;
   flex: 1;
+  min-height: 0; /* never grow past the screen; the cards shrink instead */
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: repeat(2, minmax(0, 1fr));
@@ -550,24 +546,25 @@ a { color: inherit; }
 }
 
 .tile__num {
-  font-family: "Anton", "Inter", sans-serif;
-  font-size: clamp(48px, 5.6vw, 92px);
-  font-weight: 400;
+  font-size: clamp(34px, min(4.4vw, 7vh), 76px);
+  font-weight: 900;
   line-height: 0.95;
+  letter-spacing: -0.05em;
   font-variant-numeric: tabular-nums;
 }
 .tile__num small {
-  font-size: 0.42em;
-  text-transform: uppercase;
+  font-size: 0.4em;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
-.tile--a .tile__num { font-size: clamp(80px, 10vw, 170px); }
+.tile--a .tile__num { font-size: clamp(56px, min(8vw, 13vh), 140px); }
 
 .tile__big {
   margin-top: -0.1em;
-  font-family: "Anton", "Inter", sans-serif;
-  font-size: clamp(36px, 4.4vw, 72px);
+  font-size: clamp(30px, min(3.6vw, 6vh), 60px);
+  font-weight: 900;
   line-height: 1;
-  text-transform: uppercase;
+  letter-spacing: -0.04em;
 }
 
 .tile__label {
@@ -582,7 +579,7 @@ a { color: inherit; }
 .tw-morph {
   position: relative;
   flex: 1;
-  min-height: 90px;
+  min-height: 40px;
 }
 .tw-glyph {
   position: absolute;
@@ -604,7 +601,7 @@ a { color: inherit; }
   display: flex;
   align-items: flex-end;
   gap: 6%;
-  min-height: 60px;
+  min-height: 30px;
   padding: 0 2px;
 }
 .tw-bars i {
@@ -690,7 +687,7 @@ a { color: inherit; }
 .tw-gauge {
   flex: 1;
   width: 100%;
-  min-height: 60px;
+  min-height: 30px;
   overflow: visible;
   touch-action: none;
   cursor: grab;
@@ -1263,8 +1260,10 @@ a { color: inherit; }
 
   .bento { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, minmax(0, 1fr)); }
   .tile--a { grid-row: span 1; }
-  .tile--a .tile__num { font-size: 56px; }
+  .tile--a .tile__num { font-size: min(56px, 8vh); }
   .tw-morph { min-height: 40px; }
+  /* short phones: give the cards room rather than squeeze them */
+  .morph__pin { min-height: 760px; }
   .tw-toggle { height: 44px; padding-left: 12px; font-size: 12px; }
   .tw-toggle__knob { top: 3px; right: 3px; width: 34px; height: 34px; }
   .tw-toggle__knob svg { width: 18px; height: 18px; }
@@ -1276,8 +1275,8 @@ a { color: inherit; }
   .morph__grid { inset: 84px var(--gutter) 56px; }
   .tile--a { grid-column: span 2; }
   .tile--b, .tile--c, .tile--d, .tile--e { grid-column: span 1; }
-  .tile__num { font-size: 44px; }
-  .tile--d .tile__num, .tile--e .tile__num { font-size: 32px; }
+  .tile__num { font-size: min(40px, 5.6vh); }
+  .tile--d .tile__num, .tile--e .tile__num { font-size: min(32px, 4.6vh); }
   .tile__big { font-size: 30px; }
   .tile__label { font-size: 10px; letter-spacing: 0.14em; }
 }
