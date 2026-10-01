@@ -35,6 +35,20 @@ body {
 
 body.is-loading { overflow: hidden; }
 
+/* popcorn cursor; it tilts over anything clickable */
+html,
+body { cursor: url("../assets/cursor.png") 16 16, auto; }
+a,
+button,
+[role="tab"],
+.acc__tab,
+.bcard.is-active,
+.fp-photo,
+.tw-toggle { cursor: url("../assets/cursor-hover.png") 16 16, pointer !important; }
+.tw-gauge { cursor: url("../assets/cursor-hover.png") 16 16, grab !important; }
+input,
+textarea { cursor: text; }
+
 img { display: block; max-width: 100%; height: auto; }
 
 a { color: inherit; }
