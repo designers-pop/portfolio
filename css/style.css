@@ -1300,3 +1300,24 @@ a { color: inherit; }
   }
   .acc__panel { opacity: 1; transform: none; }
 }
+
+/* desktop: the whole section fits one screen; the card is sized from the
+   screen height so nothing is cut off */
+@media (min-width: 761px) {
+  .brandpolio {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100svh;
+    min-height: 620px;
+    padding: 96px var(--gutter) 20px;
+  }
+  .brandpolio__head { margin-bottom: 8px; width: 100%; }
+  .brandpolio__title { font-size: clamp(36px, min(5vw, 8vh), 80px); }
+  .brandpolio__body { flex: 1; min-height: 0; width: 100%; grid-template-rows: minmax(0, 1fr); align-items: stretch; }
+  .brand-info { align-self: center; }
+  .deck { height: auto; min-height: 0; }
+  .bcard { --w: min(300px, 58vw, 33vh); }
+  .deck-hint { margin-top: 4px; }
+  .deck-nav { margin-top: 8px; }
+}
