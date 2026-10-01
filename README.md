@@ -21,7 +21,7 @@ npx http-server .
 
 ## Sections
 
-1. **Intro** — on a plain lighter-blue screen, three kernels pop in, then turn into the popcorn's loops as "Pop Station" scribbles in letter by letter.
+1. **Intro** — on a blush screen, the popcorn's three loops pop in one by one with a burst of crumbs, then "Pop Station" scribbles in (black, with red and yellow accents).
 2. **Who we are** — a stack of red folders (Designers, Category Builders, Sourcing Specialists, Production Experts, Technology Builders, Brand Partners). Each folder opens its page in `roles/`; those pages are placeholders to fill in.
 3. **How we build → By the numbers** — one screen that plays by itself: the filled word boxes of "Built with your brand. From first sketch to shelf." grow into the number tiles, which then count up. It replays each time you come back to it.
 4. **Brandpolio** — tilted brand cards with floating chips that lean toward the cursor and flip on click: Bumzee, Majestey London, The Mom Store. Add a brand by copying one `<article class="bcard">` in `index.html`.

@@ -1,23 +1,20 @@
 (() => {
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* ---------------- Intro: three kernels, then the logo scribbles in ----------------
-     After the reference: on a plain lighter-blue screen
-       1. three white kernels pop in where the popcorn will be, and wobble
-       2. each kernel turns into its popcorn loop, drawn round like a pen
-       3. meanwhile "Pop Station" scribbles in letter by letter (outline, then fill)
-       4. the tagline rises in, the logo holds, then the page lifts in
+  /* ---------------- Intro: the popcorn pops, then Pop Station comes up ----------------
+     On a blush screen (black type, red and yellow accents):
+       1. zoomed in on the popcorn, its three loops pop in one after another,
+          each with a springy bounce and a burst of crumbs
+       2. the view pulls back while "Pop Station" scribbles in letter by letter
+       3. the tagline rises in, the logo holds, then the page lifts in
      Runs in JS with a failsafe so it always ends. */
 
   const intro = document.getElementById("intro");
   const SVG_NS = "http://www.w3.org/2000/svg";
 
-  // each popcorn loop (logo coordinates): its circle, and the angle its tail starts at
-  const LOOPS = [
-    { cx: 511, cy: 140, r: 68, start: 70 },  // top-left loop
-    { cx: 597, cy: 174, r: 69, start: 190 }, // right loop
-    { cx: 523, cy: 220, r: 71, start: 325 }, // bottom loop
-  ];
+  // centre of each popcorn loop, in logo coordinates
+  const LOOPS = [[511, 140], [597, 174], [523, 220]];
+  const CRUMBS = ["#e01d1e", "#111111", "#ffcb0e"];
 
   let introFinished = false;
   const finishIntro = () => {
@@ -33,39 +30,31 @@
     Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v));
     return el;
   };
-  const spring = "cubic-bezier(0.34, 1.56, 0.64, 1)";
   const easeOut = "cubic-bezier(0.16, 1, 0.3, 1)";
 
-  // pen sweep: a thick circle in a mask whose dash grows round the loop.
-  // Driven frame by frame so it works in every browser.
-  let uid = 0;
-  const drawLoop = (logo, i, ms) => {
-    const loop = LOOPS[i];
-    const id = `loopmask${uid++}`;
-    const reach = loop.r + 30;
-    const mask = svgEl("mask", { id, maskUnits: "userSpaceOnUse", x: 0, y: 0, width: 776, height: 507 });
-    const pen = svgEl("circle", {
-      cx: loop.cx, cy: loop.cy, r: reach / 2, fill: "none", stroke: "#fff", "stroke-width": reach,
-      pathLength: 100, "stroke-dasharray": "0 100", transform: `rotate(${loop.start} ${loop.cx} ${loop.cy})`,
-    });
-    mask.appendChild(pen);
-    let defs = logo.querySelector("defs");
-    if (!defs) { defs = svgEl("defs"); logo.prepend(defs); }
-    defs.appendChild(mask);
-
-    const group = logo.querySelector(`.logo-loop[data-loop="${i}"]`);
-    group.setAttribute("mask", `url(#${id})`);
-    group.style.opacity = "1";
-    const start = performance.now();
-    return new Promise((done) => {
-      const tick = (now) => {
-        const t = Math.min(1, (now - start) / ms);
-        pen.setAttribute("stroke-dasharray", `${((1 - Math.pow(1 - t, 3)) * 100).toFixed(2)} 100`);
-        if (t < 1) requestAnimationFrame(tick);
-        else { group.removeAttribute("mask"); done(); }
-      };
-      requestAnimationFrame(tick);
-    });
+  // one loop of the popcorn pops: a springy bounce and a burst of crumbs
+  const popLoop = (logo, i) => {
+    const [cx, cy] = LOOPS[i];
+    logo.querySelector(`.logo-loop[data-loop="${i}"]`).animate(
+      [
+        { transform: "scale(0) rotate(-30deg)", opacity: 0 },
+        { transform: "scale(1.3) rotate(8deg)", opacity: 1, offset: 0.45 },
+        { transform: "scale(0.92) rotate(-3deg)", opacity: 1, offset: 0.7 },
+        { transform: "none", opacity: 1 },
+      ],
+      { duration: 620, easing: "ease-out", fill: "both" }
+    );
+    for (let k = 0; k < 8; k++) {
+      const a = (k / 8) * Math.PI * 2 + i * 0.6;
+      const dist = 80 + (k % 3) * 22;
+      const crumb = svgEl("circle", { cx, cy, r: 4 + (k % 3) * 1.5, fill: CRUMBS[k % 3] });
+      logo.appendChild(crumb);
+      crumb.animate(
+        [{ transform: "translate(0, 0) scale(1)", opacity: 1 },
+         { transform: `translate(${Math.cos(a) * dist}px, ${Math.sin(a) * dist}px) scale(0.3)`, opacity: 0 }],
+        { duration: 650, easing: easeOut, fill: "forwards" }
+      ).finished.then(() => crumb.remove());
+    }
   };
 
   // a letter scribbles in: its outline is drawn, then it fills
@@ -91,37 +80,31 @@
     logo.removeAttribute("role");
     logo.querySelectorAll(".logo-loop, .logo-word path, .logo-tag").forEach((el) => { el.style.opacity = "0"; });
 
-    // 1. three kernels pop in and wobble
-    const kernels = LOOPS.map(({ cx, cy }, i) => {
-      const k = svgEl("circle", { cx, cy, r: 13, fill: "#fff", class: "kernel" });
-      logo.appendChild(k);
-      k.animate(
-        [{ transform: "scale(0)" }, { transform: "scale(1)" }],
-        { duration: 500, delay: 150 + i * 140, easing: spring, fill: "both" }
-      );
-      return k;
-    });
-    await wait(1000);
-    kernels.forEach((k, i) => k.animate(
-      [{ translate: "0 0" }, { translate: `${[-6, 6, 0][i]}px ${[4, -4, 6][i]}px` }, { translate: "0 0" }],
-      { duration: 380, easing: "ease-in-out" }
-    ));
-    await wait(380);
+    // start zoomed in on the popcorn, centred on screen (its centre sits
+    // 21.5% right of and 13.5% above the logo's centre)
+    const ZOOM = "scale(1.8) translate(-21.5%, 13.5%)";
+    logo.style.transform = ZOOM;
+    await wait(350);
+
+    // 1. the loops pop, one after another
+    for (let i = 0; i < 3; i++) {
+      if (introFinished) return;
+      popLoop(logo, i);
+      await wait(330);
+    }
+    await wait(350);
     if (introFinished) return;
 
-    // 2 + 3. kernels turn into loops while the letters scribble in
-    kernels.forEach((k, i) => {
-      k.animate([{ transform: "scale(1)" }, { transform: "scale(0)" }], { duration: 260, delay: i * 120, easing: "ease-in", fill: "forwards" });
-      setTimeout(() => drawLoop(logo, i, 620), i * 120);
-    });
-    logo.querySelectorAll(".logo-word path").forEach((path, i) => scribble(path, 120 + i * 45));
+    // 2. pull back while Pop Station scribbles in
+    logo.animate([{ transform: ZOOM }, { transform: "none" }], { duration: 900, easing: easeOut, fill: "forwards" });
+    logo.querySelectorAll(".logo-word path").forEach((path, i) => scribble(path, 200 + i * 45));
 
-    // 4. tagline rises in
+    // 3. tagline rises in
     logo.querySelector(".logo-tag").animate(
       [{ transform: "translateY(40%)", opacity: 0 }, { transform: "none", opacity: 1 }],
-      { duration: 700, delay: 900, easing: easeOut, fill: "both" }
+      { duration: 700, delay: 950, easing: easeOut, fill: "both" }
     );
-    await wait(2700); // finish drawing, then a beat to take it in
+    await wait(2600); // finish drawing, then a beat to take it in
 
     const lift = intro.animate(
       [{ clipPath: "inset(0 0 0 0)" }, { clipPath: "inset(0 0 100% 0)" }],

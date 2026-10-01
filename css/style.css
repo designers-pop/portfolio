@@ -48,8 +48,8 @@ a { color: inherit; }
 }
 
 /* ==========================================================================
-   INTRO — three kernels, then the logo scribbles in
-   A plain screen in a shade lighter than the brand's steel blue.
+   INTRO — the popcorn pops, then Pop Station comes up
+   Blush screen with black type and red/yellow accents.
    main.js runs the timeline.
    ========================================================================== */
 
@@ -58,7 +58,7 @@ a { color: inherit; }
   inset: 0;
   z-index: 100;
   overflow: hidden;
-  background: #4d94e0; /* steel blue, one shade lighter */
+  background: #fdf0ee; /* blush */
 }
 
 .intro.is-done { display: none; }
@@ -75,14 +75,15 @@ a { color: inherit; }
   width: min(78vw, 64vh, 560px);
   height: auto;
   overflow: visible;
-  color: var(--white); /* stroke colour while letters scribble in */
+  color: #111111; /* stroke colour while letters scribble in */
 }
 .intro-logo path,
 .intro-logo g,
 .intro-logo circle { transform-box: fill-box; transform-origin: center; }
 
-/* on blue, "Fashion" in the tagline reads better in jonquil than rojo */
-.intro-logo .logo-tag path:last-child { fill: var(--jonquil); }
+/* on blush: black wordmark and tagline, "Fashion" stays rojo */
+.intro-logo .logo-word { fill: #111111; }
+.intro-logo .logo-tag path:first-child { fill: #111111; }
 
 .intro__skip {
   position: absolute;
@@ -90,11 +91,12 @@ a { color: inherit; }
   right: var(--gutter);
   bottom: var(--gutter);
   padding: 8px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  border: 2px solid #111111;
   border-radius: 999px;
-  background: rgba(0, 0, 0, 0.3);
-  color: var(--white);
-  font: 500 12px/1 "Inter", sans-serif;
+  background: var(--white);
+  color: #111111;
+  box-shadow: 2px 3px 0 #111111;
+  font: 700 12px/1 "Inter", sans-serif;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   cursor: pointer;
