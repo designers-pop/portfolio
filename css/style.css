@@ -147,163 +147,199 @@ a { color: inherit; }
 .nav__links a:hover { background: var(--white); color: var(--black); }
 
 /* ==========================================================================
-   HERO — "Who we are" as a stack of folders
-   Each folder is a link; tabs alternate position like a filing drawer.
+   HERO — "Who we are" as expanding panels
+   Blush paper, heavy condensed black type (after the intro's palette).
+   One panel per team in its own colour; the open panel grows wide, the
+   rest shrink to slim strips showing their icon. main.js picks the open one.
    ========================================================================== */
 
 .hero {
-  --paper: #f4f1ea;
   position: relative;
   min-height: 100vh;
   min-height: 100svh;
-  display: grid;
-  grid-template-rows: auto 1fr;
-  padding-top: 96px;
-  overflow: hidden;
-  /* soft paper texture */
-  background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
-    var(--paper);
-  color: var(--black);
-}
-
-.hero__head {
-  padding: clamp(4px, 1.5vh, 24px) var(--gutter) clamp(16px, 3vh, 36px);
-  text-align: center;
-}
-.hero__head .eyebrow { opacity: 0.55; }
-.hero__title {
-  margin: 10px 0 0;
-  color: #9e1216;
-  font-size: clamp(44px, 6.6vw, 104px);
-  font-weight: 800;
-  line-height: 0.95;
-  letter-spacing: -0.045em;
-}
-
-/* --- the stack --- */
-
-.folders {
-  --tab-h: clamp(42px, 5.4vh, 56px);
-  --strip: clamp(36px, 5.2vh, 56px);
-  --overlap: 26px;
-  align-self: end;
   display: flex;
   flex-direction: column;
-  padding-top: 8px;
+  padding: 104px var(--gutter) var(--gutter);
+  background: #fdf0ee;
+  color: #111111;
+  overflow: hidden;
 }
 
-.folder {
-  --shade: #9e1216;
-  /* felt texture laid over each folder's colour */
-  --felt: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  position: relative;
-  display: block;
-  height: calc(var(--tab-h) + var(--strip) + var(--overlap));
-  margin-top: calc(var(--overlap) * -1);
-  color: var(--ink, var(--white));
-  text-decoration: none;
-  outline: none;
-  transform: translateY(110vh) rotate(-2deg);
-  transition: transform 900ms var(--ease-out) calc(var(--i) * 110ms);
-}
-.folder:first-child { margin-top: 0; }
-/* the last folder runs to the bottom of the screen */
-.folder:last-child { height: calc(var(--tab-h) + var(--strip) * 1.6); }
-
-.hero.is-in .folder { transform: none; }
-
-/* body of the folder */
-.folder::before {
-  content: "";
-  position: absolute;
-  /* runs on behind the next folder, so no paper shows between them */
-  inset: var(--tab-h) 0 calc(var(--tab-h) * -1) 0;
-  border-radius: 16px 16px 0 0;
-  background: var(--felt), var(--shade);
-  box-shadow: 0 -10px 24px -14px rgba(0, 0, 0, 0.45);
-}
-
-.folder__tab {
-  position: absolute;
-  top: 0;
-  left: var(--tab-x);
-  width: var(--tab-w);
-  height: calc(var(--tab-h) + 2px);
+.hero__head { margin-bottom: clamp(20px, 3vh, 36px); }
+.hero__title {
   display: flex;
   align-items: center;
-  justify-content: center;
-  border-radius: 16px 16px 0 0;
-  background: var(--felt), var(--shade);
+  flex-wrap: wrap;
+  gap: 0 0.25em;
+  margin: 0;
+  font-family: "Anton", "Inter", sans-serif;
+  font-size: clamp(56px, 10vw, 150px);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
 }
-/* sloped shoulder on the tab's right side, like a manila folder */
-.folder__tab::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: -34px;
-  width: 44px;
-  height: 100%;
-  background: var(--shade);
-  background: var(--felt), var(--shade);
-  clip-path: polygon(0 0, 22% 0, 100% 100%, 0 100%);
-  border-top-right-radius: 16px;
+.hero__pop {
+  width: 0.95em;
+  height: auto;
+  transform: rotate(-8deg);
+  animation: pop-wiggle 3.2s ease-in-out infinite;
 }
-
-.folder__title {
-  position: relative;
-  padding: 0 16px;
-  z-index: 1;
-  font-size: clamp(20px, 2.4vw, 32px);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  white-space: nowrap;
+@keyframes pop-wiggle {
+  0%, 100% { transform: rotate(-8deg) scale(1); }
+  50%      { transform: rotate(6deg) scale(1.06); }
 }
-
-.folder__desc {
-  position: absolute;
-  z-index: 1;
-  top: calc(var(--tab-h) + 8px);
-  left: var(--tab-x);
-  width: var(--tab-w);
-  padding: 0 34px;
-  text-align: center;
-  font-size: clamp(12px, 1.1vw, 15px);
-  font-weight: 600;
-  line-height: 1.35;
+.hero__lede {
+  margin: 12px 0 0;
+  font-size: clamp(15px, 1.3vw, 18px);
+  font-weight: 500;
   opacity: 0.75;
 }
 
-.folder__clip {
+/* --- the panels --- */
+
+.acc {
+  flex: 1;
+  min-height: 420px;
+  display: flex;
+  gap: clamp(6px, 0.8vw, 12px);
+}
+
+.acc__panel {
+  --c: var(--jonquil);
+  --ink: #111111;
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  border: 2.5px solid #111111;
+  border-radius: 22px;
+  background: var(--c);
+  color: var(--ink);
+  box-shadow: 3px 4px 0 #111111;
+  transition: flex-grow 750ms var(--ease-out), transform 300ms var(--ease-out);
+  /* slide up into place when the section first shows */
+  opacity: 0;
+  transform: translateY(40px);
+}
+.hero.is-in .acc__panel {
+  opacity: 1;
+  transform: none;
+  transition: flex-grow 750ms var(--ease-out), opacity 600ms var(--ease-out) calc(var(--i) * 90ms),
+              transform 700ms var(--ease-spring) calc(var(--i) * 90ms);
+}
+.acc__panel.is-open { flex-grow: 5.5; }
+
+/* team colours */
+.acc__panel[data-role="designers"]            { --c: var(--jonquil); }
+.acc__panel[data-role="category-builders"]    { --c: var(--rojo);  --ink: var(--white); }
+.acc__panel[data-role="sourcing-specialists"] { --c: var(--steel); --ink: var(--white); }
+.acc__panel[data-role="production-experts"]   { --c: #111111;      --ink: var(--white); }
+.acc__panel[data-role="technology-builders"]  { --c: #f5a6aa; }
+.acc__panel[data-role="brand-partners"]       { --c: #9cc5ef; }
+
+/* collapsed: icon on top, name running up the strip */
+.acc__tab {
   position: absolute;
-  z-index: 2;
-  top: calc(var(--tab-h) - 10px);
-  left: calc(var(--tab-x) + 14px);
-  width: 20px;
-  height: 54px;
-  color: #b9bcc2;
-  transform: rotate(18deg);
-  filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.35));
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 0 26px;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  transition: opacity 300ms;
 }
-
-/* brand colours and tab positions, top to bottom */
-.folder:nth-child(1) { --shade: var(--black);   --tab-x: 16%; }
-.folder:nth-child(2) { --shade: var(--jonquil); --tab-x: 50%; --ink: var(--black); }
-.folder:nth-child(3) { --shade: var(--rojo);    --tab-x: 6%; }
-.folder:nth-child(4) { --shade: var(--steel);   --tab-x: 30%; }
-.folder:nth-child(5) { --shade: var(--white);   --tab-x: 54%; --ink: var(--black); }
-.folder:nth-child(6) { --shade: var(--black);   --tab-x: 22%; }
-.folder { --tab-w: 40%; }
-
-/* pull a folder up on hover; click pulls it out (main.js) */
-.hero.is-in .folder:hover,
-.hero.is-in .folder:focus-visible { transform: translateY(-14px); transition-delay: 0ms; transition-duration: 350ms; }
-.folder:focus-visible .folder__title { text-decoration: underline; text-underline-offset: 6px; }
-.hero.is-in .folder.is-opening {
-  transform: translateY(-60vh);
-  transition: transform 550ms cubic-bezier(0.7, 0, 0.3, 1);
-  z-index: 5;
+.acc__icon { width: 30px; height: 30px; }
+.acc__label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: "Anton", "Inter", sans-serif;
+  font-size: clamp(18px, 1.6vw, 24px);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
+.acc__panel.is-open .acc__tab { opacity: 0; pointer-events: none; }
+.acc__tab:focus-visible { outline: 3px solid currentColor; outline-offset: -8px; border-radius: 18px; }
+
+/* open: big icon, title, line and button, with the name as a ghost behind */
+.acc__body {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: clamp(22px, 3vw, 40px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 250ms;
+}
+.acc__panel.is-open .acc__body {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 500ms 300ms;
+}
+.acc__ghost {
+  position: absolute;
+  top: 6%;
+  left: 50%;
+  translate: -50% 0;
+  font-family: "Anton", "Inter", sans-serif;
+  font-size: clamp(64px, 9vw, 150px);
+  line-height: 0.9;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 2px currentColor;
+  opacity: 0.25;
+  pointer-events: none;
+}
+.acc__hero {
+  position: relative;
+  width: clamp(72px, 9vw, 140px);
+  height: auto;
+  stroke-width: 1.2;
+  transform: scale(0.6) rotate(-12deg);
+  transition: transform 700ms var(--ease-spring);
+}
+.acc__panel.is-open .acc__hero { transform: none; transition-delay: 250ms; }
+.acc__text { position: relative; }
+.acc__title {
+  position: relative;
+  margin: 0;
+  font-family: "Anton", "Inter", sans-serif;
+  font-size: clamp(32px, 3.6vw, 56px);
+  font-weight: 400;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.acc__desc {
+  position: relative;
+  max-width: 420px;
+  margin: 10px 0 18px;
+  font-size: clamp(14px, 1.2vw, 17px);
+  line-height: 1.45;
+  opacity: 0.85;
+}
+.acc__cta {
+  position: relative;
+  padding: 10px 18px;
+  border: 2px solid #111111;
+  border-radius: 999px;
+  background: var(--white);
+  color: #111111;
+  box-shadow: 2px 3px 0 #111111;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 150ms, box-shadow 150ms;
+}
+.acc__cta:hover { transform: translate(-1px, -1px); box-shadow: 3px 4px 0 #111111; }
 
 /* ==========================================================================
    HOW WE BUILD → BY THE NUMBERS
@@ -1023,7 +1059,7 @@ a { color: inherit; }
 .deck-nav__dots button[aria-selected="true"] { width: 28px; background: var(--black); }
 
 /* ==========================================================================
-   ROLE PAGES (roles/*.html) — one page per "Who we are" folder
+   ROLE PAGES (roles/*.html) — one page per "Who we are" panel
    ========================================================================== */
 
 .role-page {
@@ -1103,12 +1139,13 @@ a { color: inherit; }
 @media (max-width: 760px) {
   .nav__links { display: none; }
 
-  .folders { --tab-h: 40px; --strip: 52px; }
-  .folder { --tab-w: 72%; }
-  .folder:nth-child(odd) { --tab-x: 4%; }
-  .folder:nth-child(even) { --tab-x: 20%; }
-  .folder__tab::after { right: -26px; width: 34px; }
-  .folder__clip { display: none; }
+  .acc { flex-direction: column; min-height: 640px; }
+  .acc__panel.is-open { flex-grow: 6; }
+  .acc__tab { flex-direction: row; justify-content: flex-start; gap: 12px; padding: 0 18px; }
+  .acc__label { writing-mode: horizontal-tb; transform: none; }
+  .acc__icon { width: 24px; height: 24px; }
+  .acc__ghost { font-size: 64px; }
+  .acc__hero { width: 60px; }
 
   .brandpolio__body { grid-template-columns: 1fr; }
   .brand-info { order: 2; }
@@ -1149,5 +1186,5 @@ a { color: inherit; }
     transition-duration: 1ms !important;
     transition-delay: 0ms !important;
   }
-  .folder { transform: none; }
+  .acc__panel { opacity: 1; transform: none; }
 }

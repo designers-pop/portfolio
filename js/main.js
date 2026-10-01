@@ -122,34 +122,56 @@
     runIntro().catch(finishIntro);
   }
 
-  /* ---------------- Hero: folder stack ----------------
-     Folders slide up once the intro has gone. Clicking one pulls it out
-     of the stack, then opens its page. */
+  /* ---------------- Hero: expanding panels ----------------
+     Panels slide up once the intro has gone. Hovering or tapping a panel
+     opens it; while the section is on screen and nobody is pointing at it,
+     the open panel moves on by itself. */
 
   const hero = document.getElementById("who");
   if (hero) {
-    const showFolders = () => hero.classList.add("is-in");
-    if (!intro || introFinished) showFolders();
+    const showPanels = () => hero.classList.add("is-in");
+    if (!intro || introFinished) showPanels();
     else {
       const watch = new MutationObserver(() => {
-        if (intro.classList.contains("is-done")) { watch.disconnect(); showFolders(); }
+        if (intro.classList.contains("is-done")) { watch.disconnect(); showPanels(); }
       });
       watch.observe(intro, { attributes: true, attributeFilter: ["class"] });
     }
 
-    hero.querySelectorAll(".folder").forEach((folder) => {
-      folder.addEventListener("click", (e) => {
-        // let new-tab clicks behave normally
-        if (reduceMotion || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
-        e.preventDefault();
-        folder.classList.add("is-opening");
-        setTimeout(() => { window.location.href = folder.href; }, 480);
+    const panels = [...hero.querySelectorAll(".acc__panel")];
+    let open = -1;
+    const openPanel = (i) => {
+      open = (i + panels.length) % panels.length;
+      panels.forEach((p, k) => {
+        p.classList.toggle("is-open", k === open);
+        p.querySelector(".acc__tab").setAttribute("aria-expanded", k === open);
+        p.querySelector(".acc__body").inert = k !== open;
       });
+    };
+
+    let timer = null;
+    let paused = false;
+    let inView = false;
+    const stopCycle = () => { clearInterval(timer); timer = null; };
+    const startCycle = () => {
+      stopCycle();
+      if (inView && !paused && !reduceMotion) timer = setInterval(() => openPanel(open + 1), 3200);
+    };
+
+    panels.forEach((panel, i) => {
+      const tab = panel.querySelector(".acc__tab");
+      tab.addEventListener("click", () => { openPanel(i); paused = true; stopCycle(); });
+      tab.addEventListener("focus", () => openPanel(i));
+      panel.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") openPanel(i); });
     });
-    // coming back with the browser's back button: put the folder back
-    window.addEventListener("pageshow", () => {
-      hero.querySelectorAll(".is-opening").forEach((f) => f.classList.remove("is-opening"));
-    });
+    const acc = hero.querySelector(".acc");
+    acc.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") { paused = true; stopCycle(); } });
+    acc.addEventListener("pointerleave", () => { paused = false; startCycle(); });
+
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(([entry]) => { inView = entry.isIntersecting; startCycle(); }, { threshold: 0.4 }).observe(hero);
+    }
+    openPanel(0);
   }
 
   /* ---------------- Nav background on scroll ---------------- */
