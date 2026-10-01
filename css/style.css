@@ -1275,17 +1275,8 @@ a { color: inherit; }
   text-transform: uppercase;
   white-space: nowrap;
 }
-.marquee__set img {
-  width: 15px;
-  height: auto;
-  animation: marquee-spin 6s linear infinite;
-}
-
-/* yellow popcorn on the yellow strip needs a dark backing */
-.marquee--jonquil .marquee__set img { padding: 2px; border-radius: 50%; background: #111111; }
 
 @keyframes marquee { to { transform: translateX(-50%); } }
-@keyframes marquee-spin { to { transform: rotate(360deg); } }
 
 .sr-only {
   position: absolute;
@@ -1370,7 +1361,7 @@ a { color: inherit; }
 
 @media (prefers-reduced-motion: reduce) {
   .intro { display: none; }
-  .marquee__track, .marquee__set img { animation: none !important; }
+  .marquee__track { animation: none !important; }
   .morph { padding: 120px 0 64px; }
   .build__lede, .build__facts { opacity: 1; transform: none; }
   .morph__pin { position: static; height: auto; display: block; overflow: visible; }
