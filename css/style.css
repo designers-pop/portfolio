@@ -1235,6 +1235,67 @@ a { color: inherit; }
 .role-page .nav__links { display: flex; }
 
 /* ==========================================================================
+   MARQUEES — scrolling category strips between screens
+   Two copies of the same set slide left by one set's width, so the loop is
+   seamless. Pauses on hover; still for reduced motion.
+   ========================================================================== */
+
+.marquee {
+  --bg: var(--jonquil);
+  --fg: #111111;
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  border-block: 2.5px solid #111111;
+  background: var(--bg);
+  color: var(--fg);
+}
+.marquee--jonquil { --bg: var(--jonquil); --fg: #111111; }
+.marquee--rojo    { --bg: var(--rojo);    --fg: var(--white); }
+.marquee--steel   { --bg: var(--steel);   --fg: var(--white); }
+
+.marquee__track {
+  display: flex;
+  width: max-content;
+  animation: marquee 32s linear infinite;
+}
+.marquee--rev .marquee__track { animation-direction: reverse; }
+.marquee:hover .marquee__track { animation-play-state: paused; }
+
+.marquee__set {
+  display: flex;
+  align-items: center;
+  flex: none;
+}
+.marquee__set span {
+  padding: 14px 22px;
+  font-size: clamp(18px, 2vw, 28px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+.marquee__set img {
+  width: clamp(22px, 2.2vw, 32px);
+  height: auto;
+  animation: marquee-spin 6s linear infinite;
+}
+
+/* yellow popcorn on the yellow strip needs a dark backing */
+.marquee--jonquil .marquee__set img { padding: 4px; border-radius: 50%; background: #111111; }
+
+@keyframes marquee { to { transform: translateX(-50%); } }
+@keyframes marquee-spin { to { transform: rotate(360deg); } }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ==========================================================================
    FOOTER
    ========================================================================== */
 
@@ -1308,6 +1369,7 @@ a { color: inherit; }
 
 @media (prefers-reduced-motion: reduce) {
   .intro { display: none; }
+  .marquee__track, .marquee__set img { animation: none !important; }
   .morph { padding: 120px 0 64px; }
   .build__lede, .build__facts { opacity: 1; transform: none; }
   .morph__pin { position: static; height: auto; display: block; overflow: visible; }
