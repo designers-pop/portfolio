@@ -444,13 +444,13 @@
     }
   }
 
-  /* ---------------- Brandpolio deck ---------------- */
+  /* ---------------- Brandfolio deck ---------------- */
 
-  const brandpolio = document.getElementById("brandpolio");
-  if (brandpolio) {
-    const cards = [...brandpolio.querySelectorAll(".bcard")];
+  const brandfolio = document.getElementById("brandfolio");
+  if (brandfolio) {
+    const cards = [...brandfolio.querySelectorAll(".bcard")];
     const dotsEl = document.getElementById("deckDots");
-    const info = brandpolio.querySelector(".brand-info");
+    const info = brandfolio.querySelector(".brand-info");
     const pad = (n) => String(n).padStart(2, "0");
     document.getElementById("brandTotal").textContent = pad(cards.length);
 
@@ -505,7 +505,7 @@
       dots.forEach((d, k) => d.setAttribute("aria-selected", k === i));
 
       const card = cards[i];
-      brandpolio.dataset.active = card.dataset.brand;
+      brandfolio.dataset.active = card.dataset.brand;
       document.getElementById("brandIndex").textContent = pad(i + 1);
       document.getElementById("brandName").textContent = card.dataset.name;
       document.getElementById("brandWhat").textContent = card.dataset.what;
@@ -513,7 +513,7 @@
       link.href = card.dataset.url;
       link.setAttribute("aria-label", `Visit ${card.dataset.name}`);
       const on = card.dataset.stages.split(" ");
-      brandpolio.querySelectorAll("#brandStages li").forEach((li) => {
+      brandfolio.querySelectorAll("#brandStages li").forEach((li) => {
         li.classList.toggle("is-on", on.includes(li.dataset.stage));
       });
 
@@ -525,7 +525,7 @@
 
     document.getElementById("deckPrev").addEventListener("click", () => { show(current - 1); restart(); });
     document.getElementById("deckNext").addEventListener("click", () => { show(current + 1); restart(); });
-    brandpolio.addEventListener("keydown", (e) => {
+    brandfolio.addEventListener("keydown", (e) => {
       if (e.key === "ArrowLeft") { show(current - 1); restart(); }
       if (e.key === "ArrowRight") { show(current + 1); restart(); }
     });
@@ -550,7 +550,7 @@
     });
 
     // clicking the floating photo panel swaps it (and its caption) with the circle
-    brandpolio.querySelectorAll(".fp-photo").forEach((panel) => {
+    brandfolio.querySelectorAll(".fp-photo").forEach((panel) => {
       panel.addEventListener("click", (e) => {
         e.stopPropagation();
         const disc = panel.closest(".bcard").querySelector(".bcard__disc");
@@ -600,13 +600,13 @@
       stop();
       if (inView && !hovered && !reduceMotion) timer = setInterval(() => show(current + 1), 4500);
     };
-    brandpolio.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") { hovered = true; stop(); } });
-    brandpolio.addEventListener("pointerleave", () => { hovered = false; restart(); });
+    brandfolio.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") { hovered = true; stop(); } });
+    brandfolio.addEventListener("pointerleave", () => { hovered = false; restart(); });
     if ("IntersectionObserver" in window) {
       new IntersectionObserver(([entry]) => {
         inView = entry.isIntersecting;
         restart();
-      }, { threshold: 0.35 }).observe(brandpolio);
+      }, { threshold: 0.35 }).observe(brandfolio);
     }
 
     show(0);

@@ -14,7 +14,7 @@ Until a file exists, that spot shows a brand-colour fill instead.
 | `vendors.jpg` | 300+ vendors tile |
 | `retail.jpg` | ₹2,000+ Cr tile |
 
-### Brandpolio (`assets/img/brands/`)
+### Brandfolio (`assets/img/brands/`)
 
 | File | Where it shows |
 | --- | --- |
