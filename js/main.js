@@ -241,6 +241,118 @@
        3. the numbers count up
      It resets once the screen is fully out of view, so it replays. */
 
+  /* ---------------- Number cards: little toys ----------------
+     start() when the cards land, stop() when the screen resets. */
+
+  const widgets = (() => {
+    const root = document.getElementById("build");
+    if (!root) return { start() {}, stop() {}, still() {} };
+    const timers = [];
+    const later = (fn, ms) => timers.push(setTimeout(fn, ms));
+
+    // 35+ years: the big icon changes shape
+    const glyphs = [...root.querySelectorAll(".tw-glyph")];
+    let g = 0;
+    const showGlyph = (i) => glyphs.forEach((el, k) => el.classList.toggle("is-on", k === i));
+
+    // 40+ brands: Launch toggle with confetti
+    const toggle = root.querySelector(".tw-toggle");
+    const confetti = () => {
+      const card = toggle.closest(".tile");
+      const r = toggle.getBoundingClientRect();
+      const c = card.getBoundingClientRect();
+      const colours = ["#ffcb0e", "#e01d1e", "#ffffff", "#111111", "#f5a6aa"];
+      for (let k = 0; k < 18; k++) {
+        const bit = document.createElement("span");
+        bit.className = "tw-confetti";
+        bit.style.background = colours[k % colours.length];
+        bit.style.left = `${r.left - c.left + r.width / 2}px`;
+        bit.style.top = `${r.top - c.top + r.height / 2}px`;
+        card.appendChild(bit);
+        const a = Math.random() * Math.PI * 2;
+        const d = 60 + Math.random() * 90;
+        bit.animate(
+          [{ transform: "translate(0,0) rotate(0)", opacity: 1 },
+           { transform: `translate(${Math.cos(a) * d}px, ${Math.sin(a) * d - 40}px) rotate(${Math.random() * 540}deg)`, opacity: 0 }],
+          { duration: 900 + Math.random() * 400, easing: "cubic-bezier(0.16, 1, 0.3, 1)", fill: "forwards" }
+        ).finished.then(() => bit.remove());
+      }
+    };
+    const setToggle = (on) => {
+      toggle.setAttribute("aria-pressed", on);
+      toggle.querySelector(".tw-toggle__label").textContent = on ? "Launched!" : "Launch";
+      if (on && !reduceMotion) confetti();
+    };
+    toggle.addEventListener("click", () => setToggle(toggle.getAttribute("aria-pressed") !== "true"));
+
+    // 300+ vendors: arc gauge; drag the knob, it springs back to full
+    const gauge = root.querySelector(".tw-gauge");
+    const fill = gauge.querySelector(".tw-gauge__fill");
+    const knob = gauge.querySelector(".tw-gauge__knob");
+    const val = root.querySelector(".tw-gauge-val");
+    const MAX = 300;
+    let level = 0;
+    const setLevel = (f) => {
+      level = Math.min(1, Math.max(0, f));
+      // inline style, so it wins over the stylesheet's starting value
+      fill.style.strokeDasharray = `${(level * 100).toFixed(2)} 100`;
+      knob.setAttribute("cx", (150 - 130 * Math.cos(Math.PI * level)).toFixed(1));
+      knob.setAttribute("cy", (140 - 130 * Math.sin(Math.PI * level)).toFixed(1));
+      val.textContent = Math.round(level * MAX);
+    };
+    let raf = 0;
+    const sweepTo = (to, ms) => {
+      cancelAnimationFrame(raf);
+      const from = level;
+      const start = performance.now();
+      const tick = (now) => {
+        const t = Math.min(1, (now - start) / ms);
+        setLevel(from + (to - from) * (1 - Math.pow(1 - t, 3)));
+        if (t < 1) raf = requestAnimationFrame(tick);
+      };
+      raf = requestAnimationFrame(tick);
+    };
+    let dragging = false;
+    const levelAt = (e) => {
+      const p = new DOMPoint(e.clientX, e.clientY).matrixTransform(gauge.getScreenCTM().inverse());
+      return 1 - Math.atan2(Math.max(0, 140 - p.y), p.x - 150) / Math.PI;
+    };
+    gauge.addEventListener("pointerdown", (e) => {
+      dragging = true;
+      gauge.setPointerCapture(e.pointerId);
+      cancelAnimationFrame(raf);
+      setLevel(levelAt(e));
+    });
+    gauge.addEventListener("pointermove", (e) => { if (dragging) setLevel(levelAt(e)); });
+    const release = () => { if (!dragging) return; dragging = false; sweepTo(1, 900); };
+    gauge.addEventListener("pointerup", release);
+    gauge.addEventListener("pointercancel", release);
+
+    return {
+      start() {
+        showGlyph(0);
+        timers.push(setInterval(() => { g = (g + 1) % glyphs.length; showGlyph(g); }, 1500));
+        sweepTo(1, 1600);
+        later(() => setToggle(true), 1100);
+      },
+      stop() {
+        timers.forEach((t) => { clearTimeout(t); clearInterval(t); });
+        timers.length = 0;
+        cancelAnimationFrame(raf);
+        setLevel(0);
+        setToggle(false);
+        showGlyph(-1);
+      },
+      // reduced motion: everything in its final state
+      still() {
+        showGlyph(glyphs.length - 1);
+        setLevel(1);
+        toggle.setAttribute("aria-pressed", "true");
+        toggle.querySelector(".tw-toggle__label").textContent = "Launched!";
+      },
+    };
+  })();
+
   const morph = document.getElementById("build");
   if (morph) {
     const title = morph.querySelector(".build__title");
@@ -298,6 +410,7 @@
       morph.classList.remove("is-playing");
       title.classList.remove("is-in");
       counters.forEach((el) => { el.textContent = "0"; });
+      widgets.stop();
       render(0);
     };
 
@@ -311,7 +424,7 @@
           const t = clamp((now - start) / MORPH);
           render(t);
           if (t < 1) raf = requestAnimationFrame(tick);
-          else counters.forEach(runCounter);
+          else { counters.forEach(runCounter); widgets.start(); }
         };
         raf = requestAnimationFrame(tick);
       }, HOLD));
@@ -320,6 +433,7 @@
     if (reduceMotion || !("IntersectionObserver" in window)) {
       title.classList.add("is-in");
       counters.forEach(runCounter);
+      widgets.still();
     } else {
       render(0);
       new IntersectionObserver(([entry]) => { if (entry.isIntersecting) play(); }, { threshold: 0.55 }).observe(morph);
@@ -328,18 +442,6 @@
         if (morph.classList.contains("is-grid")) render(1);
       });
     }
-  }
-
-  /* ---------------- Bento tiles trade faces on a loop ---------------- */
-
-  const tiles = [...document.querySelectorAll(".tile")];
-  if (tiles.length && !reduceMotion) {
-    let i = 0;
-    setInterval(() => {
-      const tile = tiles[i % tiles.length];
-      tile.classList.toggle("is-alt");
-      i += 2; // skip one each step so neighbouring tiles don't flip together
-    }, 1300);
   }
 
   /* ---------------- Brandpolio deck ---------------- */

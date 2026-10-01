@@ -344,12 +344,15 @@ a { color: inherit; }
 /* ==========================================================================
    HOW WE BUILD → BY THE NUMBERS
    One screen that plays by itself when it comes into view: main.js grows
-   the filled words of the headline into the number tiles.
+   the boxed words of the headline into the number cards. Same look as
+   "Who we are": blush paper, heavy condensed type, outlined colour cards.
+   Each card has a small toy to play with instead of a pattern.
    ========================================================================== */
 
 .morph {
   position: relative;
-  background: var(--black);
+  background: #fdf0ee;
+  color: #111111;
   scroll-margin-top: 0;
 }
 
@@ -362,7 +365,7 @@ a { color: inherit; }
   position: relative;
   height: 100vh;
   height: 100svh;
-  min-height: 600px;
+  min-height: 640px;
   overflow: hidden;
   display: grid;
   place-items: center;
@@ -376,7 +379,7 @@ a { color: inherit; }
 
 .morph__grid {
   position: absolute;
-  inset: 92px var(--gutter) 64px;
+  inset: 92px var(--gutter) 40px;
   display: flex;
   flex-direction: column;
   max-width: 1320px;
@@ -386,20 +389,25 @@ a { color: inherit; }
 .morph.is-grid .morph__grid { pointer-events: auto; }
 
 .morph__label {
-  margin: 0 0 16px;
+  margin: 0 0 14px;
+  font-family: "Anton", "Inter", sans-serif;
+  font-size: clamp(28px, 3vw, 44px);
+  font-weight: 400;
+  letter-spacing: 0.01em;
   opacity: var(--c, 0);
 }
 
-/* tile content appears once the tiles have landed */
+/* card content appears once the cards have landed */
 .morph .tile > * { opacity: var(--c, 0); }
 
 .build__title {
   margin: 0 auto;
   max-width: 1320px;
-  font-size: clamp(38px, 6.6vw, 104px);
-  font-weight: 800;
-  line-height: 1.02;
-  letter-spacing: -0.045em;
+  font-family: "Anton", "Inter", sans-serif;
+  font-size: clamp(44px, 8vw, 128px);
+  font-weight: 400;
+  line-height: 1.05;
+  text-transform: uppercase;
 }
 
 .build__title .line {
@@ -407,49 +415,41 @@ a { color: inherit; }
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 0.08em 0.22em;
+  gap: 0.1em 0.2em;
 }
 
-/* fill and text colour shared by each headline word and the tile it
-   becomes; the fill is swapped for a photo when one is supplied */
-.build__title [data-morph="a"], .tile--a { --fill: linear-gradient(140deg, var(--steel), #0b2a4d); --ink: var(--white); }
-.build__title [data-morph="b"], .tile--b { --fill: linear-gradient(140deg, var(--jonquil), #e8a800); --ink: var(--black); }
-.build__title [data-morph="c"], .tile--c { --fill: linear-gradient(140deg, var(--rojo), #7a0c0d); --ink: var(--white); }
-.build__title [data-morph="d"], .tile--d { --fill: linear-gradient(140deg, #ffffff, #d9d4c7); --ink: var(--black); }
-.build__title [data-morph="e"], .tile--e { --fill: linear-gradient(140deg, var(--rojo), var(--jonquil)); --ink: var(--white); }
-.build__title .boxed[style*="--img"] { --ink: var(--white); }
+/* colour shared by each boxed headline word and the card it becomes */
+.build__title [data-morph="a"], .tile--a { --c: var(--jonquil); --ink: #111111; }
+.build__title [data-morph="b"], .tile--b { --c: var(--rojo);    --ink: var(--white); }
+.build__title [data-morph="c"], .tile--c { --c: var(--steel);   --ink: var(--white); }
+.build__title [data-morph="d"], .tile--d { --c: #111111;        --ink: var(--white); }
+.build__title [data-morph="e"], .tile--e { --c: #f5a6aa;        --ink: #111111; }
 
-/* each key word sits in a box: first the image shows through the letters,
-   then it fills the box behind them */
+/* each key word sits in an outlined box: first the colour shows through
+   the letters, then it fills the box behind them */
 .boxed {
   position: relative;
   z-index: 0;
-  padding: 0 0.14em 0.04em;
+  padding: 0 0.16em;
   border-radius: 0.14em;
-  color: transparent;
-  background: var(--img, var(--fill)) center / cover;
-  -webkit-background-clip: text;
-          background-clip: text;
-  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0);
-  transition:
-    color 700ms var(--ease-out) calc(var(--d) * 120ms + 900ms),
-    box-shadow 700ms var(--ease-out) calc(var(--d) * 120ms + 900ms);
+  color: var(--c);
+  transition: color 600ms var(--ease-out) calc(var(--d) * 120ms + 900ms);
 }
-/* the image steps out of the letters and sits behind them */
 .boxed::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
+  border: 3px solid #111111;
   border-radius: inherit;
-  background: var(--img, var(--fill)) center / cover;
+  background: var(--c);
+  box-shadow: 3px 4px 0 #111111;
   opacity: 0;
-  transform: scale(0.9);
+  transform: scale(0.85) rotate(-3deg);
   transition:
-    opacity 700ms var(--ease-out) calc(var(--d) * 120ms + 900ms),
-    transform 700ms var(--ease-out) calc(var(--d) * 120ms + 900ms);
+    opacity 500ms var(--ease-out) calc(var(--d) * 120ms + 900ms),
+    transform 700ms var(--ease-spring) calc(var(--d) * 120ms + 900ms);
 }
-.boxed[style*="--img"]::before { filter: brightness(0.7); }
 
 .word {
   display: inline-block;
@@ -459,7 +459,7 @@ a { color: inherit; }
 }
 
 .build__title.is-in .word { opacity: 1; transform: none; }
-.build__title.is-in .boxed { color: var(--ink, var(--white)); }
+.build__title.is-in .boxed { color: var(--ink); }
 .build__title.is-in .boxed::before { opacity: 1; transform: none; }
 
 /* lede and facts follow the headline in */
@@ -473,11 +473,12 @@ a { color: inherit; }
 .morph.is-playing .build__facts { opacity: 1; transform: none; }
 
 .build__lede {
-  margin: clamp(28px, 4vw, 48px) auto 0;
+  margin: clamp(24px, 3.5vw, 40px) auto 0;
   max-width: 680px;
-  color: var(--ink-soft);
   font-size: clamp(16px, 1.5vw, 19px);
+  font-weight: 500;
   line-height: 1.55;
+  opacity: 0.8;
 }
 
 .build__facts {
@@ -485,11 +486,11 @@ a { color: inherit; }
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px 28px;
-  margin: 28px 0 0;
+  margin: 24px 0 0;
   padding: 0;
   list-style: none;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
 }
@@ -499,10 +500,10 @@ a { color: inherit; }
   position: absolute;
   top: 50%;
   left: -16.5px;
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background: var(--jonquil);
+  background: var(--rojo);
   transform: translateY(-50%);
 }
 
@@ -513,8 +514,7 @@ a { color: inherit; }
 }
 [data-reveal].is-in:not(.build__title) { opacity: 1; transform: none; }
 
-
-/* --- the bento the words become --- */
+/* --- the cards the words become --- */
 
 .bento {
   position: relative;
@@ -522,111 +522,213 @@ a { color: inherit; }
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: repeat(2, minmax(0, 1fr));
-  gap: clamp(8px, 1vw, 14px);
+  gap: clamp(10px, 1.2vw, 16px);
   width: 100%;
 }
 
-.tile--a { grid-column: span 8; }
-.tile--b { grid-column: span 4; }
-.tile--c { grid-column: span 5; }
-.tile--d { grid-column: span 3; }
+.tile--a { grid-column: span 4; grid-row: span 2; }
+.tile--b,
+.tile--c,
+.tile--d,
 .tile--e { grid-column: span 4; }
 
 .tile {
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  padding: clamp(16px, 2vw, 28px);
+  justify-content: space-between;
+  gap: 10px;
+  padding: clamp(16px, 1.8vw, 26px);
   overflow: hidden;
-  border-radius: clamp(14px, 1.6vw, 22px);
-  color: var(--ink, var(--white));
+  border: 2.5px solid #111111;
+  border-radius: 22px;
+  background: var(--c);
+  color: var(--ink);
+  box-shadow: 3px 4px 0 #111111;
   transform-origin: 0 0;
   will-change: transform;
-  transition: color 600ms var(--ease-out);
 }
-
-.tile--a { --pat: var(--jonquil); }
-.tile--b { --pat: var(--black); --ink: var(--black); }
-.tile--c { --pat: var(--white); }
-.tile--d { --pat: var(--rojo); --ink: var(--black); }
-.tile--e { --pat: var(--white); }
-
-/* two faces: imagery and a brand pattern, which trade places on a loop */
-.tile::before,
-.tile::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  transition: opacity 900ms var(--ease-out), transform 1200ms var(--ease-out);
-}
-.tile::before { background: var(--fill); }
-/* with a photo, darken the bottom so the numbers stay readable */
-.tile[style*="--img"] { --ink: var(--white); }
-.tile[style*="--img"]::before {
-  background:
-    linear-gradient(to top, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.05) 60%),
-    var(--img) center / cover;
-}
-
-.tile::after {
-  opacity: 0;
-  transform: scale(1.06);
-  /* keep the pattern clear of the numbers in the bottom-left corner */
-  -webkit-mask-image: linear-gradient(to top right, transparent 30%, #000 80%);
-          mask-image: linear-gradient(to top right, transparent 30%, #000 80%);
-}
-.tile.is-alt::after { opacity: 1; transform: scale(1); }
-.tile.is-alt::before { opacity: 0.15; }
-.tile.is-alt { --ink: var(--white); }
-.tile--b.is-alt { --pat: var(--jonquil); }
-
-.tile[data-pattern="dots"]::after {
-  background: radial-gradient(circle, var(--pat) 0 28%, transparent 31%) 0 0 / 22px 22px;
-}
-.tile[data-pattern="grid"]::after {
-  background:
-    linear-gradient(var(--pat) 1px, transparent 1px) 0 0 / 28px 28px,
-    linear-gradient(90deg, var(--pat) 1px, transparent 1px) 0 0 / 28px 28px;
-  opacity: 0;
-}
-.tile.is-alt[data-pattern="grid"]::after { opacity: 0.45; }
-.tile[data-pattern="rings"]::after {
-  background: repeating-radial-gradient(circle at 80% 20%, var(--pat) 0 2px, transparent 3px 26px);
-}
-.tile[data-pattern="bars"]::after {
-  background: repeating-linear-gradient(90deg, var(--pat) 0 10px, transparent 10px 26px);
-}
-
-.tile > * { position: relative; z-index: 1; }
 
 .tile__num {
-  font-size: clamp(44px, 6.6vw, 104px);
-  font-weight: 900;
-  line-height: 0.9;
-  letter-spacing: -0.05em;
+  font-family: "Anton", "Inter", sans-serif;
+  font-size: clamp(48px, 5.6vw, 92px);
+  font-weight: 400;
+  line-height: 0.95;
   font-variant-numeric: tabular-nums;
 }
-.tile--d .tile__num,
-.tile--e .tile__num { font-size: clamp(36px, 4.4vw, 68px); }
+.tile__num small {
+  font-size: 0.42em;
+  text-transform: uppercase;
+}
+.tile--a .tile__num { font-size: clamp(80px, 10vw, 170px); }
 
 .tile__big {
-  font-size: clamp(34px, 4.8vw, 76px);
-  font-weight: 900;
-  line-height: 0.95;
-  letter-spacing: -0.04em;
+  margin-top: -0.1em;
+  font-family: "Anton", "Inter", sans-serif;
+  font-size: clamp(36px, 4.4vw, 72px);
+  line-height: 1;
   text-transform: uppercase;
 }
 
 .tile__label {
-  margin-top: 10px;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  opacity: 0.85;
 }
+
+/* 35+ years: a big icon that keeps changing shape (needle, hanger, ₹, popcorn) */
+.tile--a { justify-content: flex-end; }
+.tw-morph {
+  position: relative;
+  flex: 1;
+  min-height: 90px;
+}
+.tw-glyph {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: min(70%, 200px);
+  height: min(100%, 200px);
+  object-fit: contain;
+  stroke-width: 1.6;
+  opacity: 0;
+  transform: scale(0.4) rotate(-25deg);
+  transition: opacity 350ms, transform 600ms var(--ease-spring);
+}
+.tw-glyph.is-on { opacity: 1; transform: none; }
+
+/* 7+ years: seven bars, one per year, that bob; hover a bar to read it */
+.tw-bars {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 6%;
+  min-height: 60px;
+  padding: 0 2px;
+}
+.tw-bars i {
+  position: relative;
+  flex: 1;
+  height: calc(var(--h) * 1%);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  transform-origin: bottom;
+  transform: scaleY(0);
+  transition: transform 700ms var(--ease-spring) calc(var(--n) * 70ms), background 200ms;
+}
+.morph.is-grid .tw-bars i {
+  transform: scaleY(1);
+  animation: bob 1.8s ease-in-out calc(var(--n) * -0.25s + 1s) infinite alternate;
+}
+.tw-bars i:last-child { background: var(--white); }
+.tw-bars i:hover { background: var(--jonquil); }
+.tw-bars i:hover::after {
+  content: attr(data-year);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  translate: -50% 0;
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: #111111;
+  color: var(--white);
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+@keyframes bob {
+  from { transform: scaleY(1); }
+  to   { transform: scaleY(0.8); }
+}
+
+/* 40+ brands: a Launch toggle that slides and throws confetti */
+.tw-toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 300px;
+  height: 58px;
+  padding: 0 6px 0 22px;
+  border: 2.5px solid #111111;
+  border-radius: 999px;
+  background: var(--white);
+  color: #111111;
+  font: 700 16px/1 "Inter", sans-serif;
+  cursor: pointer;
+  transition: background 300ms;
+}
+.tw-toggle__label { transition: opacity 200ms; }
+.tw-toggle__knob {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--rojo);
+  color: var(--white);
+  transition: right 450ms var(--ease-spring), background 300ms, transform 450ms var(--ease-spring);
+}
+.tw-toggle__knob svg { width: 24px; height: 24px; }
+.tw-toggle[aria-pressed="true"] { background: var(--jonquil); padding: 0 22px 0 6px; justify-content: flex-end; }
+.tw-toggle[aria-pressed="true"] .tw-toggle__knob { right: calc(100% - 50px); transform: rotate(-45deg); background: #111111; }
+.tw-confetti {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* 300+ vendors: an arc gauge that sweeps up; drag the knob */
+.tw-gauge-head { display: flex; justify-content: space-between; }
+.tw-gauge-hint { opacity: 0.55; }
+.tw-gauge {
+  flex: 1;
+  width: 100%;
+  min-height: 60px;
+  overflow: visible;
+  touch-action: none;
+  cursor: grab;
+}
+.tw-gauge__track,
+.tw-gauge__fill { fill: none; stroke-linecap: round; stroke-width: 16; }
+.tw-gauge__track { stroke: rgba(255, 255, 255, 0.16); }
+.tw-gauge__fill { stroke: var(--jonquil); stroke-dasharray: 0 100; }
+.tw-gauge__knob { fill: var(--white); stroke: #111111; stroke-width: 3; }
+
+/* ₹2,000+ Cr: a popcorn button through to the brands */
+.tw-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  align-self: flex-start;
+  padding: 6px 20px 6px 6px;
+  border: 2.5px solid #111111;
+  border-radius: 999px;
+  background: var(--jonquil);
+  color: #111111;
+  box-shadow: 2px 3px 0 #111111;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 150ms, box-shadow 150ms;
+}
+.tw-pill__icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #111111;
+}
+.tw-pill__icon img { width: 30px; transition: transform 500ms var(--ease-spring); }
+.tw-pill:hover { transform: translate(-1px, -1px); box-shadow: 3px 4px 0 #111111; }
+.tw-pill:hover .tw-pill__icon img { transform: rotate(-20deg) scale(1.15); }
 
 /* ==========================================================================
    BRANDPOLIO — tilted brand cards with floating chips
@@ -1160,6 +1262,17 @@ a { color: inherit; }
   .build__facts li + li::before { display: none; }
 
   .bento { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, minmax(0, 1fr)); }
+  .tile--a { grid-row: span 1; }
+  .tile--a .tile__num { font-size: 56px; }
+  .tw-morph { min-height: 40px; }
+  .tw-toggle { height: 44px; padding-left: 12px; font-size: 12px; }
+  .tw-toggle__knob { top: 3px; right: 3px; width: 34px; height: 34px; }
+  .tw-toggle__knob svg { width: 18px; height: 18px; }
+  .tw-toggle[aria-pressed="true"] { padding: 0 10px 0 6px; }
+  .tw-toggle[aria-pressed="true"] .tw-toggle__knob { right: calc(100% - 37px); }
+  .tw-pill { font-size: 12px; padding-right: 12px; gap: 8px; }
+  .tw-pill__icon { width: 34px; height: 34px; }
+  .tw-pill__icon img { width: 22px; }
   .morph__grid { inset: 84px var(--gutter) 56px; }
   .tile--a { grid-column: span 2; }
   .tile--b, .tile--c, .tile--d, .tile--e { grid-column: span 1; }
