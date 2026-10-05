@@ -64,7 +64,6 @@
   font-weight: 900;
   line-height: 0.92;
   letter-spacing: -0.05em;
-  text-transform: uppercase;
 }
 .t-lede { max-width: 46ch; margin: 18px 0 0; font-size: clamp(15px, 1.25vw, 18px); font-weight: 500; line-height: 1.5; }
 
