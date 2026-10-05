@@ -28,6 +28,7 @@ npx http-server .
 3. **Marquee** — a thin scrolling strip of the categories we make.
 4. **Who we are** — "who *we are:*" over a fanned hand of six team cards; each opens the team's page in `roles/`.
 5. **Brandfolio** — brand cards; Bumzee opens its case study (`brands/bumzee.html`).
-6. **Pop, the chat assistant** — the popcorn button bottom-right on every page (`js/chat.js`, `css/chat.css`). It answers from the site's content; edit answers in `TOPICS`, and set `CONTACT_EMAIL` to route enquiries to an inbox.
+6. **Thank you + CTA** — "Thank you, *let's build!*" ringed by round icon stickers, with Start a project, Chat with Pop and See our work buttons (`#contact`).
+7. **Pop, the chat assistant** — the popcorn button bottom-right on every page (`js/chat.js`, `css/chat.css`). It answers from the site's content; edit answers in `TOPICS`, and set `CONTACT_EMAIL` to route enquiries to an inbox.
 
 Brand colours: the Popstation brand colours, softened into accents — Butter `#F4D77A` (yellow), Poppy `#DC6B3F` (red), Sky `#94B2ED` (blue) — with black `#1A1A1A` type on warm paper `#FAF5E6`. No pink. Client brand colours (Bumzee, Majestey, The Mom Store) stay their own.

@@ -1058,6 +1058,84 @@ a.boxed:focus-visible { outline: none; }
 .brandfolio__head, .brandfolio__body, .deck-hint, .deck-nav { position: relative; z-index: 1; }
 
 /* ==========================================================================
+   THANK YOU + CTA — the closing screen
+   "Thank you, let's build!" ringed by round stickers of the site's icons,
+   which pop in and bob; buttons start a project or open Pop.
+   ========================================================================== */
+
+.thanks {
+  position: relative;
+  min-height: 92vh;
+  min-height: 92svh;
+  display: grid;
+  place-items: center;
+  padding: 110px var(--gutter) 90px;
+  overflow: hidden;
+  background: var(--paper);
+  color: var(--text);
+  text-align: center;
+}
+.thanks__inner { position: relative; z-index: 1; max-width: 900px; }
+.thanks__title {
+  margin: 0;
+  font-size: clamp(44px, 7vw, 112px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+.thanks__title em {
+  display: inline-block;
+  color: var(--rojo);
+  font-family: "Instrument Serif", Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  transform: rotate(-4deg);
+}
+.thanks__lede { margin: 22px auto 0; max-width: 560px; font-size: clamp(16px, 1.4vw, 19px); font-weight: 500; line-height: 1.55; opacity: 0.8; }
+.thanks__cta { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 32px; }
+.tbtn {
+  padding: 13px 22px;
+  border: 2px solid var(--text);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--text);
+  box-shadow: 2px 3px 0 var(--text);
+  font: 700 15px/1 "Inter", sans-serif;
+  text-decoration: none;
+  transition: transform 150ms, box-shadow 150ms;
+}
+.tbtn:hover { transform: translate(-1px, -2px); box-shadow: 3px 5px 0 var(--text); }
+.tbtn--dark { background: var(--jonquil); }
+
+.ty-stickers { position: absolute; inset: 0; pointer-events: none; }
+.ty-sticker {
+  position: absolute;
+  left: var(--l);
+  top: var(--t);
+  display: grid;
+  place-items: center;
+  width: var(--sz);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--tone) 70%, #ffffff);
+  box-shadow: 0 0 0 5px #ffffff, 0 14px 24px -14px rgba(26, 26, 26, 0.45);
+  translate: -50% -50%;
+  transform: scale(0) rotate(var(--r));
+  transition: transform 700ms var(--ease-spring) calc(var(--i) * 110ms + 200ms);
+}
+.ty-sticker svg,
+.ty-sticker img { width: 62%; height: auto; overflow: visible; fill: var(--c1); }
+.thanks.is-in .ty-sticker {
+  transform: scale(1) rotate(var(--r));
+  animation: ty-bob 4s ease-in-out calc(var(--i) * -0.7s + 1.2s) infinite;
+}
+@keyframes ty-bob {
+  0%, 100% { translate: -50% -50%; }
+  50%      { translate: -50% calc(-50% - 10px); }
+}
+
+/* ==========================================================================
    FOOTER
    ========================================================================== */
 
@@ -1081,6 +1159,13 @@ a.boxed:focus-visible { outline: none; }
 
 @media (max-width: 760px) {
   .nav__links { display: none; }
+  .ty-sticker { --sz: 58px !important; }
+  .ty-sticker:nth-child(1) { --l: 16% !important; --t: 18% !important; }
+  .ty-sticker:nth-child(2) { --l: 50% !important; --t: 16% !important; }
+  .ty-sticker:nth-child(3) { --l: 84% !important; --t: 19% !important; }
+  .ty-sticker:nth-child(4) { --l: 16% !important; --t: 88% !important; }
+  .ty-sticker:nth-child(5) { --l: 50% !important; --t: 90% !important; }
+  .ty-sticker:nth-child(6) { --l: 84% !important; --t: 87% !important; }
 
   /* phones: the hand becomes a 2-column grid of gently tilted cards */
   .hand { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px 12px; margin-top: 48px; }
@@ -1111,6 +1196,7 @@ a.boxed:focus-visible { outline: none; }
 @media (prefers-reduced-motion: reduce) {
   .intro { display: none; }
   .swoosh path { stroke-dashoffset: 0 !important; }
+  .ty-sticker { transform: rotate(var(--r)) !important; animation: none !important; }
   .build__title.is-in .boxed { animation: none; }
   .word, .stat { opacity: 1 !important; transform: none !important; }
   .boxed::before, .build__lede { opacity: 1 !important; }

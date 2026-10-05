@@ -146,6 +146,17 @@
     }
   }
 
+  /* ---------------- Thank you: stickers pop in on scroll ---------------- */
+
+  const thanks = document.getElementById("contact");
+  if (thanks) {
+    if (reduceMotion || !("IntersectionObserver" in window)) thanks.classList.add("is-in");
+    else {
+      const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { thanks.classList.add("is-in"); io.disconnect(); } }, { threshold: 0.3 });
+      io.observe(thanks);
+    }
+  }
+
   /* ---------------- Nav background on scroll ---------------- */
 
   const nav = document.querySelector(".nav");

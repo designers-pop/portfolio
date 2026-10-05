@@ -163,6 +163,14 @@
     if (state) setTimeout(() => input.focus(), 50);
   };
   launch.addEventListener("click", () => open(panel.hidden));
+  // anything with data-chat opens Pop ("open"), or asks that chip's question
+  document.querySelectorAll("[data-chat]").forEach((el) => {
+    el.addEventListener("click", () => {
+      open(true);
+      const q = el.dataset.chat;
+      if (q !== "open") setTimeout(() => ask(q, CHIP_TOPIC[q]), 300);
+    });
+  });
   root.querySelector(".chat__close").addEventListener("click", () => { open(false); launch.focus(); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !panel.hidden) { open(false); launch.focus(); } });
   form.addEventListener("submit", (e) => {
