@@ -14,7 +14,7 @@
 
   // centre of each popcorn loop, in logo coordinates
   const LOOPS = [[511, 140], [597, 174], [523, 220]];
-  const CRUMBS = ["#e01d1e", "#111111", "#ffcb0e"];
+  const CRUMBS = ["#df6d41", "#111111", "#f7d89a"];
 
   let introFinished = false;
   const finishIntro = () => {
@@ -233,7 +233,7 @@
       const card = toggle.closest(".tile");
       const r = toggle.getBoundingClientRect();
       const c = card.getBoundingClientRect();
-      const colours = ["#ffcb0e", "#e01d1e", "#ffffff", "#111111", "#f5a6aa"];
+      const colours = ["#f7d89a", "#df6d41", "#ffffff", "#111111", "#aaa648"];
       for (let k = 0; k < 18; k++) {
         const bit = document.createElement("span");
         bit.className = "tw-confetti";

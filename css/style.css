@@ -6,9 +6,12 @@
 :root {
   --black: #000000;
   --white: #ffffff;
-  --jonquil: #ffcb0e;
-  --rojo: #e01d1e;
-  --steel: #2d7dd2;
+  /* palette: Buttercream, Canyon, Morning Sky, Olive Grove
+     (the old names are kept so every rule picks up the new colours) */
+  --jonquil: #f7d89a;  /* Buttercream */
+  --rojo: #df6d41;     /* Canyon */
+  --steel: #8da6cc;    /* Morning Sky */
+  --olive: #aaa648;    /* Olive Grove */
   --cream: #f2eadc;            /* wordmark colour from the logo */
   --ink-soft: rgba(255, 255, 255, 0.64);
 
@@ -71,7 +74,7 @@ a { color: inherit; }
   inset: 0;
   z-index: 100;
   overflow: hidden;
-  background: #fdf0ee; /* blush */
+  background: #faf3e8; /* blush */
 }
 
 .intro.is-done { display: none; }
@@ -301,12 +304,12 @@ a { color: inherit; }
 .poster:focus-visible { box-shadow: inset 0 0 0 4px var(--jonquil); }
 
 /* columns, in brand colours */
-.poster[data-role="designers"]            { --top: #111111; --bottom: #111111; --c1: #ffcb0e; --c2: #e01d1e; --c3: #fff4d2; --ink: #ffffff; --split: 58%; }
-.poster[data-role="category-builders"]    { --top: #2d7dd2; --bottom: #e01d1e; --c1: #fff4d2; --c2: #ffcb0e; --c3: #9cc5ef; --ink: #ffffff; --split: 44%; }
-.poster[data-role="sourcing-specialists"] { --top: #6e0b0d; --bottom: #f5a6aa; --c1: #ffcb0e; --c2: #e01d1e; --c3: #fff4d2; --ink: #111111; --split: 54%; }
-.poster[data-role="production-experts"]   { --top: #ffcb0e; --bottom: #2d7dd2; --c1: #111111; --c2: #e01d1e; --c3: #fff4d2; --ink: #ffffff; --split: 40%; }
-.poster[data-role="technology-builders"]  { --top: #e01d1e; --bottom: #111111; --c1: #9cc5ef; --c2: #ffcb0e; --c3: #111111; --ink: #ffffff; --split: 50%; }
-.poster[data-role="brand-partners"]       { --top: #9cc5ef; --bottom: #fff4d2; --c1: #e01d1e; --c2: #111111; --c3: #ffcb0e; --ink: #111111; --split: 46%; }
+.poster[data-role="designers"]            { --top: #111111; --bottom: #111111; --c1: #f7d89a; --c2: #df6d41; --c3: #fbefd6; --ink: #ffffff; --split: 58%; }
+.poster[data-role="category-builders"]    { --top: #8da6cc; --bottom: #df6d41; --c1: #fbefd6; --c2: #f7d89a; --c3: #c5d2e6; --ink: #111111; --split: 44%; }
+.poster[data-role="sourcing-specialists"] { --top: #a84a2a; --bottom: #aaa648; --c1: #f7d89a; --c2: #df6d41; --c3: #fbefd6; --ink: #111111; --split: 54%; }
+.poster[data-role="production-experts"]   { --top: #f7d89a; --bottom: #8da6cc; --c1: #111111; --c2: #df6d41; --c3: #fbefd6; --ink: #111111; --split: 40%; }
+.poster[data-role="technology-builders"]  { --top: #df6d41; --bottom: #111111; --c1: #c5d2e6; --c2: #f7d89a; --c3: #111111; --ink: #ffffff; --split: 50%; }
+.poster[data-role="brand-partners"]       { --top: #c5d2e6; --bottom: #fbefd6; --c1: #df6d41; --c2: #111111; --c3: #f7d89a; --ink: #111111; --split: 46%; }
 
 /* ==========================================================================
    HOW WE BUILD → BY THE NUMBERS
@@ -318,7 +321,7 @@ a { color: inherit; }
 
 .morph {
   position: relative;
-  background: #fff4d2; /* pale jonquil */
+  background: #fbefd6; /* pale jonquil */
   color: #111111;
   scroll-margin-top: 0;
 }
@@ -386,10 +389,10 @@ a { color: inherit; }
 
 /* colour shared by each boxed headline word and the card it becomes */
 .build__title [data-morph="a"], .tile--a { --c: var(--jonquil); --ink: #111111; }
-.build__title [data-morph="b"], .tile--b { --c: var(--rojo);    --ink: var(--white); }
-.build__title [data-morph="c"], .tile--c { --c: var(--steel);   --ink: var(--white); }
+.build__title [data-morph="b"], .tile--b { --c: var(--rojo);    --ink: #111111; }
+.build__title [data-morph="c"], .tile--c { --c: var(--steel);   --ink: #111111; }
 .build__title [data-morph="d"], .tile--d { --c: #111111;        --ink: var(--white); }
-.build__title [data-morph="e"], .tile--e { --c: #f5a6aa;        --ink: #111111; }
+.build__title [data-morph="e"], .tile--e { --c: #aaa648;        --ink: #111111; }
 
 /* each key word sits in an outlined box: first the colour shows through
    the letters, then it fills the box behind them */
@@ -704,7 +707,7 @@ a { color: inherit; }
    ========================================================================== */
 
 .brandfolio {
-  --tint: #fff6d6;
+  --tint: #fbefd6;
   --card: var(--jonquil);
   --card-ink: var(--black);
   --disc: rgba(255, 255, 255, 0.55);
@@ -717,9 +720,9 @@ a { color: inherit; }
   scroll-margin-top: 40px;
 }
 
-.brandfolio[data-active="bumzee"]   { --tint: #fff4cc; }
+.brandfolio[data-active="bumzee"]   { --tint: #fbefd6; }
 .brandfolio[data-active="majestey"] { --tint: #f1ead9; }
-.brandfolio[data-active="momstore"] { --tint: #e2edf9; }
+.brandfolio[data-active="momstore"] { --tint: #e3eaf4; }
 
 /* each card carries its own colours, so a leaving card never takes on the next brand's */
 .bcard[data-brand="bumzee"]   { --card: #fffdf6; --card-ink: #e8a33a; --disc: #ffe9a8; --card-accent: var(--jonquil); }
@@ -1236,9 +1239,9 @@ a { color: inherit; }
   background: var(--bg);
   color: var(--fg);
 }
-.marquee--jonquil { --bg: #ffe27a; --fg: #111111; } /* lighter jonquil */
-.marquee--rojo    { --bg: var(--rojo);    --fg: var(--white); }
-.marquee--steel   { --bg: var(--steel);   --fg: var(--white); }
+.marquee--jonquil { --bg: #f9e4b8; --fg: #111111; } /* lighter jonquil */
+.marquee--rojo    { --bg: var(--rojo);    --fg: #111111; }
+.marquee--steel   { --bg: var(--steel);   --fg: #111111; }
 
 .marquee__track {
   display: flex;

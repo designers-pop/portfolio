@@ -29,4 +29,4 @@ npx http-server .
 4. **Who we are** — a full-screen poster: six brand-colour columns, one per team, each with a big Popstation icon (pencil, folded tees, thread spool, sewing machine, laptop, shopping bag). Each column opens the team's page in `roles/` (placeholders to fill in).
 5. **Brandfolio** — tilted brand cards with floating panels that lean toward the cursor and flip on click: Bumzee, Majestey London, The Mom Store. Add a brand by copying one `<article class="bcard">` in `index.html`.
 
-Brand colours: Black `#000000`, White `#FFFFFF`, Jonquil `#FFCB0E`, Rojo `#E01D1E`, Steel blue `#2D7DD2`.
+Brand colours: Buttercream `#F7D89A`, Canyon `#DF6D41`, Morning Sky `#8DA6CC`, Olive Grove `#AAA648`, with black `#111111` for type. Client brand colours (Bumzee, Majestey, The Mom Store) stay their own.
