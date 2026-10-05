@@ -487,6 +487,12 @@
       document.getElementById("brandIndex").textContent = pad(i + 1);
       document.getElementById("brandName").textContent = card.dataset.name;
       document.getElementById("brandWhat").textContent = card.dataset.what;
+      const caseLink = document.getElementById("brandCase");
+      caseLink.hidden = !card.dataset.case;
+      if (card.dataset.case) {
+        caseLink.href = card.dataset.case;
+        caseLink.setAttribute("aria-label", `See our work for ${card.dataset.name}`);
+      }
       const link = document.getElementById("brandLink");
       link.href = card.dataset.url;
       link.setAttribute("aria-label", `Visit ${card.dataset.name}`);
@@ -522,6 +528,8 @@
     cards.forEach((card) => {
       card.addEventListener("click", () => {
         if (swiped || !card.classList.contains("is-active")) return;
+        // brands with a case study open it; the rest flip to show the back
+        if (card.dataset.case) { window.location.href = card.dataset.case; return; }
         card.classList.toggle("is-flipped");
         stop(); // hold on this brand while someone reads the back
       });

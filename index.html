@@ -200,7 +200,10 @@
             <li data-stage="production">Production</li>
             <li data-stage="packaging">Packaging</li>
           </ol>
-          <a class="brand-info__link" id="brandLink" href="#" target="_blank" rel="noopener">Visit site <span aria-hidden="true">↗</span></a>
+          <div class="brand-info__links">
+            <a class="brand-info__case" id="brandCase" href="#" hidden>See the work <span aria-hidden="true">→</span></a>
+            <a class="brand-info__link" id="brandLink" href="#" target="_blank" rel="noopener">Visit site <span aria-hidden="true">↗</span></a>
+          </div>
         </div>
 
         <!-- tilted brand cards with floating chips, one per brand -->
@@ -209,12 +212,14 @@
                    data-name="Bumzee"
                    data-what="Fun, comfy clothing for infants and kids. We run the whole build for them: design through production."
                    data-stages="design sourcing production"
-                   data-url="https://www.bumzee.in">
+                   data-url="https://www.bumzee.in"
+                   data-case="brands/bumzee.html">
             <div class="bcard__flip">
               <div class="bcard__face">
                 <img class="bcard__logo bcard__logo--wide" src="assets/img/brands/bumzee-logo.webp" alt="Bumzee" width="308" height="60">
                 <div class="bcard__disc" data-img="assets/img/brands/bumzee-1.webp" data-cap="Block-print co-ord" role="img" aria-label="Bumzee block-print co-ord set"><span>B</span></div>
                 <span class="bcard__bottom">Kids wear</span>
+                <span class="bcard__case">See the work →</span>
               </div>
               <div class="bcard__back"></div>
             </div>
@@ -263,7 +268,7 @@
         </div>
       </div>
 
-      <p class="deck-hint">Tap a card to flip it · drag or use the arrows to see more</p>
+      <p class="deck-hint">Tap a card to open or flip it · drag or use the arrows to see more</p>
 
       <div class="deck-nav">
         <button class="deck-nav__btn" id="deckPrev" type="button" aria-label="Previous brand">←</button>

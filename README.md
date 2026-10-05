@@ -17,6 +17,7 @@ npx http-server .
 - `js/main.js` — intro timing, rolling hero list, scroll reveals, number count-ups
 - `assets/popstation-logo.svg` — vector logo (traced from `popstation-logo.webp`; the popcorn's three loops and each letter are separate paths, which the intro animates)
 - `assets/img/` — photography (see the README in that folder)
+- `brands/bumzee.html` — Bumzee case study (opens from its Brandfolio card); styles in `css/case.css`, script in `js/case.js`, images in `assets/img/bumzee/`
 - `roles/` — one page per "Who we are" panel
 - `assets/popcorn.svg` — the popcorn on its own (used in the "Who we are" headline)
 
