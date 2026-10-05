@@ -65,6 +65,7 @@
 
 .t-photo { grid-column: span 3; grid-row: span 2; }
 .t-photo2 { grid-column: span 3; }
+.t-photo2 img { object-position: center 22%; }
 
 .t-logo {
   grid-column: span 3;
