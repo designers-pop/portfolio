@@ -333,7 +333,7 @@ a { color: inherit; }
 .tcard[data-role="sourcing-specialists"]  { --c: #ffffff; --ink: #1a1a1a; --c1: #1a1a1a; --c2: #e01d1e; --c3: #ffcb0e; --rot: -2deg; --y: 6px; }
 .tcard[data-role="production-experts"]    { --c: #1a1a1a; --ink: #ffffff; --c1: #1a1a1a; --c2: #e01d1e; --c3: #ffcb0e; --rot: 3deg; --y: 26px; }
 .tcard[data-role="technology-builders"]   { --c: #e01d1e; --ink: #ffffff; --c1: #1a1a1a; --c2: #e01d1e; --c3: #ffcb0e; --rot: -4deg; --y: 50px; }
-.tcard[data-role="brand-partners"]        { --c: #1a1a1a; --ink: #ffffff; --c1: #1a1a1a; --c2: #e01d1e; --c3: #ffcb0e; --rot: 6deg; --y: 18px; }
+.tcard[data-role="brand-partners"]        { --c: #2d7dd2; --ink: #ffffff; --c1: #1a1a1a; --c2: #e01d1e; --c3: #ffcb0e; --rot: 6deg; --y: 18px; }
 
 /* ==========================================================================
    HERO — "Built with your brand. From first sketch to shelf."
