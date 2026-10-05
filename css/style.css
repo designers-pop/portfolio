@@ -164,153 +164,156 @@ a { color: inherit; }
 .nav__links a:hover { background: var(--white); color: var(--black); }
 
 /* ==========================================================================
-   WHO WE ARE — full-screen poster
-   Six columns of flat brand-colour blocks fill the screen edge to edge.
-   Each has a big Popstation icon sitting on the split between its top and
-   bottom block, and the team's name below. Per column: --top, --bottom,
-   --c1/--c2/--c3 (icon colours), --ink (text) and --split.
+   WHO WE ARE — a fanned hand of team cards
+   A row of overlapping, tilted cards, each with a sticker icon, a bold
+   lowercase title, a rule and a list of what the team does. The hand fans
+   out when the screen comes into view; hover lifts a card to the front.
+   Per card: --c (colour), --ink (text), --rot (tilt), --y (offset).
    ========================================================================== */
 
 .hero {
   position: relative;
-  height: 100vh;
-  height: 100svh;
-  min-height: 600px;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 110px var(--gutter) 60px;
   overflow: hidden;
-  background: #1c2a66;
-  color: var(--white);
+  background: #f6efe3;
+  color: #1c2a66;
 }
+.hero__title,
+.hero__lede,
+.hand { position: relative; z-index: 1; }
 
-/* the heading sits in the first column, like the line of text on the poster */
 .hero__title {
-  position: absolute;
-  z-index: 3;
-  top: 104px;
-  left: 0;
-  width: calc(100% / 6);
   margin: 0;
-  padding: 0 clamp(14px, 1.6vw, 26px);
-  color: var(--white);
-  font-size: clamp(30px, 3.4vw, 56px);
+  font-size: clamp(40px, 5.6vw, 88px);
   font-weight: 900;
-  line-height: 0.95;
+  line-height: 1;
   letter-spacing: -0.045em;
-  text-transform: uppercase;
-  pointer-events: none;
+  text-align: center;
 }
-.hero__pop {
-  display: inline-block;
-  width: 0.9em;
-  height: auto;
-  vertical-align: -0.12em;
-  animation: pop-wiggle 3.2s ease-in-out infinite;
-}
-@keyframes pop-wiggle {
-  0%, 100% { transform: rotate(-8deg) scale(1); }
-  50%      { transform: rotate(6deg) scale(1.06); }
-}
-
-.posters {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-}
-
-.poster {
-  --split: 50%;
+/* the last words in a handwritten-style italic, underlined with a swoosh */
+.hero__title em {
   position: relative;
-  overflow: hidden;
-  background: var(--bottom);
+  font-family: "Instrument Serif", Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+.hero__title em::after {
+  content: "";
+  position: absolute;
+  left: -2%;
+  right: 4%;
+  bottom: -0.12em;
+  height: 0.22em;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 20' preserveAspectRatio='none'%3E%3Cpath d='M2 14 C50 4 120 4 198 10 M20 18 C80 10 140 10 190 15' fill='none' stroke='%231c2a66' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+}
+.hero__lede { margin: 14px 0 0; font-size: clamp(15px, 1.3vw, 18px); font-weight: 500; opacity: 0.75; text-align: center; }
+
+.hand {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 1320px;
+  margin-top: clamp(40px, 7vh, 80px);
+  padding: 30px 0 20px;
+}
+
+.tcard {
+  --rot: 0deg;
+  --y: 0px;
+  position: relative;
+  flex: 0 0 clamp(170px, 17vw, 250px);
+  min-height: clamp(260px, 36vh, 340px);
+  margin-left: clamp(-60px, -3vw, -24px);
+  padding: 46px 20px 22px;
+  border-radius: 18px;
+  background: var(--c);
   color: var(--ink);
   text-decoration: none;
+  box-shadow: 0 18px 36px -20px rgba(28, 42, 102, 0.55);
   outline: none;
-}
-.poster__top {
-  position: absolute;
-  inset: 0 0 calc(100% - var(--split)) 0;
-  background: var(--top);
-}
-
-/* the icon straddles the split */
-.poster__icon {
-  position: absolute;
-  z-index: 1;
-  top: var(--split);
-  left: 50%;
-  width: min(78%, 34vh);
-  height: auto;
-  translate: -50% -55%;
-  fill: var(--c1);
-  overflow: visible;
-  transform: scale(0) rotate(-20deg);
-  transition: transform 700ms var(--ease-spring);
-}
-.hero.is-in .poster__icon {
-  transform: none;
-  transition-delay: calc(var(--i) * 120ms + 150ms);
-}
-
-.poster__text {
-  position: absolute;
-  z-index: 2;
-  inset: auto 0 0 0;
-  display: grid;
-  justify-items: center;
-  gap: 8px;
-  padding: 0 12px clamp(22px, 4vh, 44px);
-  text-align: center;
+  /* stacked in the middle until the hand fans out */
+  transform: translateX(calc((2.5 - var(--i)) * 70%)) rotate(0deg);
   opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 600ms, transform 600ms var(--ease-out);
+  transition:
+    transform 900ms var(--ease-spring) calc(var(--i) * 70ms),
+    opacity 400ms calc(var(--i) * 70ms),
+    box-shadow 300ms;
 }
-.hero.is-in .poster__text { opacity: 1; transform: none; transition-delay: calc(var(--i) * 120ms + 450ms); }
-
-.poster__name {
-  max-width: 9ch;
-  font-size: clamp(16px, 1.7vw, 28px);
-  font-weight: 900;
-  line-height: 0.98;
-  letter-spacing: -0.03em;
-  text-transform: uppercase;
-}
-.poster__desc,
-.poster__cta {
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition: max-height 500ms var(--ease-out), opacity 300ms;
-}
-.poster__desc { max-width: 22ch; font-size: 12px; font-weight: 600; line-height: 1.35; }
-.poster__cta {
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: var(--ink);
-  color: var(--bottom);
-  font-size: 12px;
-  font-weight: 700;
-}
-
-/* hover / focus: the icon lifts and wiggles, the line appears */
-.hero.is-in .poster:hover .poster__icon,
-.hero.is-in .poster:focus-visible .poster__icon {
-  transform: translateY(-6%) rotate(-4deg) scale(1.06);
+.tcard:first-child { margin-left: 0; }
+.hero.is-in .tcard { transform: translateY(var(--y)) rotate(var(--rot)); opacity: 1; }
+.hero.is-in .tcard:hover,
+.hero.is-in .tcard:focus-visible {
+  z-index: 5;
+  transform: translateY(calc(var(--y) - 26px)) rotate(0deg) scale(1.05);
+  box-shadow: 0 30px 50px -22px rgba(28, 42, 102, 0.6);
   transition-delay: 0ms;
-  transition-duration: 450ms;
+  transition-duration: 350ms;
 }
-.poster:hover .poster__desc,
-.poster:hover .poster__cta,
-.poster:focus-visible .poster__desc,
-.poster:focus-visible .poster__cta { max-height: 80px; opacity: 1; }
-.poster:focus-visible { box-shadow: inset 0 0 0 4px var(--jonquil); }
+.tcard:focus-visible { box-shadow: 0 0 0 4px #f07f1e; }
 
-/* columns, in brand colours */
-.poster[data-role="designers"]            { --top: #1c2a66; --bottom: #1c2a66; --c1: #ffb21f; --c2: #f07f1e; --c3: #f6efe3; --ink: #ffffff; --split: 58%; }
-.poster[data-role="category-builders"]    { --top: #24398a; --bottom: #f07f1e; --c1: #f6efe3; --c2: #ffb21f; --c3: #d5dcf0; --ink: #1c2a66; --split: 44%; }
-.poster[data-role="sourcing-specialists"] { --top: #c25e12; --bottom: #e8dcc8; --c1: #ffb21f; --c2: #f07f1e; --c3: #f6efe3; --ink: #1c2a66; --split: 54%; }
-.poster[data-role="production-experts"]   { --top: #ffb21f; --bottom: #24398a; --c1: #f6efe3; --c2: #f07f1e; --c3: #1c2a66; --ink: #ffffff; --split: 40%; }
-.poster[data-role="technology-builders"]  { --top: #f07f1e; --bottom: #1c2a66; --c1: #d5dcf0; --c2: #ffb21f; --c3: #1c2a66; --ink: #ffffff; --split: 50%; }
-.poster[data-role="brand-partners"]       { --top: #d5dcf0; --bottom: #f6efe3; --c1: #f07f1e; --c2: #1c2a66; --c3: #ffb21f; --ink: #1c2a66; --split: 46%; }
+/* the sticker: icon on a white die-cut badge */
+.tcard__sticker {
+  position: absolute;
+  top: -34px;
+  left: 16px; /* the next card overlaps this one's right edge */
+  display: grid;
+  place-items: center;
+  width: 70px;
+  height: 70px;
+  border-radius: 22px;
+  background: var(--s, #ffffff);
+  box-shadow: 0 0 0 4px #ffffff, 0 8px 16px -8px rgba(28, 42, 102, 0.5);
+  transform: rotate(calc(var(--rot) * -2 + 8deg));
+  transition: transform 500ms var(--ease-spring);
+}
+.tcard__sticker svg { width: 52px; height: 52px; overflow: visible; fill: var(--c1); }
+.tcard:hover .tcard__sticker { transform: rotate(-6deg) scale(1.1); }
+
+.tcard__title {
+  margin: 0;
+  padding-bottom: 10px;
+  border-bottom: 2px solid currentColor;
+  font-size: clamp(20px, 1.8vw, 28px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+.tcard__list { margin: 12px 0 0; padding: 0; list-style: none; }
+.tcard__list li {
+  position: relative;
+  padding: 3px 0 3px 18px;
+  font-size: clamp(12px, 0.95vw, 14px);
+  font-weight: 500;
+  line-height: 1.3;
+}
+.tcard__list li::before { content: "✦"; position: absolute; left: 0; font-size: 0.8em; top: 0.35em; }
+.tcard__more {
+  display: inline-block;
+  margin-top: 14px;
+  font-size: 13px;
+  font-weight: 800;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 250ms, transform 250ms;
+}
+.tcard:hover .tcard__more,
+.tcard:focus-visible .tcard__more { opacity: 1; transform: none; }
+
+/* cards: colour, sticker colours, tilt and offset */
+.tcard[data-role="designers"]            { --c: #24398a; --ink: #ffffff; --c1: #ffb21f; --c2: #f07f1e; --c3: #1c2a66; --rot: -7deg; --y: 30px; }
+.tcard[data-role="category-builders"]    { --c: #ffb21f; --ink: #1c2a66; --c1: #24398a; --c2: #f07f1e; --c3: #f6efe3; --rot: 4deg;  --y: 64px; }
+.tcard[data-role="sourcing-specialists"] { --c: #d5dcf0; --ink: #1c2a66; --c1: #ffb21f; --c2: #f07f1e; --c3: #f6efe3; --rot: -2deg; --y: 6px; }
+.tcard[data-role="production-experts"]   { --c: #f07f1e; --ink: #1c2a66; --c1: #1c2a66; --c2: #f07f1e; --c3: #f6efe3; --rot: 3deg;  --y: 26px; }
+.tcard[data-role="technology-builders"]  { --c: #1c2a66; --ink: #ffffff; --c1: #24398a; --c2: #ffb21f; --c3: #d5dcf0; --rot: -4deg; --y: 50px; }
+.tcard[data-role="brand-partners"]       { --c: #e8dcc8; --ink: #1c2a66; --c1: #f07f1e; --c2: #1c2a66; --c3: #ffb21f; --rot: 6deg;  --y: 18px; }
 
 /* ==========================================================================
    HOW WE BUILD → BY THE NUMBERS
@@ -1343,12 +1346,13 @@ a { color: inherit; }
 @media (max-width: 760px) {
   .nav__links { display: none; }
 
-  .hero { height: auto; }
-  .hero__title { position: relative; top: auto; width: auto; padding: 96px var(--gutter) 20px; }
-  .posters { position: relative; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 300px; }
-  .poster__icon { top: 40%; width: 56%; translate: -50% -50%; }
-  .poster__desc { display: none; }
-  .poster__cta { max-height: 40px; opacity: 1; }
+  /* phones: the hand becomes a 2-column grid of gently tilted cards */
+  .hand { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px 12px; margin-top: 48px; }
+  .tcard { margin-left: 0; min-height: 0; padding: 40px 14px 16px; }
+  .hero.is-in .tcard { transform: rotate(calc(var(--rot) / 2)); }
+  .tcard__sticker { width: 54px; height: 54px; top: -26px; left: 10px; border-radius: 16px; }
+  .tcard__sticker svg { width: 40px; height: 40px; }
+  .tcard__more { opacity: 1; transform: none; }
 
   .brandfolio__body { grid-template-columns: 1fr; }
   .brand-info { order: 2; }
@@ -1404,7 +1408,7 @@ a { color: inherit; }
     transition-duration: 1ms !important;
     transition-delay: 0ms !important;
   }
-  .poster__icon, .poster__text { opacity: 1 !important; transform: none !important; }
+  .tcard { opacity: 1 !important; transform: rotate(var(--rot)) !important; }
 }
 
 /* desktop: the whole section fits one screen; the card is sized from the

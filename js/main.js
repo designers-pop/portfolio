@@ -131,8 +131,8 @@
     watch.observe(intro, { attributes: true, attributeFilter: ["class"] });
   };
 
-  /* ---------------- Who we are: poster ----------------
-     The icons pop in (CSS) when the screen comes into view. */
+  /* ---------------- Who we are: the hand of cards ----------------
+     The cards fan out (CSS) when the screen comes into view. */
 
   const hero = document.getElementById("who");
   if (hero) {
@@ -168,6 +168,9 @@
     brandfolio: [
       ["zigzag", 62, 6, 10, 0], ["swirl", 50, 38, 9, -12], ["asterisk", 92, 30, 5, 10],
       ["heart", 44, 80, 6, 8], ["smiley", 88, 76, 8, -6],
+    ],
+    who: [
+      ["smiley", 6, 10, 7, -8], ["arrow", 78, 14, 8, 10], ["asterisk", 4, 70, 5, 0], ["crown", 90, 76, 6, 6],
     ],
   };
   const NS = "http://www.w3.org/2000/svg";

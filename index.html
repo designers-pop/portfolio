@@ -8,7 +8,7 @@
   <link rel="icon" href="assets/popstation-logo.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="is-loading">
@@ -118,66 +118,87 @@
       <div class="marquee__track" aria-hidden="true"><div class="marquee__set"><span>Kidswear</span><span>Infantwear</span><span>Menswear</span><span>Womenswear</span><span>Maternity</span><span>Streetwear</span><span>Loungewear</span><span>Activewear</span></div><div class="marquee__set"><span>Kidswear</span><span>Infantwear</span><span>Menswear</span><span>Womenswear</span><span>Maternity</span><span>Streetwear</span><span>Loungewear</span><span>Activewear</span></div></div>
     </div>
 
-    <!-- ============ WHO WE ARE — full-screen poster ============
-         Six columns of flat brand-colour blocks, each with a big Popstation
-         icon on the split and the team's name below. Icons pop in when the
-         screen comes into view; hover lifts one. Columns open roles/ pages. -->
+    <!-- ============ WHO WE ARE — a fanned hand of team cards ============
+         One card per team (colour, sticker icon, what they do). The hand
+         fans out when the screen comes into view; hover lifts a card.
+         Each card opens the team's page in roles/. -->
     <section class="hero" id="who">
-      <h2 class="hero__title">Who <img class="hero__pop" src="assets/popcorn.svg" alt="" width="286" height="262"> we are</h2>
-      <nav class="posters" aria-label="Who we are">
-        <a class="poster" data-role="designers" style="--i:0" href="roles/designers.html">
-          <span class="poster__top"></span>
-          <svg class="poster__icon" viewBox="0 0 100 100" aria-hidden="true"><path d="M8 92 C30 70 46 86 70 66" fill="none" stroke="var(--c2)" stroke-width="3" stroke-linecap="round"/><g transform="rotate(45 60 40)"><rect x="50" y="2" width="20" height="62" rx="3"/><rect x="50" y="2" width="20" height="10" rx="3" fill="var(--c2)"/><rect x="50" y="12" width="20" height="5" fill="var(--c3)"/><path d="M50 64 L60 84 L70 64 Z" fill="var(--c3)"/><path d="M57 78 L60 84 L63 78 Z" fill="var(--c2)"/></g></svg>
-          <span class="poster__text">
-            <span class="poster__name">Designers</span>
-            <span class="poster__desc">Collections designed around your brand, from moodboard to tech pack.</span>
-            <span class="poster__cta">Explore →</span>
-          </span>
+      <div class="doodles" data-doodles="who" aria-hidden="true"></div>
+      <h2 class="hero__title">who <em>we are:</em></h2>
+      <p class="hero__lede">Six teams under one roof. Pick a card to meet them.</p>
+      <nav class="hand" aria-label="Who we are">
+        <a class="tcard" data-role="designers" style="--i:0" href="roles/designers.html">
+          <span class="tcard__sticker"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M8 92 C30 70 46 86 70 66" fill="none" stroke="var(--c2)" stroke-width="3" stroke-linecap="round"/><g transform="rotate(45 60 40)"><rect x="50" y="2" width="20" height="62" rx="3"/><rect x="50" y="2" width="20" height="10" rx="3" fill="var(--c2)"/><rect x="50" y="12" width="20" height="5" fill="var(--c3)"/><path d="M50 64 L60 84 L70 64 Z" fill="var(--c3)"/><path d="M57 78 L60 84 L63 78 Z" fill="var(--c2)"/></g></svg></span>
+          <h3 class="tcard__title">designers</h3>
+          <ul class="tcard__list">
+            <li>Trend &amp; moodboards</li>
+            <li>Collection design</li>
+            <li>Prints &amp; graphics</li>
+            <li>Colourways</li>
+            <li>Flats &amp; sketches</li>
+            <li>Tech packs</li>
+          </ul>
+          <span class="tcard__more">Explore →</span>
         </a>
-        <a class="poster" data-role="category-builders" style="--i:1" href="roles/category-builders.html">
-          <span class="poster__top"></span>
-          <svg class="poster__icon" viewBox="0 0 100 100" aria-hidden="true"><path d="M10 70 h80 v22 a4 4 0 0 1 -4 4 h-72 a4 4 0 0 1 -4 -4 z" fill="var(--c2)"/><path d="M14 46 h72 v22 h-72 z" fill="var(--c3)"/><path d="M18 22 h64 v22 h-64 z"/><path d="M40 22 a10 7 0 0 0 20 0" fill="var(--c3)"/></svg>
-          <span class="poster__text">
-            <span class="poster__name">Category Builders</span>
-            <span class="poster__desc">We plan the range and grow new categories for your brand.</span>
-            <span class="poster__cta">Explore →</span>
-          </span>
+        <a class="tcard" data-role="category-builders" style="--i:1" href="roles/category-builders.html">
+          <span class="tcard__sticker"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M10 70 h80 v22 a4 4 0 0 1 -4 4 h-72 a4 4 0 0 1 -4 -4 z" fill="var(--c2)"/><path d="M14 46 h72 v22 h-72 z" fill="var(--c3)"/><path d="M18 22 h64 v22 h-64 z"/><path d="M40 22 a10 7 0 0 0 20 0" fill="var(--c3)"/></svg></span>
+          <h3 class="tcard__title">category builders</h3>
+          <ul class="tcard__list">
+            <li>Range planning</li>
+            <li>Category strategy</li>
+            <li>Line sheets</li>
+            <li>Pricing &amp; costing</li>
+            <li>Season calendars</li>
+          </ul>
+          <span class="tcard__more">Explore →</span>
         </a>
-        <a class="poster" data-role="sourcing-specialists" style="--i:2" href="roles/sourcing-specialists.html">
-          <span class="poster__top"></span>
-          <svg class="poster__icon" viewBox="0 0 100 100" aria-hidden="true"><rect x="18" y="8" width="64" height="12" rx="4" fill="var(--c2)"/><rect x="18" y="80" width="64" height="12" rx="4" fill="var(--c2)"/><rect x="26" y="20" width="48" height="60"/><path d="M26 30 L74 38 M26 42 L74 50 M26 54 L74 62 M26 66 L74 74" stroke="var(--c3)" stroke-width="3"/><path d="M74 60 C92 62 96 80 88 96" fill="none" stroke="var(--c1)" stroke-width="2.5"/><path d="M84 92 L96 70" stroke="var(--c3)" stroke-width="3" stroke-linecap="round"/></svg>
-          <span class="poster__text">
-            <span class="poster__name">Sourcing Specialists</span>
-            <span class="poster__desc">Fabrics, trims and materials from a network of 300+ vendors.</span>
-            <span class="poster__cta">Explore →</span>
-          </span>
+        <a class="tcard" data-role="sourcing-specialists" style="--i:2" href="roles/sourcing-specialists.html">
+          <span class="tcard__sticker"><svg viewBox="0 0 100 100" aria-hidden="true"><rect x="18" y="8" width="64" height="12" rx="4" fill="var(--c2)"/><rect x="18" y="80" width="64" height="12" rx="4" fill="var(--c2)"/><rect x="26" y="20" width="48" height="60"/><path d="M26 30 L74 38 M26 42 L74 50 M26 54 L74 62 M26 66 L74 74" stroke="var(--c3)" stroke-width="3"/><path d="M74 60 C92 62 96 80 88 96" fill="none" stroke="var(--c1)" stroke-width="2.5"/><path d="M84 92 L96 70" stroke="var(--c3)" stroke-width="3" stroke-linecap="round"/></svg></span>
+          <h3 class="tcard__title">sourcing specialists</h3>
+          <ul class="tcard__list">
+            <li>Fabric development</li>
+            <li>Trims &amp; accessories</li>
+            <li>300+ vendor network</li>
+            <li>Sampling</li>
+            <li>Costing</li>
+          </ul>
+          <span class="tcard__more">Explore →</span>
         </a>
-        <a class="poster" data-role="production-experts" style="--i:3" href="roles/production-experts.html">
-          <span class="poster__top"></span>
-          <svg class="poster__icon" viewBox="0 0 100 100" aria-hidden="true"><path d="M6 82 h88 v10 h-88 z" fill="var(--c2)"/><path d="M14 82 V34 a14 14 0 0 1 14 -14 h52 a10 10 0 0 1 10 10 v24 h-16 v-16 h-36 v44 z"/><rect x="72" y="54" width="10" height="16" fill="var(--c3)"/><path d="M77 70 v8" stroke="var(--c3)" stroke-width="2.5"/><circle cx="24" cy="44" r="6" fill="var(--c3)"/><rect x="50" y="22" width="20" height="5" rx="2.5" fill="var(--c2)"/></svg>
-          <span class="poster__text">
-            <span class="poster__name">Production Experts</span>
-            <span class="poster__desc">35 years of manufacturing behind every order we run.</span>
-            <span class="poster__cta">Explore →</span>
-          </span>
+        <a class="tcard" data-role="production-experts" style="--i:3" href="roles/production-experts.html">
+          <span class="tcard__sticker"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M6 82 h88 v10 h-88 z" fill="var(--c2)"/><path d="M14 82 V34 a14 14 0 0 1 14 -14 h52 a10 10 0 0 1 10 10 v24 h-16 v-16 h-36 v44 z"/><rect x="72" y="54" width="10" height="16" fill="var(--c3)"/><path d="M77 70 v8" stroke="var(--c3)" stroke-width="2.5"/><circle cx="24" cy="44" r="6" fill="var(--c3)"/><rect x="50" y="22" width="20" height="5" rx="2.5" fill="var(--c2)"/></svg></span>
+          <h3 class="tcard__title">production experts</h3>
+          <ul class="tcard__list">
+            <li>Pattern &amp; grading</li>
+            <li>Bulk manufacturing</li>
+            <li>Quality control</li>
+            <li>Labels &amp; packaging</li>
+            <li>Delivery</li>
+          </ul>
+          <span class="tcard__more">Explore →</span>
         </a>
-        <a class="poster" data-role="technology-builders" style="--i:4" href="roles/technology-builders.html">
-          <span class="poster__top"></span>
-          <svg class="poster__icon" viewBox="0 0 100 100" aria-hidden="true"><rect x="14" y="14" width="72" height="50" rx="5"/><rect x="20" y="20" width="60" height="38" rx="2" fill="var(--c3)"/><path d="M26 50 L40 40 L50 46 L66 28 L74 32" fill="none" stroke="var(--c2)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 70 h92 l-6 10 h-80 z" fill="var(--c2)"/></svg>
-          <span class="poster__text">
-            <span class="poster__name">Technology Builders</span>
-            <span class="poster__desc">Popstation OS and AI-powered workflows connect every step.</span>
-            <span class="poster__cta">Explore →</span>
-          </span>
+        <a class="tcard" data-role="technology-builders" style="--i:4" href="roles/technology-builders.html">
+          <span class="tcard__sticker"><svg viewBox="0 0 100 100" aria-hidden="true"><rect x="14" y="14" width="72" height="50" rx="5"/><rect x="20" y="20" width="60" height="38" rx="2" fill="var(--c3)"/><path d="M26 50 L40 40 L50 46 L66 28 L74 32" fill="none" stroke="var(--c2)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 70 h92 l-6 10 h-80 z" fill="var(--c2)"/></svg></span>
+          <h3 class="tcard__title">technology builders</h3>
+          <ul class="tcard__list">
+            <li>Popstation OS</li>
+            <li>AI-powered workflows</li>
+            <li>Approvals &amp; tracking</li>
+            <li>Production updates</li>
+            <li>Reporting</li>
+          </ul>
+          <span class="tcard__more">Explore →</span>
         </a>
-        <a class="poster" data-role="brand-partners" style="--i:5" href="roles/brand-partners.html">
-          <span class="poster__top"></span>
-          <svg class="poster__icon" viewBox="0 0 100 100" aria-hidden="true"><path d="M34 30 V22 a16 16 0 0 1 32 0 v8" fill="none" stroke="var(--c2)" stroke-width="5"/><path d="M14 30 h72 l-6 64 h-60 z"/><image href="assets/popcorn.svg" x="32" y="46" width="36" height="33"/></svg>
-          <span class="poster__text">
-            <span class="poster__name">Brand Partners</span>
-            <span class="poster__desc">One team that stays with you from first sketch to shelf.</span>
-            <span class="poster__cta">Explore →</span>
-          </span>
+        <a class="tcard" data-role="brand-partners" style="--i:5" href="roles/brand-partners.html">
+          <span class="tcard__sticker"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M34 30 V22 a16 16 0 0 1 32 0 v8" fill="none" stroke="var(--c2)" stroke-width="5"/><path d="M14 30 h72 l-6 64 h-60 z"/><image href="assets/popcorn.svg" x="32" y="46" width="36" height="33"/></svg></span>
+          <h3 class="tcard__title">brand partners</h3>
+          <ul class="tcard__list">
+            <li>Brand incubation</li>
+            <li>Launch support</li>
+            <li>Marketplaces</li>
+            <li>Growth planning</li>
+            <li>One team, end to end</li>
+          </ul>
+          <span class="tcard__more">Explore →</span>
         </a>
       </nav>
     </section>
