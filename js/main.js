@@ -14,7 +14,7 @@
 
   // centre of each popcorn loop, in logo coordinates
   const LOOPS = [[511, 140], [597, 174], [523, 220]];
-  const CRUMBS = ["#df6d41", "#111111", "#f7d89a"];
+  const CRUMBS = ["#f07f1e", "#1c2a66", "#ffb21f"];
 
   let introFinished = false;
   const finishIntro = () => {
@@ -146,6 +146,54 @@
     }
   }
 
+  /* ---------------- Marker doodles ----------------
+     Hand-drawn scribbles (after the iz card) that draw themselves in when
+     their screen comes into view. Shapes are in a 100 x 100 box; each
+     placement says where (left/top %), how big (vw) and how tilted. */
+
+  const DOODLES = {
+    smiley: ["M70 22 C52 8 22 16 16 42 C10 70 36 90 60 84 C84 78 92 52 82 36", "M42 38 L40 52", "M60 36 L58 50", "M34 62 C46 74 64 72 72 56"],
+    heart: ["M50 86 C20 66 6 46 18 28 C28 14 46 20 50 36 C54 20 74 12 84 28 C96 48 78 68 50 86"],
+    arrow: ["M6 62 C34 52 62 50 90 48", "M70 30 L91 48 L72 66"],
+    asterisk: ["M50 10 L48 90", "M14 30 L86 68", "M86 28 L16 70"],
+    zigzag: ["M8 34 L38 18 L30 52 L66 32 L56 68 L94 46"],
+    crown: ["M10 80 L18 28 L40 58 L54 20 L68 58 L90 30 L84 82 C60 76 34 76 10 80"],
+    swirl: ["M74 18 C44 6 26 36 48 46 C70 56 62 82 32 86", "M32 86 L44 72", "M32 86 L48 92"],
+  };
+  const PLACES = {
+    build: [
+      ["arrow", 6, 18, 9, -8], ["smiley", 82, 14, 10, 6], ["asterisk", 88, 58, 6, 0],
+      ["heart", 8, 66, 8, -10], ["zigzag", 72, 80, 9, 4], ["crown", 30, 84, 7, -4],
+    ],
+    brandfolio: [
+      ["zigzag", 62, 6, 10, 0], ["swirl", 50, 38, 9, -12], ["asterisk", 92, 30, 5, 10],
+      ["heart", 44, 80, 6, 8], ["smiley", 88, 76, 8, -6],
+    ],
+  };
+  const NS = "http://www.w3.org/2000/svg";
+  document.querySelectorAll("[data-doodles]").forEach((layer) => {
+    (PLACES[layer.dataset.doodles] || []).forEach(([shape, left, top, size, rot], i) => {
+      const svg = document.createElementNS(NS, "svg");
+      svg.setAttribute("viewBox", "0 0 100 100");
+      svg.setAttribute("class", "doodle");
+      svg.style.cssText = `left:${left}%;top:${top}%;width:${size}vw;--r:${rot}deg;--i:${i}`;
+      DOODLES[shape].forEach((d) => {
+        const path = document.createElementNS(NS, "path");
+        path.setAttribute("d", d);
+        path.setAttribute("pathLength", "1");
+        svg.appendChild(path);
+      });
+      layer.appendChild(svg);
+    });
+    if (reduceMotion || !("IntersectionObserver" in window)) layer.classList.add("is-drawn");
+    else {
+      const io = new IntersectionObserver(([e]) => {
+        if (e.isIntersecting) { layer.classList.add("is-drawn"); io.disconnect(); }
+      }, { threshold: 0.3 });
+      io.observe(layer.parentElement);
+    }
+  });
+
   /* ---------------- Nav background on scroll ---------------- */
 
   const nav = document.querySelector(".nav");
@@ -233,7 +281,7 @@
       const card = toggle.closest(".tile");
       const r = toggle.getBoundingClientRect();
       const c = card.getBoundingClientRect();
-      const colours = ["#f7d89a", "#df6d41", "#ffffff", "#111111", "#aaa648"];
+      const colours = ["#ffb21f", "#f07f1e", "#ffffff", "#1c2a66", "#e8dcc8"];
       for (let k = 0; k < 18; k++) {
         const bit = document.createElement("span");
         bit.className = "tw-confetti";

@@ -4,14 +4,15 @@
    ========================================================================== */
 
 :root {
-  --black: #000000;
+  --black: #1c2a66;
   --white: #ffffff;
-  /* palette: Buttercream, Canyon, Morning Sky, Olive Grove
+  /* palette after the iz card: amber, marker orange, navy, beige
      (the old names are kept so every rule picks up the new colours) */
-  --jonquil: #f7d89a;  /* Buttercream */
-  --rojo: #df6d41;     /* Canyon */
-  --steel: #8da6cc;    /* Morning Sky */
-  --olive: #aaa648;    /* Olive Grove */
+  --jonquil: #ffb21f;  /* Amber */
+  --rojo: #f07f1e;     /* Marker orange */
+  --steel: #24398a;    /* Navy */
+  --olive: #e8dcc8;    /* Beige */
+  --navy: #1c2a66;     /* type and dark panels */
   --cream: #f2eadc;            /* wordmark colour from the logo */
   --ink-soft: rgba(255, 255, 255, 0.64);
 
@@ -74,7 +75,7 @@ a { color: inherit; }
   inset: 0;
   z-index: 100;
   overflow: hidden;
-  background: #faf3e8; /* blush */
+  background: #f3ebdd; /* blush */
 }
 
 .intro.is-done { display: none; }
@@ -91,15 +92,15 @@ a { color: inherit; }
   width: min(78vw, 64vh, 560px);
   height: auto;
   overflow: visible;
-  color: #111111; /* stroke colour while letters scribble in */
+  color: #1c2a66; /* stroke colour while letters scribble in */
 }
 .intro-logo path,
 .intro-logo g,
 .intro-logo circle { transform-box: fill-box; transform-origin: center; }
 
 /* on blush: black wordmark and tagline, "Fashion" stays rojo */
-.intro-logo .logo-word { fill: #111111; }
-.intro-logo .logo-tag path:first-child { fill: #111111; }
+.intro-logo .logo-word { fill: #1c2a66; }
+.intro-logo .logo-tag path:first-child { fill: #1c2a66; }
 
 .intro__skip {
   position: absolute;
@@ -107,11 +108,11 @@ a { color: inherit; }
   right: var(--gutter);
   bottom: var(--gutter);
   padding: 8px 14px;
-  border: 2px solid #111111;
+  border: 2px solid #1c2a66;
   border-radius: 999px;
   background: var(--white);
-  color: #111111;
-  box-shadow: 2px 3px 0 #111111;
+  color: #1c2a66;
+  box-shadow: 2px 3px 0 #1c2a66;
   font: 700 12px/1 "Inter", sans-serif;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -176,7 +177,7 @@ a { color: inherit; }
   height: 100svh;
   min-height: 600px;
   overflow: hidden;
-  background: #111111;
+  background: #1c2a66;
   color: var(--white);
 }
 
@@ -304,12 +305,12 @@ a { color: inherit; }
 .poster:focus-visible { box-shadow: inset 0 0 0 4px var(--jonquil); }
 
 /* columns, in brand colours */
-.poster[data-role="designers"]            { --top: #111111; --bottom: #111111; --c1: #f7d89a; --c2: #df6d41; --c3: #fbefd6; --ink: #ffffff; --split: 58%; }
-.poster[data-role="category-builders"]    { --top: #8da6cc; --bottom: #df6d41; --c1: #fbefd6; --c2: #f7d89a; --c3: #c5d2e6; --ink: #111111; --split: 44%; }
-.poster[data-role="sourcing-specialists"] { --top: #a84a2a; --bottom: #aaa648; --c1: #f7d89a; --c2: #df6d41; --c3: #fbefd6; --ink: #111111; --split: 54%; }
-.poster[data-role="production-experts"]   { --top: #f7d89a; --bottom: #8da6cc; --c1: #111111; --c2: #df6d41; --c3: #fbefd6; --ink: #111111; --split: 40%; }
-.poster[data-role="technology-builders"]  { --top: #df6d41; --bottom: #111111; --c1: #c5d2e6; --c2: #f7d89a; --c3: #111111; --ink: #ffffff; --split: 50%; }
-.poster[data-role="brand-partners"]       { --top: #c5d2e6; --bottom: #fbefd6; --c1: #df6d41; --c2: #111111; --c3: #f7d89a; --ink: #111111; --split: 46%; }
+.poster[data-role="designers"]            { --top: #1c2a66; --bottom: #1c2a66; --c1: #ffb21f; --c2: #f07f1e; --c3: #f6efe3; --ink: #ffffff; --split: 58%; }
+.poster[data-role="category-builders"]    { --top: #24398a; --bottom: #f07f1e; --c1: #f6efe3; --c2: #ffb21f; --c3: #d5dcf0; --ink: #1c2a66; --split: 44%; }
+.poster[data-role="sourcing-specialists"] { --top: #c25e12; --bottom: #e8dcc8; --c1: #ffb21f; --c2: #f07f1e; --c3: #f6efe3; --ink: #1c2a66; --split: 54%; }
+.poster[data-role="production-experts"]   { --top: #ffb21f; --bottom: #24398a; --c1: #f6efe3; --c2: #f07f1e; --c3: #1c2a66; --ink: #ffffff; --split: 40%; }
+.poster[data-role="technology-builders"]  { --top: #f07f1e; --bottom: #1c2a66; --c1: #d5dcf0; --c2: #ffb21f; --c3: #1c2a66; --ink: #ffffff; --split: 50%; }
+.poster[data-role="brand-partners"]       { --top: #d5dcf0; --bottom: #f6efe3; --c1: #f07f1e; --c2: #1c2a66; --c3: #ffb21f; --ink: #1c2a66; --split: 46%; }
 
 /* ==========================================================================
    HOW WE BUILD → BY THE NUMBERS
@@ -321,8 +322,8 @@ a { color: inherit; }
 
 .morph {
   position: relative;
-  background: #fbefd6; /* pale jonquil */
-  color: #111111;
+  background: #f6efe3; /* pale jonquil */
+  color: #1c2a66;
   scroll-margin-top: 0;
 }
 
@@ -388,11 +389,11 @@ a { color: inherit; }
 }
 
 /* colour shared by each boxed headline word and the card it becomes */
-.build__title [data-morph="a"], .tile--a { --c: var(--jonquil); --ink: #111111; }
-.build__title [data-morph="b"], .tile--b { --c: var(--rojo);    --ink: #111111; }
-.build__title [data-morph="c"], .tile--c { --c: var(--steel);   --ink: #111111; }
-.build__title [data-morph="d"], .tile--d { --c: #111111;        --ink: var(--white); }
-.build__title [data-morph="e"], .tile--e { --c: #aaa648;        --ink: #111111; }
+.build__title [data-morph="a"], .tile--a { --c: var(--jonquil); --ink: #1c2a66; }
+.build__title [data-morph="b"], .tile--b { --c: var(--rojo);    --ink: #1c2a66; }
+.build__title [data-morph="c"], .tile--c { --c: var(--steel);   --ink: #ffffff; }
+.build__title [data-morph="d"], .tile--d { --c: #1c2a66;        --ink: var(--white); }
+.build__title [data-morph="e"], .tile--e { --c: #e8dcc8;        --ink: #1c2a66; }
 
 /* each key word sits in an outlined box: first the colour shows through
    the letters, then it fills the box behind them */
@@ -409,10 +410,10 @@ a { color: inherit; }
   position: absolute;
   inset: 0;
   z-index: -1;
-  border: 3px solid #111111;
+  border: 3px solid #1c2a66;
   border-radius: inherit;
   background: var(--c);
-  box-shadow: 3px 4px 0 #111111;
+  box-shadow: 3px 4px 0 #1c2a66;
   opacity: 0;
   transform: scale(0.85) rotate(-3deg);
   transition:
@@ -510,11 +511,11 @@ a { color: inherit; }
   gap: 10px;
   padding: clamp(16px, 1.8vw, 26px);
   overflow: hidden;
-  border: 2.5px solid #111111;
+  border: 2.5px solid #1c2a66;
   border-radius: 22px;
   background: var(--c);
   color: var(--ink);
-  box-shadow: 3px 4px 0 #111111;
+  box-shadow: 3px 4px 0 #1c2a66;
   transform-origin: 0 0;
   will-change: transform;
 }
@@ -602,7 +603,7 @@ a { color: inherit; }
   translate: -50% 0;
   padding: 4px 8px;
   border-radius: 8px;
-  background: #111111;
+  background: #1c2a66;
   color: var(--white);
   font-size: 11px;
   font-weight: 700;
@@ -622,10 +623,10 @@ a { color: inherit; }
   max-width: 300px;
   height: 58px;
   padding: 0 6px 0 22px;
-  border: 2.5px solid #111111;
+  border: 2.5px solid #1c2a66;
   border-radius: 999px;
   background: var(--white);
-  color: #111111;
+  color: #1c2a66;
   font: 700 16px/1 "Inter", sans-serif;
   cursor: pointer;
   transition: background 300ms;
@@ -646,7 +647,7 @@ a { color: inherit; }
 }
 .tw-toggle__knob svg { width: 24px; height: 24px; }
 .tw-toggle[aria-pressed="true"] { background: var(--jonquil); padding: 0 22px 0 6px; justify-content: flex-end; }
-.tw-toggle[aria-pressed="true"] .tw-toggle__knob { right: calc(100% - 50px); transform: rotate(-45deg); background: #111111; }
+.tw-toggle[aria-pressed="true"] .tw-toggle__knob { right: calc(100% - 50px); transform: rotate(-45deg); background: #1c2a66; }
 .tw-confetti {
   position: absolute;
   width: 8px;
@@ -670,7 +671,7 @@ a { color: inherit; }
 .tw-gauge__fill { fill: none; stroke-linecap: round; stroke-width: 16; }
 .tw-gauge__track { stroke: rgba(255, 255, 255, 0.16); }
 .tw-gauge__fill { stroke: var(--jonquil); stroke-dasharray: 0 100; }
-.tw-gauge__knob { fill: var(--white); stroke: #111111; stroke-width: 3; }
+.tw-gauge__knob { fill: var(--white); stroke: #1c2a66; stroke-width: 3; }
 
 /* ₹2,000+ Cr: a popcorn button through to the brands */
 .tw-pill {
@@ -679,11 +680,11 @@ a { color: inherit; }
   gap: 12px;
   align-self: flex-start;
   padding: 6px 20px 6px 6px;
-  border: 2.5px solid #111111;
+  border: 2.5px solid #1c2a66;
   border-radius: 999px;
   background: var(--jonquil);
-  color: #111111;
-  box-shadow: 2px 3px 0 #111111;
+  color: #1c2a66;
+  box-shadow: 2px 3px 0 #1c2a66;
   font-size: 16px;
   font-weight: 700;
   text-decoration: none;
@@ -695,10 +696,10 @@ a { color: inherit; }
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: #111111;
+  background: #1c2a66;
 }
 .tw-pill__icon img { width: 30px; transition: transform 500ms var(--ease-spring); }
-.tw-pill:hover { transform: translate(-1px, -1px); box-shadow: 3px 4px 0 #111111; }
+.tw-pill:hover { transform: translate(-1px, -1px); box-shadow: 3px 4px 0 #1c2a66; }
 .tw-pill:hover .tw-pill__icon img { transform: rotate(-20deg) scale(1.15); }
 
 /* ==========================================================================
@@ -707,7 +708,7 @@ a { color: inherit; }
    ========================================================================== */
 
 .brandfolio {
-  --tint: #fbefd6;
+  --tint: #f6efe3;
   --card: var(--jonquil);
   --card-ink: var(--black);
   --disc: rgba(255, 255, 255, 0.55);
@@ -720,9 +721,9 @@ a { color: inherit; }
   scroll-margin-top: 40px;
 }
 
-.brandfolio[data-active="bumzee"]   { --tint: #fbefd6; }
+.brandfolio[data-active="bumzee"]   { --tint: #f6efe3; }
 .brandfolio[data-active="majestey"] { --tint: #f1ead9; }
-.brandfolio[data-active="momstore"] { --tint: #e3eaf4; }
+.brandfolio[data-active="momstore"] { --tint: #e4e8f5; }
 
 /* each card carries its own colours, so a leaving card never takes on the next brand's */
 .bcard[data-brand="bumzee"]   { --card: #fffdf6; --card-ink: #e8a33a; --disc: #ffe9a8; --card-accent: var(--jonquil); }
@@ -817,7 +818,7 @@ a { color: inherit; }
 .brand-info__case {
   padding: 11px 18px;
   border-radius: 999px;
-  background: #111111;
+  background: #1c2a66;
   color: #ffffff;
   font-size: 15px;
   font-weight: 700;
@@ -834,7 +835,7 @@ a { color: inherit; }
   translate: -50% 0;
   padding: 8px 14px;
   border-radius: 999px;
-  background: #111111;
+  background: #1c2a66;
   color: #ffffff;
   font-size: 12px;
   font-weight: 700;
@@ -1231,17 +1232,17 @@ a { color: inherit; }
 
 .marquee {
   --bg: var(--jonquil);
-  --fg: #111111;
+  --fg: #1c2a66;
   position: relative;
   z-index: 2;
   overflow: hidden;
-  border-block: 1px solid rgba(17, 17, 17, 0.5);
+  border-block: 1px solid rgba(28, 42, 102, 0.5);
   background: var(--bg);
   color: var(--fg);
 }
-.marquee--jonquil { --bg: #f9e4b8; --fg: #111111; } /* lighter jonquil */
-.marquee--rojo    { --bg: var(--rojo);    --fg: #111111; }
-.marquee--steel   { --bg: var(--steel);   --fg: #111111; }
+.marquee--jonquil { --bg: #fde3b3; --fg: #1c2a66; } /* lighter jonquil */
+.marquee--rojo    { --bg: var(--rojo);    --fg: #1c2a66; }
+.marquee--steel   { --bg: var(--steel);   --fg: #ffffff; }
 
 .marquee__track {
   display: flex;
@@ -1275,6 +1276,47 @@ a { color: inherit; }
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+/* ==========================================================================
+   MARKER DOODLES — orange hand-drawn scribbles that draw themselves in
+   ========================================================================== */
+
+.doodles {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.doodle {
+  position: absolute;
+  height: auto;
+  min-width: 48px;
+  overflow: visible;
+  fill: none;
+  stroke: var(--rojo);
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transform: rotate(var(--r));
+}
+.doodle path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 900ms cubic-bezier(0.65, 0, 0.35, 1);
+  transition-delay: calc(var(--i) * 160ms + 300ms);
+}
+.doodles.is-drawn .doodle path { stroke-dashoffset: 0; }
+.doodles.is-drawn .doodle { animation: doodle-wobble 5s ease-in-out calc(var(--i) * -0.8s) infinite; }
+@keyframes doodle-wobble {
+  0%, 100% { transform: rotate(var(--r)) translateY(0); }
+  50%      { transform: rotate(calc(var(--r) + 4deg)) translateY(-4px); }
+}
+/* the headline screen: doodles step aside once the cards take over */
+.morph .doodles { transition: opacity 500ms; }
+.morph.is-grid .doodles { opacity: 0; }
+.morph__text, .morph__grid, .brandfolio__head, .brandfolio__body, .deck-hint, .deck-nav { position: relative; z-index: 1; }
+.morph__grid { position: absolute; }
 
 /* ==========================================================================
    FOOTER
@@ -1349,6 +1391,7 @@ a { color: inherit; }
 
 @media (prefers-reduced-motion: reduce) {
   .intro { display: none; }
+  .doodle path { stroke-dashoffset: 0 !important; }
   .marquee__track { animation: none !important; }
   .morph { padding: 120px 0 64px; }
   .build__lede, .build__facts { opacity: 1; transform: none; }
