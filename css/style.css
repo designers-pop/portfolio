@@ -396,6 +396,19 @@ a { color: inherit; }
 }
 .build__title.is-in .word { opacity: 1; transform: none; }
 
+/* a small wave runs through the boxed words, Built → shelf., every few
+   seconds once the headline has landed */
+.build__title.is-in .boxed {
+  animation: word-wave 5.5s ease-in-out calc(var(--d) * 140ms + 2.4s) infinite;
+}
+@keyframes word-wave {
+  0%, 14%, 100% { transform: none; }
+  5%  { transform: translateY(-0.12em) rotate(-2deg); }
+  9%  { transform: translateY(0.02em) rotate(1deg); }
+}
+.build__title.is-in .boxed:hover,
+.build__title.is-in .boxed:focus-visible { animation-play-state: paused; }
+
 /* the boxed words and the pills are links */
 a.boxed { color: inherit; text-decoration: none; }
 a.boxed::before { transition-property: opacity, transform, box-shadow; }
@@ -1098,6 +1111,7 @@ a.boxed:focus-visible { outline: none; }
 @media (prefers-reduced-motion: reduce) {
   .intro { display: none; }
   .swoosh path { stroke-dashoffset: 0 !important; }
+  .build__title.is-in .boxed { animation: none; }
   .word, .stat { opacity: 1 !important; transform: none !important; }
   .boxed::before, .build__lede { opacity: 1 !important; }
   .marquee__track { animation: none !important; }
