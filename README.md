@@ -25,11 +25,11 @@ npx http-server .
 ## Sections
 
 1. **Intro** — the popcorn's loops pop in, then "Pop Station" scribbles in.
-2. **Hero** — "Built with your brand. From first sketch to shelf." with the key words in soft colour boxes, and the numbers (35+ years, 7+ years, 40+ brands, 300+ vendors, ₹2,000+ Cr) as small pills underneath.
+2. **Hero** — "Built with your brand. From first sketch to shelf." with the key words in red, black and yellow boxes, and the numbers (35+ years, 7+ years, 40+ brands, 300+ vendors, ₹2,000+ Cr) as small pills underneath.
 3. **Marquee** — a thin scrolling strip of the categories we make.
 4. **Who we are** — "who *we are:*" over a fanned hand of six team cards; each opens the team's page in `roles/`.
 5. **Brandfolio** — brand cards; Bumzee and Majestey London open their case studies (`brands/`).
 6. **Thank you + CTA** — "Thank you, *let's build!*" ringed by round icon stickers, with Start a project, Chat with Pop and See our work buttons (`#contact`).
 7. **Pop, the chat assistant** — the popcorn button bottom-right on every page (`js/chat.js`, `css/chat.css`). It answers from the site's content; edit answers in `TOPICS`, and set `CONTACT_EMAIL` to route enquiries to an inbox.
 
-Brand colours: the Popstation brand colours, softened into accents — Butter `#F4D77A` (yellow), Poppy `#DC6B3F` (red), Sky `#94B2ED` (blue) — with black `#1A1A1A` type on warm paper `#FAF5E6`. No pink. Client brand colours (Bumzee, Majestey, The Mom Store) stay their own.
+Brand colours: the original Popstation logo colours. Red `#E01D1E` and black `#1A1A1A` lead, red is the highlight, and yellow `#FFCB0E` is a small accent, all on warm paper `#FAF5E6`. No blue, no pink. Client brand colours (Bumzee, Majestey, The Mom Store) stay their own.

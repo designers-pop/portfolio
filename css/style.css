@@ -1,17 +1,17 @@
 /* ==========================================================================
    Popstation — The Fashion Foundry
-   Brand palette: Black 000000 · White FFFFFF · Jonquil FFCB0E · Rojo E01D1E · Steel blue 2D7DD2
+   Brand palette: Rojo E01D1E and black lead, Jonquil FFCB0E as a small accent,
+   on warm paper. (Steel blue is no longer used.)
    ========================================================================== */
 
 :root {
   --black: #1a1a1a;
   --white: #ffffff;
-  /* Popstation brand colours, softened into accents (no pink):
-     Butter, Poppy and Sky stand in for jonquil, rojo and steel; black for
-     type; warm paper for backgrounds. Old names kept so every rule follows. */
-  --jonquil: #f4d77a;  /* Butter (brand yellow, softened) */
-  --rojo: #dc6b3f;     /* Poppy (brand red, softened) */
-  --steel: #94b2ed;    /* Sky (brand blue, softened) */
+  /* Popstation's original logo colours: red and black lead, yellow is a
+     small accent. --steel now points at black so older rules stay on-brand. */
+  --jonquil: #ffcb0e;  /* brand yellow, used sparingly */
+  --rojo: #e01d1e;     /* brand red, the highlight colour */
+  --steel: #1a1a1a;    /* black (replaces the old steel blue) */
   --olive: #efe6d0;    /* warm beige */
   --text: #1a1a1a;     /* type and dark panels */
   --paper: #faf5e6;    /* page background */
@@ -222,6 +222,9 @@ a { color: inherit; }
   stroke-linecap: round;
   vector-effect: non-scaling-stroke;
 }
+/* red underline on the paper screens */
+.hero .swoosh,
+.brandfolio .swoosh { stroke: var(--rojo); }
 .swoosh path {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
@@ -274,7 +277,7 @@ a { color: inherit; }
   transition-delay: 0ms;
   transition-duration: 350ms;
 }
-.tcard:focus-visible { box-shadow: 0 0 0 4px #dc6b3f; }
+.tcard:focus-visible { box-shadow: 0 0 0 4px var(--rojo); }
 
 /* the sticker: icon on a white die-cut badge */
 .tcard__sticker {
@@ -325,12 +328,12 @@ a { color: inherit; }
 .tcard:focus-visible .tcard__more { opacity: 1; transform: none; }
 
 /* cards: colour, sticker colours, tilt and offset */
-.tcard[data-role="designers"]            { --c: #94b2ed; --ink: #1a1a1a; --c1: #f4d77a; --c2: #dc6b3f; --c3: #1a1a1a; --rot: -7deg; --y: 30px; }
-.tcard[data-role="category-builders"]    { --c: #f4d77a; --ink: #1a1a1a; --c1: #94b2ed; --c2: #dc6b3f; --c3: #faf5e6; --rot: 4deg;  --y: 64px; }
-.tcard[data-role="sourcing-specialists"] { --c: #dde7fa; --ink: #1a1a1a; --c1: #f4d77a; --c2: #dc6b3f; --c3: #faf5e6; --rot: -2deg; --y: 6px; }
-.tcard[data-role="production-experts"]   { --c: #dc6b3f; --ink: #1a1a1a; --c1: #1a1a1a; --c2: #dc6b3f; --c3: #faf5e6; --rot: 3deg;  --y: 26px; }
-.tcard[data-role="technology-builders"]  { --c: #1a1a1a; --ink: #ffffff; --c1: #94b2ed; --c2: #f4d77a; --c3: #dde7fa; --rot: -4deg; --y: 50px; }
-.tcard[data-role="brand-partners"]       { --c: #efe6d0; --ink: #1a1a1a; --c1: #dc6b3f; --c2: #1a1a1a; --c3: #f4d77a; --rot: 6deg;  --y: 18px; }
+.tcard[data-role="designers"]             { --c: #e01d1e; --ink: #ffffff; --c1: #1a1a1a; --c2: #e01d1e; --c3: #ffcb0e; --rot: -7deg; --y: 30px; }
+.tcard[data-role="category-builders"]     { --c: #ffcb0e; --ink: #1a1a1a; --c1: #1a1a1a; --c2: #e01d1e; --c3: #ffcb0e; --rot: 4deg; --y: 64px; }
+.tcard[data-role="sourcing-specialists"]  { --c: #ffffff; --ink: #1a1a1a; --c1: #1a1a1a; --c2: #e01d1e; --c3: #ffcb0e; --rot: -2deg; --y: 6px; }
+.tcard[data-role="production-experts"]    { --c: #1a1a1a; --ink: #ffffff; --c1: #1a1a1a; --c2: #e01d1e; --c3: #ffcb0e; --rot: 3deg; --y: 26px; }
+.tcard[data-role="technology-builders"]   { --c: #e01d1e; --ink: #ffffff; --c1: #1a1a1a; --c2: #e01d1e; --c3: #ffcb0e; --rot: -4deg; --y: 50px; }
+.tcard[data-role="brand-partners"]        { --c: #1a1a1a; --ink: #ffffff; --c1: #1a1a1a; --c2: #e01d1e; --c3: #ffcb0e; --rot: 6deg; --y: 18px; }
 
 /* ==========================================================================
    HERO — "Built with your brand. From first sketch to shelf."
@@ -353,9 +356,17 @@ a { color: inherit; }
 .home__inner { position: relative; z-index: 1; max-width: 1320px; }
 
 /* soft brand tints shared by the word boxes and the pills */
-[data-tone="butter"] { --tone: var(--jonquil); }
-[data-tone="sky"]    { --tone: var(--steel); }
-[data-tone="poppy"]  { --tone: var(--rojo); }
+/* brand tones shared by the word boxes and the thank-you stickers;
+   "sky" is black now (the name is kept so the markup still works) */
+[data-tone="butter"] { --tone: var(--jonquil); --tone-ink: var(--text); }
+[data-tone="sky"]    { --tone: var(--text);    --tone-ink: #ffffff; }
+[data-tone="poppy"]  { --tone: var(--rojo);    --tone-ink: #ffffff; }
+/* words switch to the box ink only as their box drops in */
+.build__title .boxed {
+  color: var(--text);
+  transition: opacity 700ms var(--ease-out), transform 700ms var(--ease-out), color 300ms calc(var(--d) * 120ms + 750ms);
+}
+.build__title.is-in .boxed { color: var(--tone-ink); }
 
 .build__title {
   margin: 0;
@@ -413,12 +424,12 @@ a { color: inherit; }
 .build__title.is-in .boxed:focus-visible { animation-play-state: paused; }
 
 /* the boxed words and the pills are links */
-a.boxed { color: inherit; text-decoration: none; }
+a.boxed { text-decoration: none; }
 a.boxed::before { transition-property: opacity, transform, box-shadow; }
 .build__title.is-in a.boxed:hover::before,
 .build__title.is-in a.boxed:focus-visible::before {
   transform: rotate(0deg) scale(1.06);
-  box-shadow: 3px 4px 0 var(--text);
+  box-shadow: 3px 4px 0 var(--rojo);
   transition-delay: 0ms;
   transition-duration: 250ms;
 }
@@ -452,9 +463,9 @@ a.boxed:focus-visible { outline: none; }
   align-items: baseline;
   gap: 8px;
   padding: 10px 18px;
-  border: 1.5px solid rgba(26, 26, 26, 0.14);
+  border: 1.5px solid var(--text);
   border-radius: 999px;
-  background: color-mix(in srgb, var(--tone) 38%, #ffffff);
+  background: #ffffff;
   font-size: 14px;
   font-weight: 600;
   white-space: nowrap;
@@ -480,7 +491,7 @@ a.boxed:focus-visible { outline: none; }
 .stat:hover .stat__go,
 .stat:focus-within .stat__go { opacity: 1; transform: none; }
 .stat a:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
-.stat b { font-size: 18px; font-weight: 900; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.stat b { color: var(--rojo); font-size: 18px; font-weight: 900; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
 .home.is-playing .stat { opacity: 1; transform: none; }
 
 /* ==========================================================================
@@ -503,8 +514,8 @@ a.boxed:focus-visible { outline: none; }
 }
 
 .brandfolio[data-active="bumzee"]   { --tint: #faf5e6; }
-.brandfolio[data-active="majestey"] { --tint: #f1ead9; }
-.brandfolio[data-active="momstore"] { --tint: #e6edfb; }
+.brandfolio[data-active="majestey"] { --tint: #faf5e6; }
+.brandfolio[data-active="momstore"] { --tint: #faf5e6; }
 
 /* each card carries its own colours, so a leaving card never takes on the next brand's */
 .bcard[data-brand="bumzee"]   { --card: #fffdf6; --card-ink: #e8a33a; --disc: #ffe9a8; --card-accent: var(--jonquil); }
@@ -980,7 +991,7 @@ a.boxed:focus-visible { outline: none; }
 }
 .role__lede {
   max-width: 620px;
-  margin: 28px 0 0;
+  margin: clamp(40px, 5vw, 64px) 0 0;
   font-size: clamp(18px, 2vw, 24px);
   line-height: 1.45;
 }
@@ -1023,7 +1034,7 @@ a.boxed:focus-visible { outline: none; }
   background: var(--bg);
   color: var(--fg);
 }
-.marquee--jonquil { --bg: #f9ecc4; --fg: #1a1a1a; } /* lighter jonquil */
+.marquee--jonquil { --bg: var(--rojo); --fg: #ffffff; } /* thin red strip */
 .marquee--rojo    { --bg: var(--rojo);    --fg: #1a1a1a; }
 .marquee--steel   { --bg: var(--steel);   --fg: #1a1a1a; }
 
@@ -1111,7 +1122,7 @@ a.boxed:focus-visible { outline: none; }
   transition: transform 150ms, box-shadow 150ms;
 }
 .tbtn:hover { transform: translate(-1px, -2px); box-shadow: 3px 5px 0 var(--text); }
-.tbtn--dark { background: var(--jonquil); }
+.tbtn--dark { background: var(--rojo); color: #ffffff; }
 
 .ty-stickers { position: absolute; inset: 0; pointer-events: none; }
 .ty-sticker {
@@ -1123,7 +1134,7 @@ a.boxed:focus-visible { outline: none; }
   width: var(--sz);
   aspect-ratio: 1;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--tone) 70%, #ffffff);
+  background: var(--tone);
   box-shadow: 0 0 0 5px #ffffff, 0 14px 24px -14px rgba(26, 26, 26, 0.45);
   translate: -50% -50%;
   transform: scale(0) rotate(var(--r));

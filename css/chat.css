@@ -2,7 +2,7 @@
 .chat {
   --c-ink: #1a1a1a;
   --c-paper: #faf5e6;
-  --c-accent: #f4d77a;
+  --c-accent: #ffcb0e;
   position: fixed;
   z-index: 90;
   right: clamp(14px, 2vw, 28px);

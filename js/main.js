@@ -14,7 +14,7 @@
 
   // centre of each popcorn loop, in logo coordinates
   const LOOPS = [[511, 140], [597, 174], [523, 220]];
-  const CRUMBS = ["#dc6b3f", "#1a1a1a", "#f4d77a"];
+  const CRUMBS = ["#e01d1e", "#1a1a1a", "#ffcb0e"];
 
   let introFinished = false;
   const finishIntro = () => {
