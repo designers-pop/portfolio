@@ -10,6 +10,10 @@
   --tile: #fbf7ee;
   --ink: #111111;
   --teal: #34b0ad;
+  --accent: #f2b035;     /* title tile, filters */
+  --accent-ink: #111111;
+  --cta: var(--teal);    /* closing tile */
+  --cta-ink: #ffffff;
   background: var(--bg);
   color: var(--white);
 }
@@ -50,7 +54,8 @@
   flex-direction: column;
   justify-content: flex-end;
   padding: clamp(22px, 3vw, 44px);
-  background: #f2b035;
+  background: var(--accent);
+  color: var(--accent-ink);
 }
 .t-kicker { margin: 0 0 auto; font-size: 13px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; }
 .t-title h1 {
@@ -145,7 +150,7 @@
   font: 700 13px/1 "Inter", sans-serif;
   transition: background 200ms, color 200ms, border-color 200ms;
 }
-.filters button[aria-selected="true"] { background: var(--jonquil); border-color: var(--jonquil); color: #111111; }
+.filters button[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
 
 .gallery {
   grid-column: 1 / -1;
@@ -168,7 +173,7 @@
 .g-item figcaption span { font-size: 13px; line-height: 1.4; opacity: 0.7; }
 .g-item:hover img,
 .g-item:focus-visible img { transform: scale(1.04); }
-.g-item:focus-visible { box-shadow: 0 0 0 3px var(--jonquil); }
+.g-item:focus-visible { box-shadow: 0 0 0 3px var(--accent); }
 .g-item[hidden] { display: none; }
 
 /* --- CTA --- */
@@ -176,8 +181,8 @@
   grid-column: 1 / -1;
   padding: clamp(32px, 5vw, 72px);
   margin-bottom: 40px;
-  background: var(--teal);
-  color: #ffffff;
+  background: var(--cta);
+  color: var(--cta-ink);
 }
 .cta h2 { margin: 0; font-size: clamp(34px, 5vw, 80px); font-weight: 900; line-height: 0.95; letter-spacing: -0.05em; }
 .cta__pop { position: absolute; right: 5%; top: 50%; width: clamp(120px, 16vw, 240px); height: auto; translate: 0 -50%; animation: pop-wiggle 3.2s ease-in-out infinite; }
@@ -245,3 +250,25 @@
 @media (prefers-reduced-motion: reduce) {
   .reveal { opacity: 1; transform: none; }
 }
+
+/* --- Majestey London theme: deep teal, forest, gold and crown red --- */
+.case--majestey {
+  --bg: #0f1f1d;
+  --tile: #f4efe4;
+  --accent: #c9a84a;
+  --accent-ink: #13231f;
+  --cta: #0c3c3c;
+  --cta-ink: #f4efe4;
+}
+.case--majestey .t-title { background-image: linear-gradient(rgba(201, 168, 74, 0.9), rgba(201, 168, 74, 0.9)), url("../assets/img/majestey/pattern-butter.webp"); background-size: cover; }
+.t-pattern { padding: 0; }
+.t-pattern img { width: 100%; height: 100%; object-fit: cover; }
+.t-quote { grid-column: span 6; display: flex; flex-direction: column; justify-content: center; padding: clamp(22px, 3vw, 40px); }
+.t-quote blockquote { margin: 0; font-size: clamp(20px, 2vw, 30px); font-weight: 800; line-height: 1.2; letter-spacing: -0.03em; }
+.t-quote cite { margin-top: 14px; font-size: 13px; font-style: normal; font-weight: 600; opacity: 0.6; }
+.flow { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.flow .ctile { padding: 22px; }
+.flow b { display: block; font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.55; }
+.flow h3 { margin: 8px 0 6px; font-size: 22px; font-weight: 900; letter-spacing: -0.03em; }
+.flow p { margin: 0; font-size: 14px; line-height: 1.45; }
+@media (max-width: 900px) { .flow { grid-template-columns: 1fr 1fr; } .t-quote { grid-column: 1 / -1; } }
