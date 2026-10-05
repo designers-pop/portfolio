@@ -204,16 +204,30 @@ a { color: inherit; }
   font-weight: 400;
   letter-spacing: -0.01em;
 }
-.hero__title em::after {
-  content: "";
+/* the underline draws itself in, below the words, once the screen shows */
+.swoosh {
   position: absolute;
-  left: -2%;
+  left: 0;
   right: 4%;
-  bottom: -0.12em;
-  height: 0.22em;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 20' preserveAspectRatio='none'%3E%3Cpath d='M2 14 C50 4 120 4 198 10 M20 18 C80 10 140 10 190 15' fill='none' stroke='%231a1a1a' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  top: 100%;
+  width: 96%;
+  height: 0.2em;
+  margin-top: 0.02em;
+  overflow: visible;
+  fill: none;
+  stroke: var(--text);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
 }
-.hero__lede { margin: 14px 0 0; font-size: clamp(15px, 1.3vw, 18px); font-weight: 500; opacity: 0.75; text-align: center; }
+.swoosh path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 800ms cubic-bezier(0.65, 0, 0.35, 1) 500ms;
+}
+.swoosh path + path { transition-delay: 1000ms; }
+.hero.is-in .swoosh path { stroke-dashoffset: 0; }
+.hero__lede { margin: 0.9em 0 0; padding-top: clamp(14px, 1.6vw, 26px); font-size: clamp(15px, 1.3vw, 18px); font-weight: 500; opacity: 0.75; text-align: center; }
 
 .hand {
   display: flex;
@@ -1083,6 +1097,7 @@ a.boxed:focus-visible { outline: none; }
 
 @media (prefers-reduced-motion: reduce) {
   .intro { display: none; }
+  .swoosh path { stroke-dashoffset: 0 !important; }
   .word, .stat { opacity: 1 !important; transform: none !important; }
   .boxed::before, .build__lede { opacity: 1 !important; }
   .marquee__track { animation: none !important; }
