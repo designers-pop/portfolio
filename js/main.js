@@ -122,18 +122,27 @@
     runIntro().catch(finishIntro);
   }
 
-  /* ---------------- Hero: lamp poster ----------------
-     The lamps switch on (CSS) once the intro has gone. */
+  // run fn once the intro has gone (straight away if there is none)
+  const afterIntro = (fn) => {
+    if (!intro || introFinished) return fn();
+    const watch = new MutationObserver(() => {
+      if (intro.classList.contains("is-done")) { watch.disconnect(); fn(); }
+    });
+    watch.observe(intro, { attributes: true, attributeFilter: ["class"] });
+  };
+
+  /* ---------------- Who we are: poster ----------------
+     The icons pop in (CSS) when the screen comes into view. */
 
   const hero = document.getElementById("who");
   if (hero) {
     const showPosters = () => hero.classList.add("is-in");
-    if (!intro || introFinished) showPosters();
+    if (reduceMotion || !("IntersectionObserver" in window)) showPosters();
     else {
-      const watch = new MutationObserver(() => {
-        if (intro.classList.contains("is-done")) { watch.disconnect(); showPosters(); }
-      });
-      watch.observe(intro, { attributes: true, attributeFilter: ["class"] });
+      const io = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) { showPosters(); io.disconnect(); }
+      }, { threshold: 0.3 });
+      io.observe(hero);
     }
   }
 
@@ -399,7 +408,13 @@
       widgets.still();
     } else {
       render(0);
-      new IntersectionObserver(([entry]) => { if (entry.isIntersecting) play(); }, { threshold: 0.55 }).observe(morph);
+      // it's the first screen, so wait for the intro before playing
+      let seen = false;
+      afterIntro(() => { if (seen) play(); });
+      new IntersectionObserver(([entry]) => {
+        seen = entry.isIntersecting;
+        if (seen && (!intro || introFinished)) play();
+      }, { threshold: 0.55 }).observe(morph);
       new IntersectionObserver(([entry]) => { if (!entry.isIntersecting) reset(); }, { threshold: 0 }).observe(morph);
       window.addEventListener("resize", () => {
         if (morph.classList.contains("is-grid")) render(1);

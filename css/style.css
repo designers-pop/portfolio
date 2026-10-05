@@ -160,72 +160,61 @@ a { color: inherit; }
 .nav__links a:hover { background: var(--white); color: var(--black); }
 
 /* ==========================================================================
-   HERO — "Who we are" as a lamp poster
-   Six columns of flat brand-colour blocks, each with a geometric lamp
-   whose beam lights the team's name (after the Lamps 4 Thoughts poster).
+   WHO WE ARE — full-screen poster
+   Six columns of flat brand-colour blocks fill the screen edge to edge.
+   Each has a big Popstation icon sitting on the split between its top and
+   bottom block, and the team's name below. Per column: --top, --bottom,
+   --c1/--c2/--c3 (icon colours), --ink (text) and --split.
    ========================================================================== */
 
 .hero {
   position: relative;
-  min-height: 100vh;
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  padding: 104px var(--gutter) var(--gutter);
-  background: #fff4d2; /* pale jonquil */
-  color: #111111;
+  height: 100vh;
+  height: 100svh;
+  min-height: 600px;
   overflow: hidden;
+  background: #111111;
+  color: var(--white);
 }
 
-.hero__head { margin-bottom: clamp(20px, 3vh, 36px); }
+/* the heading sits in the first column, like the line of text on the poster */
 .hero__title {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0 0.25em;
+  position: absolute;
+  z-index: 3;
+  top: 104px;
+  left: 0;
+  width: calc(100% / 6);
   margin: 0;
-  font-size: clamp(44px, 7vw, 104px);
-  font-weight: 800;
+  padding: 0 clamp(14px, 1.6vw, 26px);
+  color: var(--white);
+  font-size: clamp(30px, 3.4vw, 56px);
+  font-weight: 900;
   line-height: 0.95;
   letter-spacing: -0.045em;
+  text-transform: uppercase;
+  pointer-events: none;
 }
 .hero__pop {
-  width: 0.95em;
+  display: inline-block;
+  width: 0.9em;
   height: auto;
-  transform: rotate(-8deg);
+  vertical-align: -0.12em;
   animation: pop-wiggle 3.2s ease-in-out infinite;
 }
 @keyframes pop-wiggle {
   0%, 100% { transform: rotate(-8deg) scale(1); }
   50%      { transform: rotate(6deg) scale(1.06); }
 }
-.hero__lede {
-  margin: 12px 0 0;
-  font-size: clamp(15px, 1.3vw, 18px);
-  font-weight: 500;
-  opacity: 0.75;
-}
-
-/* --- the lamp poster ---
-   Each column: a top block and a bottom block in brand colours, a flat lamp
-   sitting on the split, and a beam from the lamp down to the team's name.
-   Per column: --top, --bottom, --lamp, --lamp2, --beam, --ink, --split
-   (where the blocks meet), --mouth (where the light leaves the lamp) and
-   --lamp-w (lamp width). */
 
 .posters {
-  flex: 1;
-  min-height: 460px;
+  position: absolute;
+  inset: 0;
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  overflow: hidden;
-  border-radius: 24px;
 }
 
 .poster {
-  --split: 38%;
-  --mouth: 34%;
-  --lamp-w: 64%;
+  --split: 50%;
   position: relative;
   overflow: hidden;
   background: var(--bottom);
@@ -239,56 +228,23 @@ a { color: inherit; }
   background: var(--top);
 }
 
-/* the lamp: its bottom edge sits on --mouth */
-.poster__lamp {
+/* the icon straddles the split */
+.poster__icon {
   position: absolute;
   z-index: 1;
+  top: var(--split);
   left: 50%;
-  bottom: calc(100% - var(--mouth));
-  width: var(--lamp-w);
+  width: min(78%, 34vh);
   height: auto;
-  translate: -50% 0;
-  fill: var(--lamp);
+  translate: -50% -55%;
+  fill: var(--c1);
   overflow: visible;
-  transform-origin: 50% 0;
+  transform: scale(0) rotate(-20deg);
+  transition: transform 700ms var(--ease-spring);
 }
-/* the pendant's cord runs up to the top edge */
-.poster[data-lamp="pendant"]::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 0;
-  width: 3px;
-  height: var(--mouth);
-  translate: -50% 0;
-  background: var(--lamp2);
-}
-
-/* the beam: a cone from the lamp's mouth to the bottom edge */
-.poster__beam {
-  position: absolute;
-  left: 50%;
-  top: var(--mouth);
-  bottom: 0;
-  width: 116%;
-  translate: -50% 0;
-  background: var(--beam);
-  clip-path: polygon(calc(50% - var(--lamp-w) * 0.32) 0, calc(50% + var(--lamp-w) * 0.32) 0, 100% 100%, 0 100%);
-  opacity: 0;
-  transition: opacity 500ms, filter 400ms;
-}
-
-/* lights on: one after another once the section shows */
-.hero.is-in .poster__beam {
-  animation: lamp-on 900ms linear calc(var(--i) * 180ms + 200ms) forwards;
-}
-@keyframes lamp-on {
-  0%   { opacity: 0; }
-  15%  { opacity: 0.9; }
-  25%  { opacity: 0.15; }
-  40%  { opacity: 0.95; }
-  50%  { opacity: 0.4; }
-  65%, 100% { opacity: 0.92; }
+.hero.is-in .poster__icon {
+  transform: none;
+  transition-delay: calc(var(--i) * 120ms + 150ms);
 }
 
 .poster__text {
@@ -298,16 +254,17 @@ a { color: inherit; }
   display: grid;
   justify-items: center;
   gap: 8px;
-  padding: 0 10px clamp(18px, 3vh, 30px);
+  padding: 0 12px clamp(22px, 4vh, 44px);
   text-align: center;
   opacity: 0;
-  transition: opacity 600ms;
+  transform: translateY(16px);
+  transition: opacity 600ms, transform 600ms var(--ease-out);
 }
-.hero.is-in .poster__text { opacity: 1; transition-delay: calc(var(--i) * 180ms + 500ms); }
+.hero.is-in .poster__text { opacity: 1; transform: none; transition-delay: calc(var(--i) * 120ms + 450ms); }
 
 .poster__name {
   max-width: 9ch;
-  font-size: clamp(16px, 1.7vw, 26px);
+  font-size: clamp(16px, 1.7vw, 28px);
   font-weight: 900;
   line-height: 0.98;
   letter-spacing: -0.03em;
@@ -324,35 +281,32 @@ a { color: inherit; }
 .poster__cta {
   padding: 6px 12px;
   border-radius: 999px;
-  background: #111111;
-  color: var(--white);
+  background: var(--ink);
+  color: var(--bottom);
   font-size: 12px;
   font-weight: 700;
 }
 
-/* hover / focus: the beam brightens, the lamp swings, the line appears */
-.poster:hover .poster__beam,
-.poster:focus-visible .poster__beam { filter: brightness(1.12) saturate(1.1); }
-.poster:hover .poster__lamp,
-.poster:focus-visible .poster__lamp { animation: lamp-swing 1.4s ease-in-out; }
+/* hover / focus: the icon lifts and wiggles, the line appears */
+.hero.is-in .poster:hover .poster__icon,
+.hero.is-in .poster:focus-visible .poster__icon {
+  transform: translateY(-6%) rotate(-4deg) scale(1.06);
+  transition-delay: 0ms;
+  transition-duration: 450ms;
+}
 .poster:hover .poster__desc,
 .poster:hover .poster__cta,
 .poster:focus-visible .poster__desc,
 .poster:focus-visible .poster__cta { max-height: 80px; opacity: 1; }
 .poster:focus-visible { box-shadow: inset 0 0 0 4px var(--jonquil); }
-@keyframes lamp-swing {
-  0%, 100% { transform: rotate(0); }
-  25%      { transform: rotate(4deg); }
-  60%      { transform: rotate(-3deg); }
-}
 
 /* columns, in brand colours */
-.poster[data-role="designers"]            { --top: #111111; --bottom: #111111; --lamp: #9cc5ef; --lamp2: #e01d1e; --beam: #ffe27a; --ink: #111111; --split: 100%; --mouth: 36%; --lamp-w: 82%; }
-.poster[data-role="category-builders"]    { --top: #2d7dd2; --bottom: #e01d1e; --lamp: #e01d1e; --lamp2: #fff4d2; --beam: #f5a6aa; --ink: #111111; --split: 34%; --mouth: 34%; --lamp-w: 74%; }
-.poster[data-role="sourcing-specialists"] { --top: #6e0b0d; --bottom: #f5a6aa; --lamp: #f5a6aa; --lamp2: #f5a6aa; --beam: #e01d1e; --ink: #ffffff; --split: 48%; --mouth: 24%; --lamp-w: 40%; }
-.poster[data-role="production-experts"]   { --top: #ffcb0e; --bottom: #2d7dd2; --lamp: #111111; --lamp2: #fff4d2; --beam: #fff4d2; --ink: #111111; --split: 26%; --mouth: 30%; --lamp-w: 70%; }
-.poster[data-role="technology-builders"]  { --top: #e01d1e; --bottom: #111111; --lamp: #ffcb0e; --lamp2: #fff4d2; --beam: #ffcb0e; --ink: #111111; --split: 44%; --mouth: 46%; --lamp-w: 56%; }
-.poster[data-role="brand-partners"]       { --top: #9cc5ef; --bottom: #2d7dd2; --lamp: #ffcb0e; --lamp2: #111111; --beam: #ffffff; --ink: #111111; --split: 30%; --mouth: 44%; --lamp-w: 46%; }
+.poster[data-role="designers"]            { --top: #111111; --bottom: #111111; --c1: #ffcb0e; --c2: #e01d1e; --c3: #fff4d2; --ink: #ffffff; --split: 58%; }
+.poster[data-role="category-builders"]    { --top: #2d7dd2; --bottom: #e01d1e; --c1: #fff4d2; --c2: #ffcb0e; --c3: #9cc5ef; --ink: #ffffff; --split: 44%; }
+.poster[data-role="sourcing-specialists"] { --top: #6e0b0d; --bottom: #f5a6aa; --c1: #ffcb0e; --c2: #e01d1e; --c3: #fff4d2; --ink: #111111; --split: 54%; }
+.poster[data-role="production-experts"]   { --top: #ffcb0e; --bottom: #2d7dd2; --c1: #111111; --c2: #e01d1e; --c3: #fff4d2; --ink: #ffffff; --split: 40%; }
+.poster[data-role="technology-builders"]  { --top: #e01d1e; --bottom: #111111; --c1: #9cc5ef; --c2: #ffcb0e; --c3: #111111; --ink: #ffffff; --split: 50%; }
+.poster[data-role="brand-partners"]       { --top: #9cc5ef; --bottom: #fff4d2; --c1: #e01d1e; --c2: #111111; --c3: #ffcb0e; --ink: #111111; --split: 46%; }
 
 /* ==========================================================================
    HOW WE BUILD → BY THE NUMBERS
@@ -1315,7 +1269,10 @@ a { color: inherit; }
 @media (max-width: 760px) {
   .nav__links { display: none; }
 
-  .posters { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 300px; }
+  .hero { height: auto; }
+  .hero__title { position: relative; top: auto; width: auto; padding: 96px var(--gutter) 20px; }
+  .posters { position: relative; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 300px; }
+  .poster__icon { top: 40%; width: 56%; translate: -50% -50%; }
   .poster__desc { display: none; }
   .poster__cta { max-height: 40px; opacity: 1; }
 
@@ -1372,7 +1329,7 @@ a { color: inherit; }
     transition-duration: 1ms !important;
     transition-delay: 0ms !important;
   }
-  .poster__beam, .poster__text { opacity: 1 !important; }
+  .poster__icon, .poster__text { opacity: 1 !important; transform: none !important; }
 }
 
 /* desktop: the whole section fits one screen; the card is sized from the

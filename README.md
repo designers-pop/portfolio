@@ -22,10 +22,10 @@ npx http-server .
 
 ## Sections
 
-1. **Intro** — on a blush screen, the popcorn's three loops pop in one by one with a burst of crumbs, then "Pop Station" scribbles in (black, with red and yellow accents).
-2. **Who we are** — a flat lamp poster: six brand-colour columns, one per team, each with a geometric lamp whose beam lights the team's name. Lamps switch on in turn; hover one to brighten it. Each column opens the team's page in `roles/` (placeholders to fill in).
-3. **How we build → By the numbers** — one screen that plays by itself: the coloured word boxes of "Built with your brand. From first sketch to shelf." grow into five number cards, each with a small toy: a shape-changing icon, bobbing bars (hover for the year), a Launch toggle with confetti, a gauge you can drag, and a popcorn button to the brands. Replays each time you come back.
-4. **Marquee** — a thin scrolling strip of the categories we make, after "Who we are". Edit the words in `index.html`.
-5. **Brandfolio** — tilted brand cards with floating chips that lean toward the cursor and flip on click: Bumzee, Majestey London, The Mom Store. Add a brand by copying one `<article class="bcard">` in `index.html`.
+1. **Intro** — on a blush screen the popcorn's loops pop in, then "Pop Station" scribbles in.
+2. **How we build → By the numbers** (first screen) — plays by itself once the intro ends: the coloured word boxes of "Built with your brand. From first sketch to shelf." grow into five number cards, each with a small toy (shape-changing icon, bobbing bars, Launch toggle with confetti, draggable gauge, popcorn button to the brands).
+3. **Marquee** — a thin scrolling strip of the categories we make. Edit the words in `index.html`.
+4. **Who we are** — a full-screen poster: six brand-colour columns, one per team, each with a big Popstation icon (pencil, folded tees, thread spool, sewing machine, laptop, shopping bag). Each column opens the team's page in `roles/` (placeholders to fill in).
+5. **Brandfolio** — tilted brand cards with floating panels that lean toward the cursor and flip on click: Bumzee, Majestey London, The Mom Store. Add a brand by copying one `<article class="bcard">` in `index.html`.
 
 Brand colours: Black `#000000`, White `#FFFFFF`, Jonquil `#FFCB0E`, Rojo `#E01D1E`, Steel blue `#2D7DD2`.
