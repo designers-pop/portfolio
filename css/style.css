@@ -1000,41 +1000,6 @@ a { color: inherit; }
   white-space: nowrap;
 }
 
-/* ==========================================================================
-   MARKER DOODLES — orange hand-drawn scribbles that draw themselves in
-   ========================================================================== */
-
-.doodles {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-.doodle {
-  position: absolute;
-  height: auto;
-  min-width: 48px;
-  overflow: visible;
-  fill: none;
-  stroke: var(--rojo);
-  stroke-width: 7;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transform: rotate(var(--r));
-}
-.doodle path {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  transition: stroke-dashoffset 900ms cubic-bezier(0.65, 0, 0.35, 1);
-  transition-delay: calc(var(--i) * 160ms + 300ms);
-}
-.doodles.is-drawn .doodle path { stroke-dashoffset: 0; }
-.doodles.is-drawn .doodle { animation: doodle-wobble 5s ease-in-out calc(var(--i) * -0.8s) infinite; }
-@keyframes doodle-wobble {
-  0%, 100% { transform: rotate(var(--r)) translateY(0); }
-  50%      { transform: rotate(calc(var(--r) + 4deg)) translateY(-4px); }
-}
 .brandfolio__head, .brandfolio__body, .deck-hint, .deck-nav { position: relative; z-index: 1; }
 
 /* ==========================================================================
@@ -1092,7 +1057,6 @@ a { color: inherit; }
   .intro { display: none; }
   .word, .stat { opacity: 1 !important; transform: none !important; }
   .boxed::before, .build__lede { opacity: 1 !important; }
-  .doodle path { stroke-dashoffset: 0 !important; }
   .marquee__track { animation: none !important; }
   *, *::before, *::after {
     animation-duration: 1ms !important;
