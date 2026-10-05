@@ -23,7 +23,7 @@ npx http-server .
 ## Sections
 
 1. **Intro** — on a blush screen, the popcorn's three loops pop in one by one with a burst of crumbs, then "Pop Station" scribbles in (black, with red and yellow accents).
-2. **Who we are** — six expanding panels on blush (Designers, Category Builders, Sourcing Specialists, Production Experts, Technology Builders, Brand Partners), each in its own colour with its own icon. Hover or tap opens one; they also cycle on their own. "Explore" opens the team's page in `roles/` (placeholders to fill in).
+2. **Who we are** — a flat lamp poster: six brand-colour columns, one per team, each with a geometric lamp whose beam lights the team's name. Lamps switch on in turn; hover one to brighten it. Each column opens the team's page in `roles/` (placeholders to fill in).
 3. **How we build → By the numbers** — one screen that plays by itself: the coloured word boxes of "Built with your brand. From first sketch to shelf." grow into five number cards, each with a small toy: a shape-changing icon, bobbing bars (hover for the year), a Launch toggle with confetti, a gauge you can drag, and a popcorn button to the brands. Replays each time you come back.
 4. **Marquee** — a thin scrolling strip of the categories we make, after "Who we are". Edit the words in `index.html`.
 5. **Brandfolio** — tilted brand cards with floating chips that lean toward the cursor and flip on click: Bumzee, Majestey London, The Mom Store. Add a brand by copying one `<article class="bcard">` in `index.html`.

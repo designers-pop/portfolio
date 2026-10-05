@@ -35,108 +35,78 @@
 
   <main id="top">
 
-    <!-- ============ HERO: Who we are — expanding panels ============
-         One panel per team, each in its own colour with its own icon.
-         Hover or tap opens a panel; they also cycle on their own (main.js).
-         "Explore" opens the team's page in roles/. -->
+    <!-- ============ HERO: Who we are — lamp poster ============
+         Six poster columns of brand-colour blocks, each with a flat lamp whose
+         beam lights the team's name. Lamps switch on in turn; hover brightens
+         one. Each column opens the team's page in roles/. -->
     <section class="hero" id="who">
       <div class="hero__head">
         <h1 class="hero__title">Who <img class="hero__pop" src="assets/popcorn.svg" alt="" width="286" height="262"> we are</h1>
         <p class="hero__lede">Six teams, one foundry. Pick one to see what they do.</p>
       </div>
 
-      <div class="acc" role="region" aria-label="Who we are">
-        <article class="acc__panel" data-role="designers" style="--i:0">
-          <button class="acc__tab" type="button" aria-expanded="false" aria-controls="acc-designers">
-            <svg class="acc__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l4.5-1 10-10a2.1 2.1 0 0 0-3-3l-10 10L4 20z"/><path d="M14 7l3 3"/></svg>
-            <span class="acc__label">Designers</span>
-          </button>
-          <div class="acc__body" id="acc-designers">
-            <span class="acc__ghost" aria-hidden="true">Designers</span>
-            <svg class="acc__hero" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l4.5-1 10-10a2.1 2.1 0 0 0-3-3l-10 10L4 20z"/><path d="M14 7l3 3"/></svg>
-            <div class="acc__text">
-              <h2 class="acc__title">Designers</h2>
-              <p class="acc__desc">Collections designed around your brand, from moodboard to tech pack.</p>
-              <a class="acc__cta" href="roles/designers.html">Explore <span aria-hidden="true">→</span></a>
-            </div>
-          </div>
-        </article>
-        <article class="acc__panel" data-role="category-builders" style="--i:1">
-          <button class="acc__tab" type="button" aria-expanded="false" aria-controls="acc-category-builders">
-            <svg class="acc__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><path d="M17.25 14v6.5M14 17.25h6.5"/></svg>
-            <span class="acc__label">Category Builders</span>
-          </button>
-          <div class="acc__body" id="acc-category-builders">
-            <span class="acc__ghost" aria-hidden="true">Category Builders</span>
-            <svg class="acc__hero" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><path d="M17.25 14v6.5M14 17.25h6.5"/></svg>
-            <div class="acc__text">
-              <h2 class="acc__title">Category Builders</h2>
-              <p class="acc__desc">We plan the range and grow new categories for your brand.</p>
-              <a class="acc__cta" href="roles/category-builders.html">Explore <span aria-hidden="true">→</span></a>
-            </div>
-          </div>
-        </article>
-        <article class="acc__panel" data-role="sourcing-specialists" style="--i:2">
-          <button class="acc__tab" type="button" aria-expanded="false" aria-controls="acc-sourcing-specialists">
-            <svg class="acc__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12M6 21h12"/><path d="M7.5 3v18M16.5 3v18"/><path d="M7.5 7.5l9 2.5M7.5 11l9 2.5M7.5 14.5l9 2.5"/></svg>
-            <span class="acc__label">Sourcing Specialists</span>
-          </button>
-          <div class="acc__body" id="acc-sourcing-specialists">
-            <span class="acc__ghost" aria-hidden="true">Sourcing Specialists</span>
-            <svg class="acc__hero" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12M6 21h12"/><path d="M7.5 3v18M16.5 3v18"/><path d="M7.5 7.5l9 2.5M7.5 11l9 2.5M7.5 14.5l9 2.5"/></svg>
-            <div class="acc__text">
-              <h2 class="acc__title">Sourcing Specialists</h2>
-              <p class="acc__desc">Fabrics, trims and materials from a network of 300+ vendors.</p>
-              <a class="acc__cta" href="roles/sourcing-specialists.html">Explore <span aria-hidden="true">→</span></a>
-            </div>
-          </div>
-        </article>
-        <article class="acc__panel" data-role="production-experts" style="--i:3">
-          <button class="acc__tab" type="button" aria-expanded="false" aria-controls="acc-production-experts">
-            <svg class="acc__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 4L6.5 17.5"/><path d="M6.5 17.5a2.5 2.5 0 1 1-1.8-1.8"/><ellipse cx="18.5" cy="5.5" rx="1" ry="2" transform="rotate(45 18.5 5.5)"/><path d="M14 10c3 1 5 4 4 8"/></svg>
-            <span class="acc__label">Production Experts</span>
-          </button>
-          <div class="acc__body" id="acc-production-experts">
-            <span class="acc__ghost" aria-hidden="true">Production Experts</span>
-            <svg class="acc__hero" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 4L6.5 17.5"/><path d="M6.5 17.5a2.5 2.5 0 1 1-1.8-1.8"/><ellipse cx="18.5" cy="5.5" rx="1" ry="2" transform="rotate(45 18.5 5.5)"/><path d="M14 10c3 1 5 4 4 8"/></svg>
-            <div class="acc__text">
-              <h2 class="acc__title">Production Experts</h2>
-              <p class="acc__desc">35 years of manufacturing behind every order we run.</p>
-              <a class="acc__cta" href="roles/production-experts.html">Explore <span aria-hidden="true">→</span></a>
-            </div>
-          </div>
-        </article>
-        <article class="acc__panel" data-role="technology-builders" style="--i:4">
-          <button class="acc__tab" type="button" aria-expanded="false" aria-controls="acc-technology-builders">
-            <svg class="acc__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/><rect x="9.5" y="9.5" width="5" height="5" rx="1"/><path d="M9 2.5V6M15 2.5V6M9 18v3.5M15 18v3.5M2.5 9H6M2.5 15H6M18 9h3.5M18 15h3.5"/></svg>
-            <span class="acc__label">Technology Builders</span>
-          </button>
-          <div class="acc__body" id="acc-technology-builders">
-            <span class="acc__ghost" aria-hidden="true">Technology Builders</span>
-            <svg class="acc__hero" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/><rect x="9.5" y="9.5" width="5" height="5" rx="1"/><path d="M9 2.5V6M15 2.5V6M9 18v3.5M15 18v3.5M2.5 9H6M2.5 15H6M18 9h3.5M18 15h3.5"/></svg>
-            <div class="acc__text">
-              <h2 class="acc__title">Technology Builders</h2>
-              <p class="acc__desc">Popstation OS and AI-powered workflows connect every step.</p>
-              <a class="acc__cta" href="roles/technology-builders.html">Explore <span aria-hidden="true">→</span></a>
-            </div>
-          </div>
-        </article>
-        <article class="acc__panel" data-role="brand-partners" style="--i:5">
-          <button class="acc__tab" type="button" aria-expanded="false" aria-controls="acc-brand-partners">
-            <svg class="acc__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="12" r="5.5"/><circle cx="15" cy="12" r="5.5"/></svg>
-            <span class="acc__label">Brand Partners</span>
-          </button>
-          <div class="acc__body" id="acc-brand-partners">
-            <span class="acc__ghost" aria-hidden="true">Brand Partners</span>
-            <svg class="acc__hero" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="12" r="5.5"/><circle cx="15" cy="12" r="5.5"/></svg>
-            <div class="acc__text">
-              <h2 class="acc__title">Brand Partners</h2>
-              <p class="acc__desc">One team that stays with you from first sketch to shelf.</p>
-              <a class="acc__cta" href="roles/brand-partners.html">Explore <span aria-hidden="true">→</span></a>
-            </div>
-          </div>
-        </article>
-      </div>
+      <nav class="posters" aria-label="Who we are">
+        <a class="poster" data-role="designers" data-lamp="pendant" style="--i:0" href="roles/designers.html">
+          <span class="poster__top"></span>
+          <span class="poster__beam"></span>
+          <svg class="poster__lamp" viewBox="0 0 100 100" aria-hidden="true"><rect x="47" y="0" width="6" height="52" fill="var(--lamp2)"/><rect x="40" y="52" width="20" height="12" rx="3"/><rect x="28" y="64" width="44" height="13" rx="4"/><rect x="12" y="77" width="76" height="16" rx="6"/><rect x="18" y="93" width="64" height="7" rx="3" fill="var(--lamp2)"/></svg>
+          <span class="poster__text">
+            <span class="poster__name">Designers</span>
+            <span class="poster__desc">Collections designed around your brand, from moodboard to tech pack.</span>
+            <span class="poster__cta">Explore →</span>
+          </span>
+        </a>
+        <a class="poster" data-role="category-builders" data-lamp="mushroom" style="--i:1" href="roles/category-builders.html">
+          <span class="poster__top"></span>
+          <span class="poster__beam"></span>
+          <svg class="poster__lamp" viewBox="0 0 100 100" aria-hidden="true"><path d="M6 70 C6 30 94 30 94 70 Z"/><rect x="6" y="66" width="88" height="8" rx="4"/><rect x="42" y="74" width="16" height="26" fill="var(--lamp2)"/><path d="M80 74 v14" stroke="var(--lamp)" stroke-width="2.5"/><circle cx="80" cy="90" r="3"/></svg>
+          <span class="poster__text">
+            <span class="poster__name">Category Builders</span>
+            <span class="poster__desc">We plan the range and grow new categories for your brand.</span>
+            <span class="poster__cta">Explore →</span>
+          </span>
+        </a>
+        <a class="poster" data-role="sourcing-specialists" data-lamp="cone" style="--i:2" href="roles/sourcing-specialists.html">
+          <span class="poster__top"></span>
+          <span class="poster__beam"></span>
+          <svg class="poster__lamp" viewBox="0 0 100 100" aria-hidden="true"><path d="M2 40 L30 18 L46 22" fill="none" stroke="var(--lamp2)" stroke-width="3"/><rect x="18" y="20" width="14" height="6" rx="2" fill="var(--lamp2)" transform="rotate(-38 25 23)"/><path d="M42 6 Q50 -2 58 6 L68 100 L32 100 Z"/></svg>
+          <span class="poster__text">
+            <span class="poster__name">Sourcing Specialists</span>
+            <span class="poster__desc">Fabrics, trims and materials from a network of 300+ vendors.</span>
+            <span class="poster__cta">Explore →</span>
+          </span>
+        </a>
+        <a class="poster" data-role="production-experts" data-lamp="hood" style="--i:3" href="roles/production-experts.html">
+          <span class="poster__top"></span>
+          <span class="poster__beam"></span>
+          <svg class="poster__lamp" viewBox="0 0 100 100" aria-hidden="true"><path d="M10 62 C12 26 88 26 90 62 Z"/><rect x="8" y="60" width="84" height="10" rx="3"/><path d="M14 70 L86 70 L80 100 L20 100 Z" fill="var(--lamp2)"/></svg>
+          <span class="poster__text">
+            <span class="poster__name">Production Experts</span>
+            <span class="poster__desc">35 years of manufacturing behind every order we run.</span>
+            <span class="poster__cta">Explore →</span>
+          </span>
+        </a>
+        <a class="poster" data-role="technology-builders" data-lamp="globe" style="--i:4" href="roles/technology-builders.html">
+          <span class="poster__top"></span>
+          <span class="poster__beam"></span>
+          <svg class="poster__lamp" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="52" r="46"/><ellipse cx="44" cy="56" rx="26" ry="30" fill="var(--lamp2)"/><ellipse cx="44" cy="56" rx="18" ry="22" fill="var(--beam)"/></svg>
+          <span class="poster__text">
+            <span class="poster__name">Technology Builders</span>
+            <span class="poster__desc">Popstation OS and AI-powered workflows connect every step.</span>
+            <span class="poster__cta">Explore →</span>
+          </span>
+        </a>
+        <a class="poster" data-role="brand-partners" data-lamp="hourglass" style="--i:5" href="roles/brand-partners.html">
+          <span class="poster__top"></span>
+          <span class="poster__beam"></span>
+          <svg class="poster__lamp" viewBox="0 0 100 100" aria-hidden="true"><path d="M20 0 L80 0 L58 46 L80 100 L20 100 L42 46 Z"/><path d="M58 46 H92 V100" fill="none" stroke="var(--lamp2)" stroke-width="3"/><circle cx="92" cy="46" r="3.5" fill="var(--lamp2)"/></svg>
+          <span class="poster__text">
+            <span class="poster__name">Brand Partners</span>
+            <span class="poster__desc">One team that stays with you from first sketch to shelf.</span>
+            <span class="poster__cta">Explore →</span>
+          </span>
+        </a>
+      </nav>
     </section>
 
     <!-- marquee: Categories we make -->

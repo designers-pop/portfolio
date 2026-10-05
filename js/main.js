@@ -122,56 +122,19 @@
     runIntro().catch(finishIntro);
   }
 
-  /* ---------------- Hero: expanding panels ----------------
-     Panels slide up once the intro has gone. Hovering or tapping a panel
-     opens it; while the section is on screen and nobody is pointing at it,
-     the open panel moves on by itself. */
+  /* ---------------- Hero: lamp poster ----------------
+     The lamps switch on (CSS) once the intro has gone. */
 
   const hero = document.getElementById("who");
   if (hero) {
-    const showPanels = () => hero.classList.add("is-in");
-    if (!intro || introFinished) showPanels();
+    const showPosters = () => hero.classList.add("is-in");
+    if (!intro || introFinished) showPosters();
     else {
       const watch = new MutationObserver(() => {
-        if (intro.classList.contains("is-done")) { watch.disconnect(); showPanels(); }
+        if (intro.classList.contains("is-done")) { watch.disconnect(); showPosters(); }
       });
       watch.observe(intro, { attributes: true, attributeFilter: ["class"] });
     }
-
-    const panels = [...hero.querySelectorAll(".acc__panel")];
-    let open = -1;
-    const openPanel = (i) => {
-      open = (i + panels.length) % panels.length;
-      panels.forEach((p, k) => {
-        p.classList.toggle("is-open", k === open);
-        p.querySelector(".acc__tab").setAttribute("aria-expanded", k === open);
-        p.querySelector(".acc__body").inert = k !== open;
-      });
-    };
-
-    let timer = null;
-    let paused = false;
-    let inView = false;
-    const stopCycle = () => { clearInterval(timer); timer = null; };
-    const startCycle = () => {
-      stopCycle();
-      if (inView && !paused && !reduceMotion) timer = setInterval(() => openPanel(open + 1), 3200);
-    };
-
-    panels.forEach((panel, i) => {
-      const tab = panel.querySelector(".acc__tab");
-      tab.addEventListener("click", () => { openPanel(i); paused = true; stopCycle(); });
-      tab.addEventListener("focus", () => openPanel(i));
-      panel.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") openPanel(i); });
-    });
-    const acc = hero.querySelector(".acc");
-    acc.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") { paused = true; stopCycle(); } });
-    acc.addEventListener("pointerleave", () => { paused = false; startCycle(); });
-
-    if ("IntersectionObserver" in window) {
-      new IntersectionObserver(([entry]) => { inView = entry.isIntersecting; startCycle(); }, { threshold: 0.4 }).observe(hero);
-    }
-    openPanel(0);
   }
 
   /* ---------------- Nav background on scroll ---------------- */
