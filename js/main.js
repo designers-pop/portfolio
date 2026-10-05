@@ -14,7 +14,7 @@
 
   // centre of each popcorn loop, in logo coordinates
   const LOOPS = [[511, 140], [597, 174], [523, 220]];
-  const CRUMBS = ["#f07f1e", "#1c2a66", "#ffb21f"];
+  const CRUMBS = ["#dc6b3f", "#1a1a1a", "#f4d77a"];
 
   let introFinished = false;
   const finishIntro = () => {
@@ -163,7 +163,7 @@
   const PLACES = {
     build: [
       ["arrow", 6, 18, 9, -8], ["smiley", 82, 14, 10, 6], ["asterisk", 88, 58, 6, 0],
-      ["heart", 8, 66, 8, -10], ["zigzag", 72, 80, 9, 4], ["crown", 30, 84, 7, -4],
+      ["heart", 6, 80, 7, -10], ["zigzag", 72, 80, 9, 4], ["crown", 30, 84, 7, -4],
     ],
     brandfolio: [
       ["zigzag", 62, 6, 10, 0], ["swirl", 50, 38, 9, -12], ["asterisk", 92, 30, 5, 10],
@@ -256,221 +256,18 @@
     requestAnimationFrame(tick);
   };
 
-  /* ---------------- How we build → By the numbers ----------------
-     One screen that plays by itself when it comes into view:
-       1. the headline rises in; the image shows through the key words,
-          then fills the box behind each one
-       2. each filled box grows and slides into its tile
-       3. the numbers count up
-     It resets once the screen is fully out of view, so it replays. */
+  /* ---------------- Hero: Built with your brand ----------------
+     The first screen: once the intro has gone, the headline's words drop
+     in, then the stat pills appear and count up. */
 
-  /* ---------------- Number cards: little toys ----------------
-     start() when the cards land, stop() when the screen resets. */
-
-  const widgets = (() => {
-    const root = document.getElementById("build");
-    if (!root) return { start() {}, stop() {}, still() {} };
-    const timers = [];
-    const later = (fn, ms) => timers.push(setTimeout(fn, ms));
-
-    // 35+ years: the big icon changes shape
-    const glyphs = [...root.querySelectorAll(".tw-glyph")];
-    let g = 0;
-    const showGlyph = (i) => glyphs.forEach((el, k) => el.classList.toggle("is-on", k === i));
-
-    // 40+ brands: Launch toggle with confetti
-    const toggle = root.querySelector(".tw-toggle");
-    const confetti = () => {
-      const card = toggle.closest(".tile");
-      const r = toggle.getBoundingClientRect();
-      const c = card.getBoundingClientRect();
-      const colours = ["#ffb21f", "#f07f1e", "#ffffff", "#1c2a66", "#e8dcc8"];
-      for (let k = 0; k < 18; k++) {
-        const bit = document.createElement("span");
-        bit.className = "tw-confetti";
-        bit.style.background = colours[k % colours.length];
-        bit.style.left = `${r.left - c.left + r.width / 2}px`;
-        bit.style.top = `${r.top - c.top + r.height / 2}px`;
-        card.appendChild(bit);
-        const a = Math.random() * Math.PI * 2;
-        const d = 60 + Math.random() * 90;
-        bit.animate(
-          [{ transform: "translate(0,0) rotate(0)", opacity: 1 },
-           { transform: `translate(${Math.cos(a) * d}px, ${Math.sin(a) * d - 40}px) rotate(${Math.random() * 540}deg)`, opacity: 0 }],
-          { duration: 900 + Math.random() * 400, easing: "cubic-bezier(0.16, 1, 0.3, 1)", fill: "forwards" }
-        ).finished.then(() => bit.remove());
-      }
+  const home = document.getElementById("build");
+  if (home) {
+    const playHome = () => {
+      home.classList.add("is-playing");
+      home.querySelector(".build__title").classList.add("is-in");
+      setTimeout(() => home.querySelectorAll("[data-count]").forEach(runCounter), reduceMotion ? 0 : 1300);
     };
-    const setToggle = (on) => {
-      toggle.setAttribute("aria-pressed", on);
-      toggle.querySelector(".tw-toggle__label").textContent = on ? "Launched!" : "Launch";
-      if (on && !reduceMotion) confetti();
-    };
-    toggle.addEventListener("click", () => setToggle(toggle.getAttribute("aria-pressed") !== "true"));
-
-    // 300+ vendors: arc gauge; drag the knob, it springs back to full
-    const gauge = root.querySelector(".tw-gauge");
-    const fill = gauge.querySelector(".tw-gauge__fill");
-    const knob = gauge.querySelector(".tw-gauge__knob");
-    const val = root.querySelector(".tw-gauge-val");
-    const MAX = 300;
-    let level = 0;
-    const setLevel = (f) => {
-      level = Math.min(1, Math.max(0, f));
-      // inline style, so it wins over the stylesheet's starting value
-      fill.style.strokeDasharray = `${(level * 100).toFixed(2)} 100`;
-      knob.setAttribute("cx", (150 - 130 * Math.cos(Math.PI * level)).toFixed(1));
-      knob.setAttribute("cy", (140 - 130 * Math.sin(Math.PI * level)).toFixed(1));
-      val.textContent = Math.round(level * MAX);
-    };
-    let raf = 0;
-    const sweepTo = (to, ms) => {
-      cancelAnimationFrame(raf);
-      const from = level;
-      const start = performance.now();
-      const tick = (now) => {
-        const t = Math.min(1, (now - start) / ms);
-        setLevel(from + (to - from) * (1 - Math.pow(1 - t, 3)));
-        if (t < 1) raf = requestAnimationFrame(tick);
-      };
-      raf = requestAnimationFrame(tick);
-    };
-    let dragging = false;
-    const levelAt = (e) => {
-      const p = new DOMPoint(e.clientX, e.clientY).matrixTransform(gauge.getScreenCTM().inverse());
-      return 1 - Math.atan2(Math.max(0, 140 - p.y), p.x - 150) / Math.PI;
-    };
-    gauge.addEventListener("pointerdown", (e) => {
-      dragging = true;
-      gauge.setPointerCapture(e.pointerId);
-      cancelAnimationFrame(raf);
-      setLevel(levelAt(e));
-    });
-    gauge.addEventListener("pointermove", (e) => { if (dragging) setLevel(levelAt(e)); });
-    const release = () => { if (!dragging) return; dragging = false; sweepTo(1, 900); };
-    gauge.addEventListener("pointerup", release);
-    gauge.addEventListener("pointercancel", release);
-
-    return {
-      start() {
-        showGlyph(0);
-        timers.push(setInterval(() => { g = (g + 1) % glyphs.length; showGlyph(g); }, 1500));
-        sweepTo(1, 1600);
-        later(() => setToggle(true), 1100);
-      },
-      stop() {
-        timers.forEach((t) => { clearTimeout(t); clearInterval(t); });
-        timers.length = 0;
-        cancelAnimationFrame(raf);
-        setLevel(0);
-        setToggle(false);
-        showGlyph(-1);
-      },
-      // reduced motion: everything in its final state
-      still() {
-        showGlyph(glyphs.length - 1);
-        setLevel(1);
-        toggle.setAttribute("aria-pressed", "true");
-        toggle.querySelector(".tw-toggle__label").textContent = "Launched!";
-      },
-    };
-  })();
-
-  const morph = document.getElementById("build");
-  if (morph) {
-    const title = morph.querySelector(".build__title");
-    const text = morph.querySelector(".morph__text");
-    const grid = morph.querySelector(".morph__grid");
-    const bento = morph.querySelector(".bento");
-    const pairs = [...morph.querySelectorAll(".tile")].map((tile) => ({
-      tile,
-      src: morph.querySelector(`[data-morph="${tile.dataset.from}"]`),
-    }));
-    const counters = [...morph.querySelectorAll("[data-count]")];
-    const clamp = (v) => Math.min(1, Math.max(0, v));
-    const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-    const HOLD = 2600;  // headline on screen before the morph
-    const MORPH = 1200; // boxes growing into tiles
-
-    // t = 0: headline only · t = 1: bento in place
-    const render = (t) => {
-      const e = easeInOut(t);
-      text.style.opacity = String(1 - clamp(t * 1.8));
-      text.style.transform = `scale(${1 - 0.08 * e})`;
-      grid.style.setProperty("--c", clamp((t - 0.75) / 0.25).toFixed(3));
-      morph.classList.toggle("is-grid", t >= 1);
-
-      const g = bento.getBoundingClientRect();
-      pairs.forEach(({ tile, src }) => {
-        if (!src) return;
-        if (t <= 0) {
-          tile.style.opacity = "0";
-          tile.style.transform = "";
-          src.style.visibility = "";
-          return;
-        }
-        // the tile sits at its grid spot; transform it back onto its word
-        const s = src.getBoundingClientRect();
-        const x = g.left + tile.offsetLeft;
-        const y = g.top + tile.offsetTop;
-        const w = tile.offsetWidth;
-        const h = tile.offsetHeight;
-        const k = 1 - e;
-        const sx = s.width / w + (1 - s.width / w) * e;
-        const sy = s.height / h + (1 - s.height / h) * e;
-        tile.style.opacity = "1";
-        tile.style.transform = t >= 1 ? "" : `translate(${(s.left - x) * k}px, ${(s.top - y) * k}px) scale(${sx}, ${sy})`;
-        src.style.visibility = "hidden";
-      });
-    };
-
-    let timers = [];
-    let raf = 0;
-    const reset = () => {
-      timers.forEach(clearTimeout);
-      timers = [];
-      cancelAnimationFrame(raf);
-      morph.classList.remove("is-playing");
-      title.classList.remove("is-in");
-      counters.forEach((el) => { el.textContent = "0"; });
-      widgets.stop();
-      render(0);
-    };
-
-    const play = () => {
-      if (morph.classList.contains("is-playing")) return;
-      morph.classList.add("is-playing");
-      title.classList.add("is-in");
-      timers.push(setTimeout(() => {
-        const start = performance.now();
-        const tick = (now) => {
-          const t = clamp((now - start) / MORPH);
-          render(t);
-          if (t < 1) raf = requestAnimationFrame(tick);
-          else { counters.forEach(runCounter); widgets.start(); }
-        };
-        raf = requestAnimationFrame(tick);
-      }, HOLD));
-    };
-
-    if (reduceMotion || !("IntersectionObserver" in window)) {
-      title.classList.add("is-in");
-      counters.forEach(runCounter);
-      widgets.still();
-    } else {
-      render(0);
-      // it's the first screen, so wait for the intro before playing
-      let seen = false;
-      afterIntro(() => { if (seen) play(); });
-      new IntersectionObserver(([entry]) => {
-        seen = entry.isIntersecting;
-        if (seen && (!intro || introFinished)) play();
-      }, { threshold: 0.55 }).observe(morph);
-      new IntersectionObserver(([entry]) => { if (!entry.isIntersecting) reset(); }, { threshold: 0 }).observe(morph);
-      window.addEventListener("resize", () => {
-        if (morph.classList.contains("is-grid")) render(1);
-      });
-    }
+    afterIntro(playHome);
   }
 
   /* ---------------- Brandfolio deck ---------------- */
