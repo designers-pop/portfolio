@@ -175,6 +175,61 @@
 .g-item:focus-visible { box-shadow: 0 0 0 3px var(--accent); }
 .g-item[hidden] { display: none; }
 
+/* --- sketch to sample: a sideways strip of flats --- */
+.board__lede { grid-column: 1 / -1; max-width: 62ch; margin: -4px 0 8px; font-size: clamp(15px, 1.2vw, 17px); line-height: 1.5; opacity: 0.75; }
+.sketches {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(260px, calc((100% - 28px) / 3));
+  gap: 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 10px;
+  scrollbar-width: thin;
+}
+.sketch {
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #ffffff;
+  color: #111111;
+}
+.sketch img { flex: 1; width: 100%; height: clamp(240px, 30vw, 380px); padding: 16px; object-fit: contain; }
+.sketch figcaption { display: grid; align-content: start; gap: 4px; min-height: 128px; padding: 14px 18px 18px; background: var(--tile); }
+.sketch figcaption b { font-size: 15px; font-weight: 800; letter-spacing: -0.02em; }
+.sketch figcaption span { font-size: 13px; line-height: 1.4; opacity: 0.7; }
+
+/* --- lookbook: films and photos side by side --- */
+.look {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+}
+.look__item { position: relative; margin: 0; overflow: hidden; border-radius: 20px; background: #222222; aspect-ratio: 3 / 4; }
+.look__item video,
+.look__item img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.look__item figcaption {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #111111;
+  font-size: 12px;
+  font-weight: 700;
+}
+@media (max-width: 900px) {
+  .look { grid-auto-flow: column; grid-template-columns: none; grid-auto-columns: 62%; overflow-x: auto; scroll-snap-type: x mandatory; }
+  .look__item { scroll-snap-align: start; }
+  .sketches { grid-auto-columns: 78%; }
+}
+
 /* --- CTA --- */
 .cta {
   grid-column: 1 / -1;
