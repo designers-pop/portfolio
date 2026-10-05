@@ -463,9 +463,10 @@ a.boxed:focus-visible { outline: none; }
   align-items: baseline;
   gap: 8px;
   padding: 10px 18px;
-  border: 1.5px solid var(--text);
   border-radius: 999px;
-  background: #ffffff;
+  background: var(--pill);
+  color: var(--pill-ink);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 10px 22px -14px rgba(26, 26, 26, 0.55);
   font-size: 14px;
   font-weight: 600;
   white-space: nowrap;
@@ -487,11 +488,18 @@ a.boxed:focus-visible { outline: none; }
 }
 .stat__go { font-weight: 800; opacity: 0; transform: translateX(-4px); transition: opacity 200ms, transform 200ms; }
 .home.is-playing .stat:hover,
-.home.is-playing .stat:focus-within { transform: translateY(-3px); box-shadow: 2px 3px 0 var(--text); transition-delay: 0ms; transition-duration: 200ms; }
+.home.is-playing .stat:focus-within { transform: translateY(-3px); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 3px 4px 0 var(--text); transition-delay: 0ms; transition-duration: 200ms; }
 .stat:hover .stat__go,
 .stat:focus-within .stat__go { opacity: 1; transform: none; }
+/* glossy gradient pills in the brand colours */
+.stat[data-pill="yellow"] { --pill: linear-gradient(135deg, #ffd23a, #e9a800); --pill-ink: #1a1a1a; }
+.stat[data-pill="cream"]  { --pill: linear-gradient(135deg, #ffffff, #e4ddd0); --pill-ink: #1a1a1a; }
+.stat[data-pill="red"]    { --pill: linear-gradient(135deg, #e8292a, #8e1010); --pill-ink: #ffffff; }
+.stat[data-pill="blue"]   { --pill: linear-gradient(135deg, #3a8ae0, #173f73); --pill-ink: #ffffff; }
+.stat[data-pill="sunset"] { --pill: linear-gradient(135deg, #e01d1e 30%, #f08a10); --pill-ink: #ffffff; }
+.stat a { font-weight: 700; }
 .stat a:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
-.stat b { color: var(--rojo); font-size: 18px; font-weight: 900; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.stat b { font-size: 18px; font-weight: 900; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
 .home.is-playing .stat { opacity: 1; transform: none; }
 
 /* ==========================================================================
