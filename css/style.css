@@ -511,7 +511,7 @@ a.boxed:focus-visible { outline: none; }
 .brandfolio {
   position: relative;
   overflow-x: clip;
-  padding: clamp(56px, 6vw, 80px) var(--gutter) clamp(28px, 3vw, 40px);
+  padding: 112px var(--gutter) clamp(56px, 6vw, 88px);
   background: var(--paper);
   color: var(--text);
 }
@@ -521,8 +521,8 @@ a.boxed:focus-visible { outline: none; }
   align-items: flex-end;
   justify-content: space-between;
   gap: 18px 28px;
-  max-width: 1320px;
-  margin: 0 auto clamp(20px, 3vw, 34px);
+  max-width: 1240px;
+  margin: 0 auto clamp(32px, 4.5vh, 56px);
 }
 .brandfolio .eyebrow { opacity: 0.6; }
 .brandfolio__title {
@@ -538,14 +538,14 @@ a.boxed:focus-visible { outline: none; }
 .bslide[data-brand="majestey"] { --b: var(--text); --b-ink: #ffffff; }
 .bslide[data-brand="momstore"] { --b: #2d7dd2;     --b-ink: #ffffff; }
 
-.bslides { display: grid; max-width: 1320px; margin: 0 auto; }
+.bslides { display: grid; max-width: 1240px; margin: 0 auto; }
 .bslide {
   grid-area: 1 / 1;
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-  gap: clamp(12px, 1.4vw, 20px);
-  height: clamp(420px, calc(100vh - 340px), 640px);
-  height: clamp(420px, calc(100svh - 340px), 640px);
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: clamp(32px, 5vw, 80px);
+  height: clamp(420px, calc(100vh - 370px), 580px);
+  height: clamp(420px, calc(100svh - 370px), 580px);
   visibility: hidden;
   opacity: 0;
   transition: opacity 450ms ease, visibility 0s 450ms;
@@ -572,7 +572,7 @@ a.boxed:focus-visible { outline: none; }
 .bcard[data-brand="momstore"] { --card: #f4f9fd; --card-ink: #6db8de; --disc: #f6d3da; --card-accent: #e898a8; }
 
 .bcard {
-  --w: clamp(240px, calc((100svh - 340px) * 0.56), 330px);
+  --w: clamp(220px, calc((100svh - 370px) * 0.56), 300px);
   position: relative;
   width: var(--w);
   height: calc(var(--w) * 1.62);
@@ -712,7 +712,7 @@ a.boxed:focus-visible { outline: none; }
   display: flex;
   flex-direction: column;
   min-height: 0;
-  padding: clamp(26px, 3vw, 48px);
+  padding: clamp(32px, 3.6vw, 56px);
   border-radius: 36px;
   background: var(--b);
   color: var(--b-ink);
@@ -736,14 +736,14 @@ a.boxed:focus-visible { outline: none; }
   margin: auto 0 0;
   padding-top: 18px;
   font-family: "Instrument Serif", Georgia, serif;
-  font-size: clamp(48px, 5.6vw, 96px);
+  font-size: clamp(46px, 5vw, 84px);
   font-style: italic;
   font-weight: 400;
   line-height: 0.95;
   letter-spacing: -0.01em;
 }
-.bslide__what { max-width: 44ch; margin: 14px 0 0; font-size: clamp(15px, 1.25vw, 18px); font-weight: 500; line-height: 1.5; opacity: 0.92; }
-.bslide__stages { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 0; padding: 0; list-style: none; }
+.bslide__what { max-width: 44ch; margin: 18px 0 0; font-size: clamp(15px, 1.25vw, 18px); font-weight: 500; line-height: 1.5; opacity: 0.92; }
+.bslide__stages { display: flex; flex-wrap: wrap; gap: 8px; margin: 26px 0 0; padding: 0; list-style: none; }
 .bslide__stages li {
   padding: 7px 14px;
   border: 1.5px solid currentColor;
@@ -1130,3 +1130,16 @@ a.boxed:focus-visible { outline: none; }
   .tcard { opacity: 1 !important; transform: rotate(var(--rot)) !important; }
 }
 
+
+/* short laptop screens: keep the Brandfolio slide comfortable in one view */
+@media (min-width: 761px) and (max-height: 780px) {
+  .brandfolio { padding-top: 100px; }
+  .brandfolio__title { font-size: clamp(36px, 4.4vw, 64px); }
+  .bslide { height: clamp(400px, calc(100svh - 300px), 560px); }
+  .bslide__info { padding: 26px 34px; }
+  .bslide__logo { height: 52px; }
+  .bslide__name { font-size: clamp(40px, 4.2vw, 64px); padding-top: 10px; }
+  .bslide__what { margin-top: 10px; font-size: 15px; }
+  .bslide__stages { margin-top: 14px; }
+  .bslide__links { padding-top: 16px; }
+}
