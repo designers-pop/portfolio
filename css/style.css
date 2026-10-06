@@ -365,7 +365,7 @@ a { color: inherit; }
   z-index: 2;
   top: clamp(18px, 2.4vw, 32px);
   left: var(--gutter);
-  width: clamp(110px, 10vw, 150px);
+  width: clamp(78px, 6.6vw, 100px);
 }
 .home__logo img { display: block; width: 100%; height: auto; }
 .home__links {
@@ -1184,7 +1184,7 @@ a.boxed:focus-visible { outline: none; }
 
 /* phones: room for the logo above the headline on the first screen */
 @media (max-width: 760px) {
-  .home { padding-top: 132px; padding-bottom: 104px; }
-  .home__logo { width: 104px; }
+  .home { padding-top: 112px; padding-bottom: 104px; }
+  .home__logo { width: 80px; }
   .home__links { display: none; }
 }
