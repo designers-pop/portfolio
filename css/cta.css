@@ -82,7 +82,7 @@
   padding: 26px clamp(20px, 5vw, 34px) 26px;
   border-radius: 32px;
   background:
-    linear-gradient(180deg, #ffcb0e 0%, #f58a1f 18%, rgba(255, 255, 255, 0) 46%),
+    linear-gradient(180deg, #ffcb0e 0%, #ffd84a 20%, rgba(255, 216, 74, 0) 48%),
     #ffffff;
   box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.5);
   text-align: center;
@@ -92,14 +92,8 @@
 }
 .wwu.is-in .wwu__card { opacity: 1; transform: none; }
 
-/* soft sparkles in the warm top, like the reference */
+/* soft sparkles in the yellow top */
 .wwu__glow { position: absolute; inset: 0 0 auto; height: 45%; overflow: hidden; border-radius: 32px 32px 0 0; pointer-events: none; }
-.wwu__glow::before {
-  content: "";
-  position: absolute;
-  inset: -20% -10%;
-  background: repeating-linear-gradient(120deg, rgba(255, 255, 255, 0) 0 60px, rgba(255, 255, 255, 0.16) 60px 110px);
-}
 .wwu__glow i { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #ffffff; opacity: 0.8; }
 .wwu__glow i:nth-child(1) { left: 12%; top: 22%; }
 .wwu__glow i:nth-child(2) { left: 28%; top: 48%; width: 3px; height: 3px; }
