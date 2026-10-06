@@ -347,11 +347,13 @@ a { color: inherit; }
 
 .home {
   position: relative;
-  min-height: 80vh;
-  min-height: 80svh;
+  /* exactly one screen: logo, headline, stats and the Work with us button;
+     Who we are only appears once you scroll */
+  min-height: 100vh;
+  min-height: 100svh;
   display: grid;
   place-items: center;
-  padding: 64px var(--gutter) 24px;
+  padding: 96px var(--gutter) 112px;
   overflow: hidden;
   background: var(--paper);
   color: var(--text);
@@ -363,7 +365,7 @@ a { color: inherit; }
   z-index: 2;
   top: clamp(18px, 2.4vw, 32px);
   left: var(--gutter);
-  width: clamp(92px, 8.5vw, 128px);
+  width: clamp(110px, 10vw, 150px);
 }
 .home__logo img { display: block; width: 100%; height: auto; }
 
@@ -1159,4 +1161,10 @@ a.boxed:focus-visible { outline: none; }
   .bslide__what { margin-top: 10px; font-size: 15px; }
   .bslide__stages { margin-top: 14px; }
   .bslide__links { padding-top: 16px; }
+}
+
+/* phones: room for the logo above the headline on the first screen */
+@media (max-width: 760px) {
+  .home { padding-top: 132px; padding-bottom: 104px; }
+  .home__logo { width: 104px; }
 }
