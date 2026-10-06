@@ -132,7 +132,7 @@ a { color: inherit; }
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 12px var(--gutter);
+  padding: 6px var(--gutter);
   background: #1a1a1a;
   box-shadow: 0 10px 30px -18px rgba(0, 0, 0, 0.6);
 }
@@ -146,12 +146,12 @@ a { color: inherit; }
 .nav--home.is-shown { transform: none; visibility: visible; transition: transform 450ms cubic-bezier(0.16, 1, 0.3, 1), visibility 0s; }
 
 /* the white logo straight on the black strip */
-.nav__logo { display: block; width: clamp(80px, 7vw, 100px); }
+.nav__logo { display: block; width: clamp(62px, 5.2vw, 76px); }
 .nav__logo img { display: block; width: 100%; height: auto; }
 
 .nav__links { display: flex; align-items: center; gap: 4px; }
 .nav__links a {
-  padding: 10px 16px;
+  padding: 8px 15px;
   border-radius: 999px;
   color: #ffffff;
   font-size: 13px;
@@ -358,6 +358,14 @@ a { color: inherit; }
   text-align: center;
 }
 .home__inner { position: relative; z-index: 1; max-width: 1320px; }
+.home__logo {
+  position: absolute;
+  z-index: 2;
+  top: clamp(18px, 2.4vw, 32px);
+  left: var(--gutter);
+  width: clamp(92px, 8.5vw, 128px);
+}
+.home__logo img { display: block; width: 100%; height: auto; }
 
 /* soft brand tints shared by the word boxes and the pills */
 /* brand tones shared by the word boxes and the thank-you stickers;
@@ -724,30 +732,30 @@ a.boxed:focus-visible { outline: none; }
   transform: translateX(28px);
   transition: transform 700ms var(--ease-out);
 }
-.bslide__top { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.bslide__top { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
+/* the brand's own logo is its name here, on a white badge */
 .bslide__logo {
   display: flex;
   align-items: center;
   flex: none;
-  height: clamp(56px, 6vw, 72px);
-  padding: 8px 18px;
-  border-radius: 18px;
+  height: clamp(92px, 9vw, 124px);
+  padding: 14px 28px;
+  border-radius: 24px;
   background: #ffffff;
 }
-.bslide__logo img { display: block; width: auto; max-width: 150px; height: 100%; object-fit: contain; }
-.bslide[data-brand="bumzee"] .bslide__logo img { height: auto; }
-.bslide__count { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.75; }
+.bslide__logo img { display: block; width: auto; max-width: 260px; height: 100%; object-fit: contain; }
+.bslide[data-brand="bumzee"] .bslide__logo img { height: auto; width: clamp(160px, 14vw, 210px); }
+.bslide__count { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.75; white-space: nowrap; padding-top: 6px; }
 .bslide__name {
-  margin: auto 0 0;
-  padding-top: 18px;
-  font-family: "Instrument Serif", Georgia, serif;
-  font-size: clamp(42px, 4.4vw, 72px);
-  font-style: italic;
-  font-weight: 400;
-  line-height: 0.95;
-  letter-spacing: -0.01em;
+  /* read out by screen readers; the logo above shows the name */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
-.bslide__what { max-width: 44ch; margin: 18px 0 0; font-size: clamp(15px, 1.25vw, 18px); font-weight: 500; line-height: 1.5; opacity: 0.92; }
+.bslide__what { max-width: 44ch; margin: clamp(24px, 3vw, 40px) 0 0; font-size: clamp(15px, 1.25vw, 18px); font-weight: 500; line-height: 1.5; opacity: 0.92; }
 .bslide__stages { display: flex; flex-wrap: wrap; gap: 8px; margin: 26px 0 0; padding: 0; list-style: none; }
 .bslide__stages li {
   padding: 7px 14px;
@@ -1102,7 +1110,6 @@ a.boxed:focus-visible { outline: none; }
 
   .bslide { grid-template-columns: 1fr; align-content: start; height: auto; }
   .bslide__stage { padding: 28px 0 40px; }
-  .bslide__name { margin-top: 0; }
   .bcard { --w: min(240px, 60vw); }
   .fp-info, .bcard[data-brand="majestey"] .fp-info { left: -22%; top: 38%; padding: 9px 12px 9px 9px; }
   .fp-icon--photo { width: 44px; height: 44px; }
@@ -1148,8 +1155,7 @@ a.boxed:focus-visible { outline: none; }
   .brandfolio__title { font-size: clamp(36px, 4.4vw, 64px); }
   .bslide { min-height: clamp(400px, calc(100svh - 300px), 560px); }
   .bslide__info { padding: 26px 34px; }
-  .bslide__logo { height: 52px; }
-  .bslide__name { font-size: clamp(40px, 4.2vw, 64px); padding-top: 10px; }
+  .bslide__logo { height: 76px; }
   .bslide__what { margin-top: 10px; font-size: 15px; }
   .bslide__stages { margin-top: 14px; }
   .bslide__links { padding-top: 16px; }
