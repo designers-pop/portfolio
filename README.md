@@ -15,6 +15,7 @@ npx http-server .
 - `index.html` — page content
 - `css/style.css` — brand colours, layout and all animations
 - `js/main.js` — intro, hero, card hand, Brandfolio slider
+- `js/cta.js` + `css/cta.css` — the floating "Work with us" button on every page and its enquiry form (name, phone, email, message → thank-you). Set `FORM_ENDPOINT` in `js/cta.js` to a form service (e.g. Formspree) so enquiries are delivered; until then nothing is sent.
 - `assets/popstation-logo.svg` — vector logo (traced from `popstation-logo.webp`; the popcorn's three loops and each letter are separate paths, which the intro animates)
 - `assets/img/` — photography (see the README in that folder)
 - `brands/majestey.html` — Majestey London case study (identity, monogram, packaging, product); images in `assets/img/majestey/`

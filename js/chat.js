@@ -9,7 +9,7 @@
 
   const contactLine = () => CONTACT_EMAIL
     ? `Write to us at <a href="mailto:${CONTACT_EMAIL}?subject=Let%27s%20build%20my%20brand">${CONTACT_EMAIL}</a> with a line about your brand, and the team will get back to you.`
-    : `Tell us a little about your brand: what you make, who it's for and when you want to launch. The team will pick it up from there.`;
+    : `Tell us a little about your brand: what you make, who it's for and when you want to launch. <button class="chat__wwu" type="button" data-wwu>Fill in the Work with us form →</button>`;
 
   // each topic: words that trigger it, the answer, and follow-up chips
   const TOPICS = [
