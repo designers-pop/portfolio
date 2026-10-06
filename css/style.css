@@ -532,10 +532,10 @@ a.boxed:focus-visible { outline: none; }
   letter-spacing: -0.045em;
 }
 
-/* each brand's colours: panel, its text, the picture frame, the card icons */
-.bslide[data-brand="bumzee"]   { --b: #e8583a; --b-ink: #ffffff; --b-frame: #f2b035; --b-dot: #34b0ad; }
-.bslide[data-brand="majestey"] { --b: #0c3c3c; --b-ink: #f4efe4; --b-frame: #c9a84a; --b-dot: #e42424; }
-.bslide[data-brand="momstore"] { --b: #8ec3e2; --b-ink: #1a1a1a; --b-frame: #f2c4cf; --b-dot: #e8a4b4; }
+/* the details panel takes a Popstation colour per brand: red, black, blue */
+.bslide[data-brand="bumzee"]   { --b: var(--rojo); --b-ink: #ffffff; }
+.bslide[data-brand="majestey"] { --b: var(--text); --b-ink: #ffffff; }
+.bslide[data-brand="momstore"] { --b: #2d7dd2;     --b-ink: #ffffff; }
 
 .bslides { display: grid; max-width: 1320px; margin: 0 auto; }
 .bslide {
@@ -551,7 +551,7 @@ a.boxed:focus-visible { outline: none; }
 }
 .bslide.is-active { visibility: visible; opacity: 1; transition: opacity 450ms ease, visibility 0s; }
 
-/* left: the brand's interactive card on a soft tint of its colour. The
+/* left: the brand's interactive card, straight on the page. The
    card leans toward the pointer, its photo panel swaps into the disc, and
    a click opens the case study. */
 .bslide__stage {
@@ -559,21 +559,19 @@ a.boxed:focus-visible { outline: none; }
   display: grid;
   place-items: center;
   min-height: 0;
-  border-radius: 36px;
-  background: color-mix(in srgb, var(--b-frame) 30%, #ffffff);
   perspective: 1600px;
   transform: translateX(-28px);
   transition: transform 700ms var(--ease-out);
 }
 
-.bcard[data-brand="bumzee"]   { --card: #fffdf6; --card-ink: #e8a33a; --disc: #ffe9a8; --card-accent: #f2b035; --chip-1: #e8583a; --chip-2: #34b0ad; }
-.bcard[data-brand="majestey"] { --card: #fbf6ea; --card-ink: #262d20; --disc: #efe4c8; --card-accent: #c9a85c; --chip-1: #e42424; --chip-2: #c9a84a; }
+.bcard[data-brand="bumzee"]   { --card: #fffdf6; --card-ink: #e8a33a; --disc: #ffe9a8; --card-accent: #f2b035; }
+.bcard[data-brand="majestey"] { --card: #fbf6ea; --card-ink: #262d20; --disc: #efe4c8; --card-accent: #c9a85c; }
 .bcard[data-brand="majestey"] .bcard__disc { width: 64%; }
 .bcard[data-brand="majestey"] .fp-info { top: 40%; }
-.bcard[data-brand="momstore"] { --card: #f4f9fd; --card-ink: #6db8de; --disc: #f6d3da; --card-accent: #e898a8; --chip-1: #e8a4b4; --chip-2: #8ec3e2; }
+.bcard[data-brand="momstore"] { --card: #f4f9fd; --card-ink: #6db8de; --disc: #f6d3da; --card-accent: #e898a8; }
 
 .bcard {
-  --w: clamp(220px, calc((100svh - 340px) * 0.5), 300px);
+  --w: clamp(240px, calc((100svh - 340px) * 0.56), 330px);
   position: relative;
   width: var(--w);
   height: calc(var(--w) * 1.62);
@@ -696,8 +694,8 @@ a.boxed:focus-visible { outline: none; }
   white-space: nowrap;
   box-shadow: 0 18px 38px -14px rgba(0, 0, 0, 0.4);
 }
-.chip-float i { width: 11px; height: 11px; border-radius: 50%; background: var(--chip-1); }
-.cf-3 i { background: var(--chip-2); }
+.chip-float i { width: 11px; height: 11px; border-radius: 50%; background: var(--rojo); }
+.cf-3 i { background: var(--jonquil); }
 .cf-2 { top: 60%; right: -30%; }
 .cf-3 { bottom: 18%; left: -26%; }
 
@@ -1087,9 +1085,9 @@ a.boxed:focus-visible { outline: none; }
   .tcard__more { opacity: 1; transform: none; }
 
   .bslide { grid-template-columns: 1fr; align-content: start; height: auto; }
-  .bslide__stage { padding: 44px 0 52px; }
+  .bslide__stage { padding: 28px 0 40px; }
   .bslide__name { margin-top: 0; }
-  .bcard { --w: min(220px, 56vw); }
+  .bcard { --w: min(240px, 60vw); }
   .fp-info, .bcard[data-brand="majestey"] .fp-info { left: -22%; top: 38%; padding: 9px 12px 9px 9px; }
   .fp-icon--photo { width: 44px; height: 44px; }
   .fp-text b { font-size: 14px; }
