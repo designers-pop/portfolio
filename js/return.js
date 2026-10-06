@@ -42,6 +42,15 @@
     return;
   }
 
+  // other pages: the header logo gets its soft backing once scrolled
+  // (the home page does this in main.js)
+  const nav = document.querySelector(".nav");
+  if (nav) {
+    const onScroll = () => nav.classList.toggle("is-solid", window.scrollY > 40);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  }
+
   // other pages: the logo and "←" links back to the home page return to
   // the remembered spot when there is one
   document.querySelectorAll('a[href*="index.html"]').forEach((a) => {

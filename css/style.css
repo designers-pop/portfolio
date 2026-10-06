@@ -132,37 +132,53 @@ a { color: inherit; }
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 14px var(--gutter);
-  transition: background 300ms, backdrop-filter 300ms;
+  padding: 16px var(--gutter);
+  pointer-events: none; /* only the logo and the strip take clicks */
 }
+.nav > * { pointer-events: auto; }
 
-.nav.is-solid {
-  background: rgba(0, 0, 0, 0.72);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
+/* the logo on its own, no box: dark lettering on light pages, white on dark */
 .nav__logo {
   display: block;
-  width: 86px;
-  padding: 6px 8px;
-  border-radius: 10px;
-  background: var(--black);
+  width: clamp(88px, 8vw, 112px);
 }
+.nav__logo img { display: block; width: 100%; height: auto; }
+/* once scrolled, a soft frosted backing in the page's own colour keeps it
+   readable over content without bringing back a hard box */
+.nav__logo { margin: -8px -12px; padding: 8px 12px; border-radius: 18px; transition: width 300ms var(--ease-out), background 300ms, box-shadow 300ms; }
+.nav.is-solid .nav__logo {
+  width: clamp(76px, 6.4vw, 92px);
+  background: color-mix(in srgb, var(--logo-ground, #faf5e6) 82%, transparent);
+  box-shadow: 0 8px 24px -16px rgba(26, 26, 26, 0.45);
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+}
+.case .nav { --logo-ground: var(--bg); }
+.role-page .nav { --logo-ground: var(--shade); }
 
-.nav__links { display: flex; gap: 6px; }
-
-.nav__links a {
-  padding: 9px 14px;
+/* the links ride in one black oval strip */
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 6px;
   border-radius: 999px;
-  background: var(--black);
-  color: var(--white);
+  background: #1a1a1a;
+  box-shadow: 0 10px 28px -14px rgba(26, 26, 26, 0.6);
+}
+.nav__links a {
+  padding: 10px 16px;
+  border-radius: 999px;
+  color: #ffffff;
   font-size: 13px;
   font-weight: 600;
   text-decoration: none;
   transition: background 200ms, color 200ms;
 }
-.nav__links a:hover { background: var(--white); color: var(--black); }
+.nav__links a:hover { background: rgba(255, 255, 255, 0.14); }
+/* the last link is the strip's white pill, like a "shop" button */
+.nav__links a:last-child { margin-left: 4px; background: #ffffff; color: #1a1a1a; }
+.nav__links a:last-child:hover { background: var(--jonquil); }
 
 /* ==========================================================================
    WHO WE ARE — a fanned hand of team cards
@@ -972,11 +988,21 @@ a.boxed:focus-visible { outline: none; }
   aspect-ratio: 1;
   border-radius: 50%;
   background: var(--tone);
-  box-shadow: 0 0 0 5px #ffffff, 0 14px 24px -14px rgba(26, 26, 26, 0.45);
+  box-shadow: 0 16px 26px -14px rgba(26, 26, 26, 0.5);
   translate: -50% -50%;
+  /* drifts gently toward the cursor (js/main.js sets --px / --py, -0.5 to 0.5) */
+  margin: calc(var(--py, 0) * var(--depth, 20) * 1px) 0 0 calc(var(--px, 0) * var(--depth, 20) * 1px);
   transform: scale(0) rotate(var(--r));
-  transition: transform 700ms var(--ease-spring) calc(var(--i) * 110ms + 200ms);
+  transition:
+    transform 700ms var(--ease-spring) calc(var(--i) * 110ms + 200ms),
+    margin 900ms cubic-bezier(0.16, 1, 0.3, 1);
 }
+.ty-sticker:nth-child(1) { --depth: 30; }
+.ty-sticker:nth-child(2) { --depth: 22; }
+.ty-sticker:nth-child(3) { --depth: 16; }
+.ty-sticker:nth-child(4) { --depth: 24; }
+.ty-sticker:nth-child(5) { --depth: 28; }
+.ty-sticker:nth-child(6) { --depth: 18; }
 .ty-sticker svg,
 .ty-sticker img { width: 62%; height: auto; overflow: visible; fill: var(--c1); }
 .thanks.is-in .ty-sticker {

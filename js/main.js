@@ -360,6 +360,28 @@
     show(0);
   }
 
+  /* ---------------- Thank you: icons drift with the cursor ----------------
+     A mild parallax: each sticker eases a few pixels toward the pointer,
+     by its own depth (CSS), and settles back when the pointer leaves. */
+
+  const tyStage = document.getElementById("contact");
+  if (tyStage && !reduceMotion && matchMedia("(pointer: fine)").matches) {
+    let frame = 0;
+    tyStage.addEventListener("pointermove", (e) => {
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const r = tyStage.getBoundingClientRect();
+        tyStage.style.setProperty("--px", ((e.clientX - r.left) / r.width - 0.5).toFixed(3));
+        tyStage.style.setProperty("--py", ((e.clientY - r.top) / r.height - 0.5).toFixed(3));
+      });
+    });
+    tyStage.addEventListener("pointerleave", () => {
+      tyStage.style.setProperty("--px", "0");
+      tyStage.style.setProperty("--py", "0");
+    });
+  }
+
   /* ---------------- Footer year ---------------- */
 
   const year = document.getElementById("year");
