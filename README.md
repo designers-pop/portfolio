@@ -20,6 +20,7 @@ npx http-server .
 - `assets/img/` — photography (see the README in that folder)
 - `brands/majestey.html` — Majestey London case study (identity, monogram, packaging, product); images in `assets/img/majestey/`
 - `brands/bumzee.html` — Bumzee case study (opens from "More about the brand" in the Brandfolio); styles in `css/case.css`, script in `js/case.js`, images in `assets/img/bumzee/`
+- `brands/momstore.html` — The Mom Store case study (range boards, AW26 romper tech packs, strike-offs and QC, labels); images in `assets/img/momstore/`
 - `roles/` — one page per "Who we are" panel
 - `assets/popcorn.svg` — the popcorn on its own (used in the "Who we are" headline)
 
