@@ -137,6 +137,14 @@ a { color: inherit; }
   box-shadow: 0 10px 30px -18px rgba(0, 0, 0, 0.6);
 }
 
+/* home page: hidden on the first screen, slides down from the second */
+.nav--home {
+  transform: translateY(-110%);
+  visibility: hidden;
+  transition: transform 450ms cubic-bezier(0.16, 1, 0.3, 1), visibility 0s 450ms;
+}
+.nav--home.is-shown { transform: none; visibility: visible; transition: transform 450ms cubic-bezier(0.16, 1, 0.3, 1), visibility 0s; }
+
 /* the white logo straight on the black strip */
 .nav__logo { display: block; width: clamp(80px, 7vw, 100px); }
 .nav__logo img { display: block; width: 100%; height: auto; }
@@ -343,7 +351,7 @@ a { color: inherit; }
   min-height: 80svh;
   display: grid;
   place-items: center;
-  padding: 112px var(--gutter) 24px;
+  padding: 64px var(--gutter) 24px;
   overflow: hidden;
   background: var(--paper);
   color: var(--text);
