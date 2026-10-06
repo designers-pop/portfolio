@@ -17,6 +17,15 @@
 
   const isHome = !!document.getElementById("intro");
 
+  // the floating buttons (Work with us, Ask Pop) step aside for the footer
+  const footer = document.querySelector(".footer");
+  if (footer && "IntersectionObserver" in window) {
+    new IntersectionObserver(([e]) => {
+      document.documentElement.classList.toggle("at-footer", e.isIntersecting);
+    }).observe(footer);
+  }
+
+
   if (isHome) {
     // remember the spot whenever the visitor leaves the home page
     const save = () => store.set(KEY_Y, String(Math.round(window.scrollY)));

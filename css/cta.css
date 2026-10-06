@@ -226,3 +226,8 @@
   .wwu-fab, .wwu__card, .wwu::backdrop { transition: none; }
   .wwu-fab:hover .wwu-fab__icon img { animation: none; }
 }
+
+/* the floating buttons stay up to the brands strip and step aside for the footer */
+.at-footer .wwu-fab.is-shown { opacity: 0; transform: translate(-50%, 140%); pointer-events: none; }
+.chat__launch { transition: transform 300ms, box-shadow 200ms, opacity 300ms; }
+.at-footer .chat:not(.is-open) .chat__launch { opacity: 0; transform: translateY(40px); pointer-events: none; }
