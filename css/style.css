@@ -886,9 +886,8 @@ a.boxed:focus-visible { outline: none; }
   flex: none;
 }
 .marquee__set span {
-  /* about 3 cm taller than the old thin strip on desktop */
-  padding: clamp(34px, 4vw, 56px) clamp(28px, 4vw, 64px);
-  font-size: clamp(15px, 1.6vw, 22px);
+  padding: clamp(24px, 2.8vw, 39px) clamp(24px, 3.2vw, 48px);
+  font-size: clamp(13px, 1.12vw, 15.5px);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
