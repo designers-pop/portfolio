@@ -28,7 +28,7 @@ npx http-server .
 2. **Hero** — "Built with your brand. From first sketch to shelf." with the key words in red, black and yellow boxes, and the numbers (35+ years, 7+ years, 40+ brands, 300+ vendors, ₹2,000+ Cr) as small pills underneath.
 3. **Marquee** — a thin scrolling strip of the categories we make.
 4. **Who we are** — "who *we are:*" over a fanned hand of six team cards; each opens the team's page in `roles/`.
-5. **Brandfolio** — one brand per slide: the brand's website picture on the left with key facts pinned on, its details on the right in its own colours; "More about the brand" opens the case study (`brands/`).
+5. **Brandfolio** — one brand per slide: the brand's interactive card on the left (tilts with the pointer, tap the photo panel to swap it into the disc, click to open the case study), its details on the right in its own colours with "More about the brand" (`brands/`).
 6. **Thank you + CTA** — "Thank you, *let's build!*" ringed by round icon stickers, with Start a project, Chat with Pop and See our work buttons (`#contact`).
 7. **Pop, the chat assistant** — the popcorn button bottom-right on every page (`js/chat.js`, `css/chat.css`). It answers from the site's content; edit answers in `TOPICS`, and set `CONTACT_EMAIL` to route enquiries to an inbox.
 

@@ -47,7 +47,7 @@ body { cursor: url("../assets/cursor.png") 16 16, auto; }
 a,
 button,
 [role="tab"],
-.bslide__shotlink { cursor: url("../assets/cursor-hover.png") 16 16, pointer !important; }
+.fp-photo { cursor: url("../assets/cursor-hover.png") 16 16, pointer !important; }
 input,
 textarea { cursor: text; }
 
@@ -551,64 +551,162 @@ a.boxed:focus-visible { outline: none; }
 }
 .bslide.is-active { visibility: visible; opacity: 1; transition: opacity 450ms ease, visibility 0s; }
 
-/* left: the brand's picture in a frame of its accent colour */
-.bslide__shot {
+/* left: the brand's interactive card on a soft tint of its colour. The
+   card leans toward the pointer, its photo panel swaps into the disc, and
+   a click opens the case study. */
+.bslide__stage {
   position: relative;
+  display: grid;
+  place-items: center;
   min-height: 0;
-  margin: 0;
-  padding: clamp(10px, 1vw, 14px);
   border-radius: 36px;
-  background: var(--b-frame);
+  background: color-mix(in srgb, var(--b-frame) 30%, #ffffff);
+  perspective: 1600px;
   transform: translateX(-28px);
   transition: transform 700ms var(--ease-out);
 }
-.bslide__shotlink { display: block; height: 100%; border-radius: 26px; }
-.bslide__shotlink:focus-visible { outline: 3px solid var(--text); outline-offset: 3px; }
-.bslide__img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  border-radius: 26px;
-  object-fit: cover;
+
+.bcard[data-brand="bumzee"]   { --card: #fffdf6; --card-ink: #e8a33a; --disc: #ffe9a8; --card-accent: #f2b035; --chip-1: #e8583a; --chip-2: #34b0ad; }
+.bcard[data-brand="majestey"] { --card: #fbf6ea; --card-ink: #262d20; --disc: #efe4c8; --card-accent: #c9a85c; --chip-1: #e42424; --chip-2: #c9a84a; }
+.bcard[data-brand="majestey"] .bcard__disc { width: 64%; }
+.bcard[data-brand="majestey"] .fp-info { top: 40%; }
+.bcard[data-brand="momstore"] { --card: #f4f9fd; --card-ink: #6db8de; --disc: #f6d3da; --card-accent: #e898a8; --chip-1: #e8a4b4; --chip-2: #8ec3e2; }
+
+.bcard {
+  --w: clamp(220px, calc((100svh - 340px) * 0.5), 300px);
+  position: relative;
+  width: var(--w);
+  height: calc(var(--w) * 1.62);
+  transform-style: preserve-3d;
+  transform: rotateY(var(--ry, 0deg)) rotateX(var(--rx, 0deg));
   transition: transform 900ms var(--ease-out);
 }
-.bslide__shotlink { overflow: hidden; }
-.bslide__shotlink:hover .bslide__img { transform: scale(1.04); }
-.bslide__img--logo { padding: 16%; background: #ffffff; object-fit: contain; }
+.bcard[data-case] { cursor: url("../assets/cursor-hover.png") 16 16, pointer; }
+.bcard.is-tilting { transition: transform 180ms linear; }
 
-/* the brand facts, pinned on the picture as cards */
-.btag {
+.bcard__face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px 20px 34px;
+  border-radius: 28px;
+  background: var(--card);
+  color: var(--card-ink);
+  box-shadow: 0 40px 70px -34px rgba(0, 0, 0, 0.4);
+}
+.bcard__bottom { font-size: clamp(26px, 2.6vw, 36px); font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
+.bcard__logo { display: block; width: auto; height: clamp(64px, 7vw, 92px); }
+.bcard__logo--wide { height: auto; width: 74%; margin-top: 8px; }
+.bcard__disc {
+  display: grid;
+  place-items: center;
+  width: 74%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--img, var(--disc)) center 18% / cover;
+  box-shadow: 0 0 0 8px var(--disc);
+  overflow: hidden;
+  transition: background-image 300ms;
+}
+.bcard__disc span { font-size: clamp(90px, 9vw, 130px); font-weight: 900; letter-spacing: -0.06em; line-height: 1; }
+.bcard__disc[style*="--img"] span { display: none; }
+.bcard__case {
+  position: absolute;
+  left: 50%;
+  bottom: -18px;
+  translate: -50% 0;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: #1a1a1a;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* items floating in front of the card: bigger, solid and easy to read */
+.chip-float,
+.fpanel {
   position: absolute;
   z-index: 2;
+  opacity: 0;
+  transform: translateZ(60px) scale(0.6);
+  transition: opacity 500ms var(--ease-out), transform 800ms var(--ease-spring);
+}
+.bslide.is-active .chip-float,
+.bslide.is-active .fpanel { opacity: 1; transform: translateZ(60px) scale(1); }
+.bslide.is-active .fp-photo { transition-delay: 250ms; }
+.bslide.is-active .fp-info  { transition-delay: 350ms; }
+.bslide.is-active .cf-2     { transition-delay: 480ms; }
+.bslide.is-active .cf-3     { transition-delay: 580ms; }
+
+.fpanel {
+  margin: 0;
+  border-radius: 18px;
+  background: #ffffff;
+  color: var(--text);
+  box-shadow: 0 22px 44px -18px rgba(0, 0, 0, 0.45);
+}
+.fp-info {
+  top: 22%;
+  left: -38%;
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 20px 12px 12px;
-  border-radius: 20px;
-  background: #ffffff;
-  color: var(--text);
-  box-shadow: 0 18px 36px -16px rgba(26, 26, 26, 0.45);
-  pointer-events: none;
-  opacity: 0;
-  transform: translateY(16px) scale(0.9);
-  transition: opacity 500ms var(--ease-out), transform 600ms var(--ease-spring);
+  width: max-content;
+  padding: 12px 18px 12px 12px;
 }
-.btag i {
+.fp-icon {
   flex: none;
-  display: grid;
-  place-items: center;
   width: 42px;
   height: 42px;
-  border-radius: 13px;
-  background: var(--b-dot);
+  border-radius: 12px;
+  background: var(--card-accent, var(--card));
 }
-.btag i::before { content: "✦"; color: #ffffff; font-size: 18px; font-style: normal; }
-.btag > span { display: grid; gap: 2px; }
-.btag b { font-size: clamp(14px, 1.2vw, 17px); font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; }
-.btag small { font-size: 13px; opacity: 0.62; white-space: nowrap; }
-.btag--1 { left: clamp(20px, 2.4vw, 34px); bottom: clamp(20px, 2.4vw, 34px); }
-.btag--2 { right: clamp(20px, 2.4vw, 34px); top: clamp(20px, 2.4vw, 34px); }
-.btag--2 i { background: var(--b); }
+.fp-icon--photo { width: 60px; height: 60px; border-radius: 14px; background: var(--img, var(--card-accent)) center 30% / cover; }
+.fp-text { display: grid; gap: 3px; }
+.fp-text b { font-size: 16px; font-weight: 800; line-height: 1.2; letter-spacing: -0.02em; white-space: nowrap; }
+.fp-text small { font-size: 13px; opacity: 0.62; }
+
+.fp-photo {
+  top: 4%;
+  right: -36%;
+  width: 52%;
+  padding: 8px;
+  cursor: url("../assets/cursor-hover.png") 16 16, pointer;
+}
+.fp-img { display: block; aspect-ratio: 4 / 5; border-radius: 12px; background: var(--img, var(--disc)) center 20% / cover; }
+.fp-photo figcaption { display: grid; gap: 2px; padding: 9px 5px 4px; }
+.fp-photo figcaption b { font-size: 14px; font-weight: 800; letter-spacing: -0.01em; }
+.fp-photo figcaption small { font-size: 12px; opacity: 0.6; }
+
+.chip-float {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 800;
+  white-space: nowrap;
+  box-shadow: 0 18px 38px -14px rgba(0, 0, 0, 0.4);
+}
+.chip-float i { width: 11px; height: 11px; border-radius: 50%; background: var(--chip-1); }
+.cf-3 i { background: var(--chip-2); }
+.cf-2 { top: 60%; right: -30%; }
+.cf-3 { bottom: 18%; left: -26%; }
+
+/* idle drift, like items floating in space */
+.bslide.is-active .fpanel,
+.bslide.is-active .chip-float { animation: drift 5s ease-in-out 1.2s infinite alternate; }
+.bslide.is-active .fp-info { animation-delay: 1.8s; }
+.bslide.is-active .cf-3 { animation-delay: 2.4s; }
+@keyframes drift { to { translate: 0 -8px; } }
 
 /* right: the brand's details in its colours */
 .bslide__info {
@@ -675,12 +773,8 @@ a.boxed:focus-visible { outline: none; }
 .bslide__site { color: inherit; font-size: 15px; font-weight: 700; text-underline-offset: 4px; }
 
 /* entrance: panels slide together, then the cards pop on and drift */
-.bslide.is-active .bslide__shot,
+.bslide.is-active .bslide__stage,
 .bslide.is-active .bslide__info { transform: none; }
-.bslide.is-active .btag { opacity: 1; transform: none; }
-.bslide.is-active .btag--1 { transition-delay: 300ms; animation: btag-drift 5s ease-in-out 1.2s infinite alternate; }
-.bslide.is-active .btag--2 { transition-delay: 450ms; animation: btag-drift 5s ease-in-out 2s infinite alternate-reverse; }
-@keyframes btag-drift { to { translate: 0 -8px; } }
 
 .deck-nav { display: flex; align-items: center; gap: 14px; }
 .deck-nav__btn {
@@ -993,11 +1087,18 @@ a.boxed:focus-visible { outline: none; }
   .tcard__more { opacity: 1; transform: none; }
 
   .bslide { grid-template-columns: 1fr; align-content: start; height: auto; }
-  .bslide__shot { height: clamp(280px, 62vw, 460px); }
+  .bslide__stage { padding: 44px 0 52px; }
   .bslide__name { margin-top: 0; }
-  .btag { padding: 9px 14px 9px 9px; gap: 9px; border-radius: 16px; }
-  .btag i { width: 32px; height: 32px; border-radius: 10px; }
-  .btag small { display: none; }
+  .bcard { --w: min(220px, 56vw); }
+  .fp-info, .bcard[data-brand="majestey"] .fp-info { left: -22%; top: 38%; padding: 9px 12px 9px 9px; }
+  .fp-icon--photo { width: 44px; height: 44px; }
+  .fp-text b { font-size: 14px; }
+  .fp-text small { font-size: 11px; }
+  .fp-photo { right: -22%; width: 46%; }
+  .fp-photo figcaption small { display: none; }
+  .cf-2 { right: -16%; top: 56%; }
+  .cf-3 { left: -14%; top: 66%; bottom: auto; }
+  .chip-float { padding: 9px 14px; font-size: 13px; }
 
 
   .build__facts { flex-direction: column; gap: 10px; }

@@ -231,8 +231,9 @@
   }
 
   /* ---------------- Brandfolio ----------------
-     One brand per slide. Arrows, dots, arrow keys or a swipe change
-     brand; it moves on by itself while on screen and not hovered. */
+     One brand per slide: its interactive card on the left, its details on
+     the right. Arrows, dots, arrow keys or a swipe change brand; it moves
+     on by itself while on screen and not hovered. */
 
   const brandfolio = document.getElementById("brandfolio");
   if (brandfolio) {
@@ -271,6 +272,56 @@
       if (e.key === "ArrowLeft") { show(current - 1); restart(); }
       if (e.key === "ArrowRight") { show(current + 1); restart(); }
     });
+
+    // the card opens its case study; its photo panel swaps into the disc
+    brandfolio.querySelectorAll(".bcard[data-case]").forEach((card) => {
+      card.setAttribute("role", "link");
+      card.tabIndex = 0;
+      card.setAttribute("aria-label", `More about ${card.closest(".bslide").querySelector(".bslide__name").textContent}`);
+      const go = () => { window.location.href = card.dataset.case; };
+      card.addEventListener("click", go);
+      card.addEventListener("keydown", (e) => { if (e.key === "Enter") go(); });
+    });
+    brandfolio.querySelectorAll(".fp-photo").forEach((panel) => {
+      panel.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const disc = panel.closest(".bcard").querySelector(".bcard__disc");
+        const img = panel.querySelector(".fp-img");
+        const cap = panel.querySelector("figcaption b");
+        const a = disc.style.getPropertyValue("--img");
+        const b = img.style.getPropertyValue("--img");
+        if (!a || !b) return; // only once both photos exist
+        disc.style.setProperty("--img", b);
+        img.style.setProperty("--img", a);
+        const discCap = disc.dataset.cap;
+        disc.dataset.cap = cap.textContent;
+        cap.textContent = discCap;
+        const discLabel = disc.getAttribute("aria-label");
+        disc.setAttribute("aria-label", img.getAttribute("aria-label"));
+        img.setAttribute("aria-label", discLabel);
+      });
+    });
+
+    // the card leans toward the pointer
+    if (!reduceMotion) {
+      brandfolio.querySelectorAll(".bslide__stage").forEach((stage) => {
+        const card = stage.querySelector(".bcard");
+        stage.addEventListener("pointermove", (e) => {
+          if (e.pointerType !== "mouse") return;
+          const r = stage.getBoundingClientRect();
+          const x = (e.clientX - r.left) / r.width - 0.5;
+          const y = (e.clientY - r.top) / r.height - 0.5;
+          card.classList.add("is-tilting");
+          card.style.setProperty("--ry", `${(x * 14).toFixed(2)}deg`);
+          card.style.setProperty("--rx", `${(-y * 10).toFixed(2)}deg`);
+        });
+        stage.addEventListener("pointerleave", () => {
+          card.classList.remove("is-tilting");
+          card.style.removeProperty("--ry");
+          card.style.removeProperty("--rx");
+        });
+      });
+    }
 
     // swipe on touch screens
     const track = document.getElementById("bslides");
