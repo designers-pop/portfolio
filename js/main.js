@@ -163,11 +163,12 @@
   /* ---------------- Nav background on scroll ---------------- */
 
   const nav = document.querySelector(".nav");
-  // the header stays out of the first screen and slides in from the second
+  // the header stays out of the way at the very top and slides in once you start scrolling
   const firstScreen = document.getElementById("build");
   const onScroll = () => {
     nav.classList.toggle("is-solid", window.scrollY > 40);
-    const edge = firstScreen ? firstScreen.offsetHeight - nav.offsetHeight : 0;
+    // shows once a quarter of the first screen has scrolled by
+    const edge = firstScreen ? firstScreen.offsetHeight * 0.25 : 0;
     nav.classList.toggle("is-shown", window.scrollY > edge);
   };
   window.addEventListener("scroll", onScroll, { passive: true });
