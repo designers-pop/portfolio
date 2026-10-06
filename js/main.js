@@ -22,6 +22,7 @@
     introFinished = true;
     intro.classList.add("is-done");
     document.body.classList.remove("is-loading");
+    try { sessionStorage.setItem("ps-intro-seen", "1"); } catch (e) {}
   };
 
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -114,7 +115,9 @@
     finishIntro();
   };
 
-  if (!intro || reduceMotion || !("animate" in Element.prototype)) {
+  // the intro plays once per visit; coming back skips it
+  const seen = document.documentElement.classList.contains("intro-seen");
+  if (!intro || seen || reduceMotion || !("animate" in Element.prototype)) {
     finishIntro();
   } else {
     intro.querySelector(".intro__skip").addEventListener("click", finishIntro);

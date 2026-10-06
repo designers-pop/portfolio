@@ -40,6 +40,7 @@ body {
 }
 
 body.is-loading { overflow: hidden; }
+.intro-seen body.is-loading { overflow: visible; }
 
 /* popcorn cursor; it tilts over anything clickable */
 html,
@@ -78,6 +79,7 @@ a { color: inherit; }
 }
 
 .intro.is-done { display: none; }
+.intro-seen .intro { display: none; }
 
 .intro__stage {
   position: absolute;
