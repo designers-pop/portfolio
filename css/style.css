@@ -132,40 +132,16 @@ a { color: inherit; }
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 16px var(--gutter);
-  pointer-events: none; /* only the logo and the strip take clicks */
-}
-.nav > * { pointer-events: auto; }
-
-/* the logo on its own, no box: dark lettering on light pages, white on dark */
-.nav__logo {
-  display: block;
-  width: clamp(88px, 8vw, 112px);
-}
-.nav__logo img { display: block; width: 100%; height: auto; }
-/* once scrolled, a soft frosted backing in the page's own colour keeps it
-   readable over content without bringing back a hard box */
-.nav__logo { margin: -8px -12px; padding: 8px 12px; border-radius: 18px; transition: width 300ms var(--ease-out), background 300ms, box-shadow 300ms; }
-.nav.is-solid .nav__logo {
-  width: clamp(76px, 6.4vw, 92px);
-  background: color-mix(in srgb, var(--logo-ground, #faf5e6) 82%, transparent);
-  box-shadow: 0 8px 24px -16px rgba(26, 26, 26, 0.45);
-  -webkit-backdrop-filter: blur(10px);
-          backdrop-filter: blur(10px);
-}
-.case .nav { --logo-ground: var(--bg); }
-.role-page .nav { --logo-ground: var(--shade); }
-
-/* the links ride in one black oval strip */
-.nav__links {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  padding: 6px;
-  border-radius: 999px;
+  padding: 12px var(--gutter);
   background: #1a1a1a;
-  box-shadow: 0 10px 28px -14px rgba(26, 26, 26, 0.6);
+  box-shadow: 0 10px 30px -18px rgba(0, 0, 0, 0.6);
 }
+
+/* the white logo straight on the black strip */
+.nav__logo { display: block; width: clamp(80px, 7vw, 100px); }
+.nav__logo img { display: block; width: 100%; height: auto; }
+
+.nav__links { display: flex; align-items: center; gap: 4px; }
 .nav__links a {
   padding: 10px 16px;
   border-radius: 999px;
@@ -176,8 +152,8 @@ a { color: inherit; }
   transition: background 200ms, color 200ms;
 }
 .nav__links a:hover { background: rgba(255, 255, 255, 0.14); }
-/* the last link is the strip's white pill, like a "shop" button */
-.nav__links a:last-child { margin-left: 4px; background: #ffffff; color: #1a1a1a; }
+/* the last link is the strip's white pill */
+.nav__links a:last-child { margin-left: 6px; background: #ffffff; color: #1a1a1a; }
 .nav__links a:last-child:hover { background: var(--jonquil); }
 
 /* ==========================================================================
@@ -190,14 +166,15 @@ a { color: inherit; }
 
 .hero {
   position: relative;
-  /* a full screen, so the red strip only arrives after it */
+  /* a full screen, so the red strip only arrives after it; content sits
+     near the top so it doesn't leave a gap after the first screen */
   min-height: 100vh;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: clamp(96px, 10vw, 136px) var(--gutter) clamp(96px, 10vw, 140px);
+  justify-content: flex-start;
+  padding: clamp(56px, 6vw, 80px) var(--gutter) clamp(48px, 5vw, 72px);
   overflow: hidden;
   background: #faf5e6;
   color: #1a1a1a;
@@ -362,12 +339,11 @@ a { color: inherit; }
 
 .home {
   position: relative;
-  /* a full first screen, so the red strip only arrives on the second */
-  min-height: 100vh;
-  min-height: 100svh;
+  min-height: 80vh;
+  min-height: 80svh;
   display: grid;
   place-items: center;
-  padding: 100px var(--gutter) 96px;
+  padding: 112px var(--gutter) 24px;
   overflow: hidden;
   background: var(--paper);
   color: var(--text);
@@ -909,8 +885,8 @@ a.boxed:focus-visible { outline: none; }
   flex: none;
 }
 .marquee__set span {
-  padding: clamp(24px, 2.8vw, 39px) clamp(24px, 3.2vw, 48px);
-  font-size: clamp(13px, 1.12vw, 15.5px);
+  padding: clamp(19px, 2.24vw, 31px) clamp(24px, 3.2vw, 48px);
+  font-size: clamp(12px, 1vw, 14px);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
