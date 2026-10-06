@@ -1,4 +1,4 @@
-/* "Work with us": a floating button that shows once the page is scrolled,
+/* "Work with us": a floating button, shown from the first screen on,
    and opens a sheet with a short enquiry form (name, phone, email,
    message) that ends on a thank-you.
 
@@ -23,9 +23,18 @@
   fab.innerHTML = `<span class="wwu-fab__icon"><img src="${base}assets/popcorn.svg" alt=""></span><span class="wwu-fab__label">Work with us</span>`;
   document.body.appendChild(fab);
 
-  const onScroll = () => fab.classList.toggle("is-shown", window.scrollY > window.innerHeight * 0.5);
-  window.addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
+  // it rises in on the first screen: on the home page once the intro has
+  // finished and the headline has landed, elsewhere shortly after load
+  const showFab = () => setTimeout(() => fab.classList.add("is-shown"), reduceMotion ? 0 : 1400);
+  const intro = document.getElementById("intro");
+  if (intro && !intro.classList.contains("is-done")) {
+    const watch = new MutationObserver(() => {
+      if (intro.classList.contains("is-done")) { watch.disconnect(); showFab(); }
+    });
+    watch.observe(intro, { attributes: true, attributeFilter: ["class"] });
+  } else {
+    showFab();
+  }
 
   /* ---------- the sheet ---------- */
   const sheet = document.createElement("dialog");
