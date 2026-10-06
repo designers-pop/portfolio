@@ -1038,7 +1038,11 @@ a.boxed:focus-visible { outline: none; }
 .logos__set li:hover { opacity: 1; filter: none; }
 .logos__set img { width: auto; max-width: 150px; height: 100%; max-height: 52px; object-fit: contain; }
 .logos__set img[src*="bumzee"],
-.logos__set img[src*="beaubeau"] { max-height: 26px; }
+.logos__set img[src*="beaubeau"],
+.logos__set img[src*="basique"],
+.logos__set img[src*="slayddrip"] { max-height: 28px; }
+.logos__set img[src*="tigc"] { max-height: 40px; border-radius: 6px; }
+.logos__set img[src*="yunkmodes"] { max-height: 42px; }
 .logo-word { font-size: 24px; }
 .logo-word--sans { font-weight: 900; letter-spacing: -0.04em; }
 .logo-word--serif { font-family: "Instrument Serif", Georgia, serif; font-size: 30px; font-style: italic; letter-spacing: -0.01em; }
