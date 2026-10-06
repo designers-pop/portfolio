@@ -360,25 +360,40 @@
     show(0);
   }
 
-  /* ---------------- Thank you: icons drift with the cursor ----------------
-     A mild parallax: each sticker eases a few pixels toward the pointer,
-     by its own depth (CSS), and settles back when the pointer leaves. */
+  /* ---------------- Thank you: icons react to the cursor, each on its own ----------------
+     Every sticker looks at where the pointer is relative to itself: the
+     nearer the pointer, the more it moves. Some lean toward it, some shy
+     away, each with its own strength, tilt and speed, so they never move
+     as one block. They settle back when the pointer leaves. */
 
   const tyStage = document.getElementById("contact");
   if (tyStage && !reduceMotion && matchMedia("(pointer: fine)").matches) {
+    // [strength in px, direction (+1 toward / -1 away), tilt in deg, lag in ms]
+    const feel = [[22, 1, 8, 700], [16, -1, -10, 1100], [18, 1, 6, 1400],
+                  [20, -1, 9, 900], [24, 1, -7, 1250], [14, -1, 12, 800]];
+    const stickers = [...tyStage.querySelectorAll(".ty-sticker")];
+    stickers.forEach((st, i) => st.style.setProperty("--lag", `${(feel[i] || feel[0])[3]}ms`));
     let frame = 0;
     tyStage.addEventListener("pointermove", (e) => {
       if (frame) return;
       frame = requestAnimationFrame(() => {
         frame = 0;
-        const r = tyStage.getBoundingClientRect();
-        tyStage.style.setProperty("--px", ((e.clientX - r.left) / r.width - 0.5).toFixed(3));
-        tyStage.style.setProperty("--py", ((e.clientY - r.top) / r.height - 0.5).toFixed(3));
+        stickers.forEach((st, i) => {
+          const [power, dir, tilt] = feel[i] || feel[0];
+          const r = st.getBoundingClientRect();
+          const dx = e.clientX - (r.left + r.width / 2);
+          const dy = e.clientY - (r.top + r.height / 2);
+          const dist = Math.hypot(dx, dy) || 1;
+          const pull = Math.max(0, 1 - dist / 520); // only nearby stickers really move
+          const k = (power * pull * dir) / dist;
+          st.style.setProperty("--mx", `${(dx * k).toFixed(1)}px`);
+          st.style.setProperty("--my", `${(dy * k).toFixed(1)}px`);
+          st.style.setProperty("--mr", `${(tilt * pull * Math.sign(dx || 1)).toFixed(1)}deg`);
+        });
       });
     });
     tyStage.addEventListener("pointerleave", () => {
-      tyStage.style.setProperty("--px", "0");
-      tyStage.style.setProperty("--py", "0");
+      stickers.forEach((st) => ["--mx", "--my", "--mr"].forEach((v) => st.style.removeProperty(v)));
     });
   }
 

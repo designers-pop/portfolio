@@ -993,19 +993,15 @@ a.boxed:focus-visible { outline: none; }
   background: var(--tone);
   box-shadow: 0 16px 26px -14px rgba(26, 26, 26, 0.5);
   translate: -50% -50%;
-  /* drifts gently toward the cursor (js/main.js sets --px / --py, -0.5 to 0.5) */
-  margin: calc(var(--py, 0) * var(--depth, 20) * 1px) 0 0 calc(var(--px, 0) * var(--depth, 20) * 1px);
+  /* each one reacts to the cursor on its own (js/main.js sets --mx / --my / --mr per sticker) */
+  margin: var(--my, 0px) 0 0 var(--mx, 0px);
+  rotate: var(--mr, 0deg);
   transform: scale(0) rotate(var(--r));
   transition:
     transform 700ms var(--ease-spring) calc(var(--i) * 110ms + 200ms),
-    margin 900ms cubic-bezier(0.16, 1, 0.3, 1);
+    margin var(--lag, 900ms) cubic-bezier(0.16, 1, 0.3, 1),
+    rotate var(--lag, 900ms) cubic-bezier(0.16, 1, 0.3, 1);
 }
-.ty-sticker:nth-child(1) { --depth: 30; }
-.ty-sticker:nth-child(2) { --depth: 22; }
-.ty-sticker:nth-child(3) { --depth: 16; }
-.ty-sticker:nth-child(4) { --depth: 24; }
-.ty-sticker:nth-child(5) { --depth: 28; }
-.ty-sticker:nth-child(6) { --depth: 18; }
 .ty-sticker svg,
 .ty-sticker img { width: 62%; height: auto; overflow: visible; fill: var(--c1); }
 .thanks.is-in .ty-sticker {
