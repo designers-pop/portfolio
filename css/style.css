@@ -831,7 +831,18 @@ a.boxed:focus-visible { outline: none; }
   background: rgba(26, 26, 26, 0.22);
   transition: width 400ms var(--ease-out), background 400ms;
 }
-.deck-nav__dots button[aria-selected="true"] { width: 28px; background: var(--rojo); }
+.deck-nav__dots button[aria-selected="true"] { position: relative; overflow: hidden; width: 28px; background: var(--rojo); }
+/* countdown: the active dot fills while the next brand is on its way */
+.is-auto .deck-nav__dots button[aria-selected="true"] { background: rgba(224, 29, 30, 0.3); }
+.is-auto .deck-nav__dots button[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--rojo);
+  transform-origin: left;
+  animation: dot-fill var(--auto, 5000ms) linear forwards;
+}
+@keyframes dot-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
 /* ==========================================================================
    ROLE PAGES (roles/*.html) — one page per "Who we are" poster column

@@ -344,19 +344,32 @@
       if (Math.abs(dx) > 50) { show(current + (dx < 0 ? 1 : -1)); restart(); }
     });
 
-    // autoplay only while the section is on screen and not hovered
+    // brands change on their own every few seconds while the section is on
+    // screen; the active dot fills up as a countdown. Using the arrows, dots
+    // or a swipe starts the countdown again. It only holds while the
+    // pointer rests on the brand card itself or a link inside has focus.
+    const DELAY = 5000;
     let timer = null;
     let inView = false;
-    let hovered = false;
-    const stop = () => { clearInterval(timer); timer = null; };
+    let held = false;
+    const stop = () => { clearInterval(timer); timer = null; brandfolio.classList.remove("is-auto"); };
     const restart = () => {
       stop();
-      if (inView && !hovered && !reduceMotion) timer = setInterval(() => show(current + 1), 6000);
+      if (!inView || held || reduceMotion) return;
+      void brandfolio.offsetWidth; // restart the dot's fill animation
+      brandfolio.classList.add("is-auto");
+      timer = setInterval(() => {
+        show(current + 1);
+        brandfolio.classList.remove("is-auto"); void brandfolio.offsetWidth; brandfolio.classList.add("is-auto");
+      }, DELAY);
     };
-    brandfolio.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") { hovered = true; stop(); } });
-    brandfolio.addEventListener("pointerleave", () => { hovered = false; restart(); });
-    brandfolio.addEventListener("focusin", () => { hovered = true; stop(); });
-    brandfolio.addEventListener("focusout", () => { hovered = false; restart(); });
+    brandfolio.style.setProperty("--auto", `${DELAY}ms`);
+    brandfolio.querySelectorAll(".bslide__stage").forEach((stage) => {
+      stage.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") { held = true; stop(); } });
+      stage.addEventListener("pointerleave", () => { held = false; restart(); });
+    });
+    brandfolio.addEventListener("focusin", (e) => { if (e.target.closest(".bslide")) { held = true; stop(); } });
+    brandfolio.addEventListener("focusout", () => { held = false; restart(); });
     if ("IntersectionObserver" in window) {
       new IntersectionObserver(([entry]) => {
         inView = entry.isIntersecting;
