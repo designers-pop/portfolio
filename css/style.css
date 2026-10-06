@@ -47,8 +47,7 @@ body { cursor: url("../assets/cursor.png") 16 16, auto; }
 a,
 button,
 [role="tab"],
-.bcard.is-active,
-.fp-photo { cursor: url("../assets/cursor-hover.png") 16 16, pointer !important; }
+.bslide__shotlink { cursor: url("../assets/cursor-hover.png") 16 16, pointer !important; }
 input,
 textarea { cursor: text; }
 
@@ -503,472 +502,209 @@ a.boxed:focus-visible { outline: none; }
 .home.is-playing .stat { opacity: 1; transform: none; }
 
 /* ==========================================================================
-   BRANDFOLIO — tilted brand cards with floating chips
-   The section tint and card colour follow the active brand.
+   BRANDFOLIO — one brand per slide: the brand's own picture on the left
+   (with its key facts pinned on as cards), its details on the right in the
+   brand's colours, and "More about the brand" into the case study.
    ========================================================================== */
 
 .brandfolio {
-  --tint: #faf5e6;
-  --card: var(--jonquil);
-  --card-ink: var(--black);
-  --disc: rgba(255, 255, 255, 0.55);
   position: relative;
-  overflow: hidden;
-  padding: clamp(80px, 10vw, 140px) var(--gutter) clamp(56px, 7vw, 96px);
-  background: var(--tint);
-  color: var(--black);
-  transition: background 900ms var(--ease-out);
-  scroll-margin-top: 40px;
+  overflow-x: clip;
+  padding: clamp(84px, 9vw, 112px) var(--gutter) clamp(32px, 4vw, 48px);
+  background: var(--paper);
+  color: var(--text);
 }
-
-.brandfolio[data-active="bumzee"]   { --tint: #faf5e6; }
-.brandfolio[data-active="majestey"] { --tint: #faf5e6; }
-.brandfolio[data-active="momstore"] { --tint: #faf5e6; }
-
-/* each card carries its own colours, so a leaving card never takes on the next brand's */
-.bcard[data-brand="bumzee"]   { --card: #fffdf6; --card-ink: #e8a33a; --disc: #ffe9a8; --card-accent: var(--jonquil); }
-/* Majestey takes its colours from its logo: cream, dark green, gold and red */
-.bcard[data-brand="majestey"] { --card: #fbf6ea; --card-ink: #262d20; --disc: #efe4c8; --card-accent: #c9a85c; }
-.bcard[data-brand="majestey"] .chip-float i { background: #d93a36; }
-.bcard[data-brand="majestey"] .cf-3 i { background: #c9a85c; }
-.bcard[data-brand="majestey"] .bcard__disc { width: 64%; }
-.bcard[data-brand="momstore"] { --card: #f4f9fd; --card-ink: #6db8de; --disc: #f6d3da; --card-accent: #e898a8; }
-
 .brandfolio__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px 28px;
   max-width: 1320px;
-  margin: 0 auto clamp(24px, 4vw, 48px);
+  margin: 0 auto clamp(20px, 3vw, 34px);
 }
 .brandfolio .eyebrow { opacity: 0.6; }
 .brandfolio__title {
   margin: 12px 0 0;
-  font-size: clamp(40px, 6.4vw, 96px);
+  font-size: clamp(40px, 5.4vw, 84px);
   font-weight: 900;
   line-height: 0.95;
   letter-spacing: -0.045em;
 }
 
-.brandfolio__body {
+/* each brand's colours: panel, its text, the picture frame, the card icons */
+.bslide[data-brand="bumzee"]   { --b: #e8583a; --b-ink: #ffffff; --b-frame: #f2b035; --b-dot: #34b0ad; }
+.bslide[data-brand="majestey"] { --b: #0c3c3c; --b-ink: #f4efe4; --b-frame: #c9a84a; --b-dot: #e42424; }
+.bslide[data-brand="momstore"] { --b: #8ec3e2; --b-ink: #1a1a1a; --b-frame: #f2c4cf; --b-dot: #e8a4b4; }
+
+.bslides { display: grid; max-width: 1320px; margin: 0 auto; }
+.bslide {
+  grid-area: 1 / 1;
   display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  align-items: center;
-  gap: clamp(24px, 4vw, 64px);
-  max-width: 1320px;
-  margin: 0 auto;
-}
-
-/* --- details for the active brand --- */
-
-.brand-info__count {
-  margin: 0;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  opacity: 0.55;
-}
-.brand-info__name {
-  margin: 14px 0 0;
-  font-family: "Instrument Serif", Georgia, serif;
-  font-size: clamp(40px, 5.2vw, 76px);
-  font-style: italic;
-  font-weight: 400;
-  line-height: 1;
-  letter-spacing: -0.01em;
-}
-.brand-info__what {
-  max-width: 440px;
-  margin: 16px 0 0;
-  font-size: clamp(16px, 1.4vw, 19px);
-  line-height: 1.5;
-  opacity: 0.78;
-}
-.brand-info.is-swapping > * { animation: info-in 700ms var(--ease-out) both; }
-.brand-info.is-swapping > :nth-child(2) { animation-delay: 60ms; }
-.brand-info.is-swapping > :nth-child(3) { animation-delay: 120ms; }
-.brand-info.is-swapping > :nth-child(4) { animation-delay: 180ms; }
-.brand-info.is-swapping > :nth-child(5) { animation-delay: 240ms; }
-@keyframes info-in {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: none; }
-}
-
-/* the four things Popstation can deliver; filled = done for this brand */
-.stages {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 24px 0 0;
-  padding: 0;
-  list-style: none;
-}
-.stages li {
-  padding: 8px 14px;
-  border: 1.5px solid rgba(0, 0, 0, 0.18);
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 600;
-  color: rgba(0, 0, 0, 0.4);
-  transition: background 400ms, color 400ms, border-color 400ms;
-}
-.stages li.is-on {
-  border-color: var(--black);
-  background: var(--black);
-  color: var(--white);
-}
-
-.brand-info__links { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; margin-top: 28px; }
-.brand-info__links .brand-info__link { margin-top: 0; }
-.brand-info__case {
-  padding: 11px 18px;
-  border-radius: 999px;
-  background: #1a1a1a;
-  color: #ffffff;
-  font-size: 15px;
-  font-weight: 700;
-  text-decoration: none;
-  transition: transform 150ms;
-}
-.brand-info__case:hover { transform: translateY(-2px); }
-.brand-info__case[hidden] { display: none; }
-/* badge on cards that open a case study */
-.bcard__case {
-  position: absolute;
-  left: 50%;
-  bottom: -16px;
-  translate: -50% 0;
-  padding: 8px 14px;
-  border-radius: 999px;
-  background: #1a1a1a;
-  color: #ffffff;
-  font-size: 12px;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.brand-info__link {
-  display: inline-flex;
-  gap: 6px;
-  margin-top: 28px;
-  padding-bottom: 3px;
-  border-bottom: 2px solid currentColor;
-  font-size: 15px;
-  font-weight: 700;
-  text-decoration: none;
-}
-
-/* --- the deck ---
-   Modelled on the reference: a tall card that rests face-on, a round photo
-   in the middle, white info panels and chips overlapping its edges. The card
-   only swings in 3D while brands change. */
-
-.deck {
-  position: relative;
-  height: clamp(520px, 52vw, 660px);
-  perspective: 1800px;
-  touch-action: pan-y;
-}
-
-.bcard {
-  --w: min(300px, 58vw);
-  position: absolute;
-  inset: 0;
-  margin: auto;
-  width: var(--w);
-  height: calc(var(--w) * 1.62);
-  transform-style: preserve-3d;
-  /* leaving cards fade out fast, then are hidden completely, so only one
-     brand is ever on screen (opacity alone doesn't reach 3D children in
-     every browser, hence visibility too) */
-  transition:
-    transform 1000ms var(--ease-out),
-    opacity 350ms var(--ease-out),
-    visibility 0s linear 350ms;
-  opacity: 0;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: clamp(12px, 1.4vw, 20px);
+  height: clamp(420px, calc(100vh - 340px), 640px);
+  height: clamp(420px, calc(100svh - 340px), 640px);
   visibility: hidden;
-  pointer-events: none;
+  opacity: 0;
+  transition: opacity 450ms ease, visibility 0s 450ms;
 }
-.bcard.is-prev { transform: translateX(-70%) rotateY(75deg) scale(0.85); }
-.bcard.is-next { transform: translateX(70%) rotateY(-75deg) scale(0.85); }
-.bcard.is-active {
-  opacity: 1;
-  visibility: visible;
-  transition:
-    transform 1000ms var(--ease-out),
-    opacity 600ms var(--ease-out) 150ms,
-    visibility 0s;
-  pointer-events: auto;
-  cursor: pointer;
-  /* face-on at rest; the pointer adds a gentle lean (--rx / --ry from main.js) */
-  transform: rotateY(var(--ry, 0deg)) rotateX(var(--rx, 0deg));
-}
-.bcard.is-tilting { transition: transform 180ms linear, opacity 600ms var(--ease-out), visibility 0s; }
+.bslide.is-active { visibility: visible; opacity: 1; transition: opacity 450ms ease, visibility 0s; }
 
-/* click to flip: the face turns over to show what Popstation delivers */
-.bcard__flip {
-  position: absolute;
-  inset: 0;
-  transform-style: preserve-3d;
+/* left: the brand's picture in a frame of its accent colour */
+.bslide__shot {
+  position: relative;
+  min-height: 0;
+  margin: 0;
+  padding: clamp(10px, 1vw, 14px);
+  border-radius: 36px;
+  background: var(--b-frame);
+  transform: translateX(-28px);
+  transition: transform 700ms var(--ease-out);
+}
+.bslide__shotlink { display: block; height: 100%; border-radius: 26px; }
+.bslide__shotlink:focus-visible { outline: 3px solid var(--text); outline-offset: 3px; }
+.bslide__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 26px;
+  object-fit: cover;
   transition: transform 900ms var(--ease-out);
 }
-.bcard.is-flipped .bcard__flip { transform: rotateY(180deg); }
-.bcard__face,
-.bcard__back {
-  -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
-}
-.bcard__back {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  padding: 28px 24px;
-  border-radius: 30px;
-  background: var(--black);
-  color: var(--white);
-  transform: rotateY(180deg);
-  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.45);
-}
-.bcard__back h4 {
-  margin: 0;
-  font-size: clamp(24px, 2.4vw, 32px);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  color: var(--card-accent, var(--jonquil));
-}
-.bcard__back p {
-  margin: 0;
-  font-size: 14px;
-  line-height: 1.5;
-  opacity: 0.8;
-}
-.bcard__back ul {
-  display: grid;
-  gap: 8px;
-  margin: auto 0 0;
-  padding: 0;
-  list-style: none;
-}
-.bcard__back li {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 14px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.07);
-  font-size: 14px;
-  font-weight: 600;
-  opacity: 0.4;
-}
-.bcard__back li.is-on { opacity: 1; background: rgba(255, 255, 255, 0.14); }
-.bcard__back li.is-on::after { content: "✓"; color: var(--card-accent, var(--jonquil)); }
-.bcard__back a {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--white);
-}
+.bslide__shotlink { overflow: hidden; }
+.bslide__shotlink:hover .bslide__img { transform: scale(1.04); }
+.bslide__img--logo { padding: 16%; background: #ffffff; object-fit: contain; }
 
-.bcard.is-active.is-flipped .chip-float,
-.bcard.is-active.is-flipped .fpanel { opacity: 0; transform: translateZ(60px) scale(0.6); transition-delay: 0ms; }
-
-.bcard__face {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 30px 20px 34px;
-  border-radius: 28px;
-  background: var(--card);
-  color: var(--card-ink);
-  box-shadow: 0 40px 70px -34px rgba(0, 0, 0, 0.4);
-}
-
-.bcard__top,
-.bcard__bottom {
-  font-size: clamp(26px, 2.6vw, 36px);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1;
-}
-
-/* a brand's own logo in place of its typed name */
-.bcard__logo {
-  display: block;
-  width: auto;
-  height: clamp(70px, 7vw, 96px);
-}
-
-/* the round photo in the middle */
-.bcard__disc {
-  display: grid;
-  place-items: center;
-  width: 74%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: var(--img, var(--disc)) center 18% / cover;
-  box-shadow: 0 0 0 8px var(--disc);
-  overflow: hidden;
-}
-.bcard__disc span {
-  font-size: clamp(90px, 9vw, 130px);
-  font-weight: 900;
-  letter-spacing: -0.06em;
-  line-height: 1;
-}
-.bcard__disc[style*="--img"] span { display: none; }
-
-/* --- items floating in front of the card --- */
-
-.chip-float,
-.fpanel {
+/* the brand facts, pinned on the picture as cards */
+.btag {
   position: absolute;
   z-index: 2;
-  opacity: 0;
-  transform: translateZ(60px) scale(0.6);
-  transition:
-    opacity 500ms var(--ease-out),
-    transform 800ms var(--ease-spring);
-}
-.bcard.is-active .chip-float,
-.bcard.is-active .fpanel { opacity: 1; transform: translateZ(60px) scale(1); }
-.bcard.is-active .fp-photo { transition-delay: 250ms; }
-.bcard.is-active .fp-info  { transition-delay: 350ms; }
-.bcard.is-active .cf-2     { transition-delay: 480ms; }
-.bcard.is-active .cf-3     { transition-delay: 580ms; }
-
-/* white panels, like the reference's info cards */
-.fpanel {
-  margin: 0;
-  border-radius: 16px;
-  background: var(--white);
-  color: var(--black);
-  box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.4);
-}
-
-.fp-info {
-  top: 24%;
-  left: -30%;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 14px 10px 10px;
-  width: max-content;
-  max-width: 78%;
+  gap: 12px;
+  padding: 12px 20px 12px 12px;
+  border-radius: 20px;
+  background: #ffffff;
+  color: var(--text);
+  box-shadow: 0 18px 36px -16px rgba(26, 26, 26, 0.45);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(16px) scale(0.9);
+  transition: opacity 500ms var(--ease-out), transform 600ms var(--ease-spring);
 }
-.fp-icon {
+.btag i {
   flex: none;
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  background: var(--card-accent, var(--card));
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
-}
-/* a small photo in place of the colour square */
-.fp-icon--photo {
-  width: 52px;
-  height: 52px;
-  border-radius: 12px;
-  background: var(--img, var(--card-accent, var(--card))) center 30% / cover;
-}
-.bcard__logo--wide { height: auto; width: 74%; margin-top: 8px; }
-.fp-text { display: grid; gap: 2px; }
-.fp-text b { font-size: 13px; font-weight: 700; line-height: 1.2; white-space: nowrap; }
-.fp-text small { font-size: 11px; opacity: 0.6; }
-
-.fp-photo {
-  top: 6%;
-  right: -30%;
-  width: 46%;
-  padding: 7px;
-  cursor: pointer;
-}
-.fp-img {
-  display: block;
-  aspect-ratio: 4 / 5;
-  border-radius: 11px;
-  background: var(--img, var(--disc)) center 20% / cover;
-}
-.fp-photo figcaption {
   display: grid;
-  gap: 1px;
-  padding: 8px 4px 3px;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  background: var(--b-dot);
 }
-.fp-photo figcaption b { font-size: 12px; font-weight: 700; }
-.fp-photo figcaption small { font-size: 10px; opacity: 0.55; }
+.btag i::before { content: "✦"; color: #ffffff; font-size: 18px; font-style: normal; }
+.btag > span { display: grid; gap: 2px; }
+.btag b { font-size: clamp(14px, 1.2vw, 17px); font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; }
+.btag small { font-size: 13px; opacity: 0.62; white-space: nowrap; }
+.btag--1 { left: clamp(20px, 2.4vw, 34px); bottom: clamp(20px, 2.4vw, 34px); }
+.btag--2 { right: clamp(20px, 2.4vw, 34px); top: clamp(20px, 2.4vw, 34px); }
+.btag--2 i { background: var(--b); }
 
-/* idle drift, like the reference's items floating in space */
-.bcard.is-active .fpanel,
-.bcard.is-active .chip-float { animation: drift 5s ease-in-out 1.2s infinite alternate; }
-.bcard.is-active .fp-info { animation-delay: 1.8s; }
-.bcard.is-active .cf-3 { animation-delay: 2.4s; }
-@keyframes drift {
-  from { translate: 0 0; }
-  to   { translate: 0 -8px; }
+/* right: the brand's details in its colours */
+.bslide__info {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: clamp(26px, 3vw, 48px);
+  border-radius: 36px;
+  background: var(--b);
+  color: var(--b-ink);
+  transform: translateX(28px);
+  transition: transform 700ms var(--ease-out);
 }
-
-.chip-float {
-  display: inline-flex;
+.bslide__top { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.bslide__logo {
+  display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
+  flex: none;
+  height: clamp(56px, 6vw, 72px);
+  padding: 8px 18px;
+  border-radius: 18px;
+  background: #ffffff;
+}
+.bslide__logo img { display: block; width: auto; max-width: 150px; height: 100%; object-fit: contain; }
+.bslide[data-brand="bumzee"] .bslide__logo img { height: auto; }
+.bslide__count { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.75; }
+.bslide__name {
+  margin: auto 0 0;
+  padding-top: 18px;
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: clamp(48px, 5.6vw, 96px);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+}
+.bslide__what { max-width: 44ch; margin: 14px 0 0; font-size: clamp(15px, 1.25vw, 18px); font-weight: 500; line-height: 1.5; opacity: 0.92; }
+.bslide__stages { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 0; padding: 0; list-style: none; }
+.bslide__stages li {
+  padding: 7px 14px;
+  border: 1.5px solid currentColor;
   border-radius: 999px;
-  background: var(--white);
-  color: var(--black);
   font-size: 13px;
   font-weight: 700;
-  white-space: nowrap;
-  box-shadow: 0 16px 36px -14px rgba(0, 0, 0, 0.35);
+  opacity: 0.4;
 }
-.chip-float i {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--rojo);
-}
-.cf-3 i { background: var(--steel); }
-
-.cf-2 { top: 58%; right: -22%; }
-.cf-3 { bottom: 20%; left: -18%; }
-
-.deck-hint {
-  margin: clamp(8px, 2vw, 20px) 0 0;
-  text-align: center;
-  font-size: 13px;
-  opacity: 0.55;
-}
-
-.deck-nav {
-  display: flex;
+.bslide__stages li.is-on { border-color: var(--b-ink); background: var(--b-ink); color: var(--b); opacity: 1; }
+.bslide__links { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; margin-top: auto; padding-top: 24px; }
+.bslide__more {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 18px;
-  margin-top: clamp(16px, 3vw, 36px);
+  gap: 10px;
+  padding: 15px 24px;
+  border-radius: 999px;
+  background: var(--b-ink);
+  color: var(--b);
+  font-size: 16px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: transform 200ms, box-shadow 200ms;
 }
+.bslide__more:hover,
+.bslide__more:focus-visible { transform: translateY(-2px); box-shadow: 0 10px 22px -10px rgba(0, 0, 0, 0.5); }
+.bslide__site { color: inherit; font-size: 15px; font-weight: 700; text-underline-offset: 4px; }
+
+/* entrance: panels slide together, then the cards pop on and drift */
+.bslide.is-active .bslide__shot,
+.bslide.is-active .bslide__info { transform: none; }
+.bslide.is-active .btag { opacity: 1; transform: none; }
+.bslide.is-active .btag--1 { transition-delay: 300ms; animation: btag-drift 5s ease-in-out 1.2s infinite alternate; }
+.bslide.is-active .btag--2 { transition-delay: 450ms; animation: btag-drift 5s ease-in-out 2s infinite alternate-reverse; }
+@keyframes btag-drift { to { translate: 0 -8px; } }
+
+.deck-nav { display: flex; align-items: center; gap: 14px; }
 .deck-nav__btn {
-  width: 44px;
-  height: 44px;
-  border: 1.5px solid rgba(0, 0, 0, 0.2);
+  width: 48px;
+  height: 48px;
+  border: 2px solid var(--text);
   border-radius: 50%;
   background: transparent;
-  color: var(--black);
+  color: var(--text);
   font-size: 18px;
-  cursor: pointer;
   transition: background 200ms, color 200ms;
 }
-.deck-nav__btn:hover { background: var(--black); color: var(--white); }
-.deck-nav__dots { display: flex; gap: 10px; }
+.deck-nav__btn:hover { background: var(--text); color: #ffffff; }
+.deck-nav__dots { display: flex; gap: 8px; }
 .deck-nav__dots button {
   width: 10px;
   height: 10px;
   padding: 0;
   border: 0;
   border-radius: 999px;
-  background: rgba(0, 0, 0, 0.2);
-  cursor: pointer;
+  background: rgba(26, 26, 26, 0.22);
   transition: width 400ms var(--ease-out), background 400ms;
 }
-.deck-nav__dots button[aria-selected="true"] { width: 28px; background: var(--black); }
+.deck-nav__dots button[aria-selected="true"] { width: 28px; background: var(--rojo); }
 
 /* ==========================================================================
    ROLE PAGES (roles/*.html) — one page per "Who we are" poster column
@@ -1079,7 +815,6 @@ a.boxed:focus-visible { outline: none; }
   white-space: nowrap;
 }
 
-.brandfolio__head, .brandfolio__body, .deck-hint, .deck-nav { position: relative; z-index: 1; }
 
 /* ==========================================================================
    THANK YOU + CTA — the closing screen
@@ -1257,13 +992,12 @@ a.boxed:focus-visible { outline: none; }
   .tcard__sticker svg { width: 40px; height: 40px; }
   .tcard__more { opacity: 1; transform: none; }
 
-  .brandfolio__body { grid-template-columns: 1fr; }
-  .brand-info { order: 2; }
-  .deck { height: 520px; }
-  .fp-info { left: -8%; top: 52%; }
-  .fp-photo { right: -10%; width: 40%; }
-  .cf-2 { right: -8%; top: 72%; }
-  .cf-3 { left: -8%; }
+  .bslide { grid-template-columns: 1fr; align-content: start; height: auto; }
+  .bslide__shot { height: clamp(280px, 62vw, 460px); }
+  .bslide__name { margin-top: 0; }
+  .btag { padding: 9px 14px 9px 9px; gap: 9px; border-radius: 16px; }
+  .btag i { width: 32px; height: 32px; border-radius: 10px; }
+  .btag small { display: none; }
 
 
   .build__facts { flex-direction: column; gap: 10px; }
@@ -1292,23 +1026,3 @@ a.boxed:focus-visible { outline: none; }
   .tcard { opacity: 1 !important; transform: rotate(var(--rot)) !important; }
 }
 
-/* desktop: the whole section fits one screen; the card is sized from the
-   screen height so nothing is cut off */
-@media (min-width: 761px) {
-  .brandfolio {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    height: 100svh;
-    min-height: 620px;
-    padding: 96px var(--gutter) 20px;
-  }
-  .brandfolio__head { margin-bottom: 8px; width: 100%; }
-  .brandfolio__title { font-size: clamp(36px, min(5vw, 8vh), 80px); }
-  .brandfolio__body { flex: 1; min-height: 0; width: 100%; grid-template-rows: minmax(0, 1fr); align-items: stretch; }
-  .brand-info { align-self: center; }
-  .deck { height: auto; min-height: 0; }
-  .bcard { --w: min(300px, 58vw, 33vh); }
-  .deck-hint { margin-top: 4px; }
-  .deck-nav { margin-top: 8px; }
-}

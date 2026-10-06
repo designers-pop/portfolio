@@ -230,90 +230,40 @@
     afterIntro(playHome);
   }
 
-  /* ---------------- Brandfolio deck ---------------- */
+  /* ---------------- Brandfolio ----------------
+     One brand per slide. Arrows, dots, arrow keys or a swipe change
+     brand; it moves on by itself while on screen and not hovered. */
 
   const brandfolio = document.getElementById("brandfolio");
   if (brandfolio) {
-    const cards = [...brandfolio.querySelectorAll(".bcard")];
+    const slides = [...brandfolio.querySelectorAll(".bslide")];
     const dotsEl = document.getElementById("deckDots");
-    const info = brandfolio.querySelector(".brand-info");
-    const pad = (n) => String(n).padStart(2, "0");
-    document.getElementById("brandTotal").textContent = pad(cards.length);
+    let current = 0;
 
-    // back of each card: what Popstation delivers for the brand
-    const STAGES = [["design", "Design"], ["sourcing", "Sourcing"], ["production", "Production"], ["packaging", "Packaging"]];
-    cards.forEach((card) => {
-      const on = card.dataset.stages.split(" ");
-      const back = card.querySelector(".bcard__back");
-      const h = document.createElement("h4");
-      h.textContent = card.dataset.name;
-      const p = document.createElement("p");
-      p.textContent = card.dataset.what;
-      const ul = document.createElement("ul");
-      STAGES.forEach(([key, label]) => {
-        const li = document.createElement("li");
-        li.textContent = label;
-        li.classList.toggle("is-on", on.includes(key));
-        ul.appendChild(li);
-      });
-      const a = document.createElement("a");
-      a.href = card.dataset.url;
-      a.target = "_blank";
-      a.rel = "noopener";
-      a.textContent = "Visit site ↗";
-      a.addEventListener("click", (e) => e.stopPropagation());
-      back.append(h, p, ul, a);
+    const dots = slides.map((slide, i) => {
+      const dot = document.createElement("button");
+      dot.type = "button";
+      dot.setAttribute("role", "tab");
+      dot.setAttribute("aria-label", slide.querySelector(".bslide__name").textContent);
+      dot.addEventListener("click", () => { show(i); restart(); });
+      dotsEl.appendChild(dot);
+      return dot;
     });
 
-    const dots = cards.map((card, i) => {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.setAttribute("role", "tab");
-      b.setAttribute("aria-label", card.dataset.name);
-      b.addEventListener("click", () => { show(i); restart(); });
-      dotsEl.appendChild(b);
-      return b;
-    });
+    // all slides share one grid cell; the inactive ones are hidden and inert
+    slides.forEach((slide) => slide.removeAttribute("hidden"));
 
-    let current = -1;
-    const show = (i) => {
-      const n = cards.length;
-      i = (i + n) % n;
-      if (i === current) return;
-      current = i;
-      cards.forEach((card, k) => {
-        card.classList.remove("is-flipped");
-        card.classList.toggle("is-active", k === i);
-        card.classList.toggle("is-prev", k === (i - 1 + n) % n);
-        card.classList.toggle("is-next", k !== i && k !== (i - 1 + n) % n);
-        card.setAttribute("aria-hidden", k !== i);
+    function show(i) {
+      current = (i + slides.length) % slides.length;
+      slides.forEach((slide, j) => {
+        const on = j === current;
+        slide.classList.toggle("is-active", on);
+        slide.inert = !on;
+        slide.setAttribute("aria-hidden", String(!on));
+        dots[j].setAttribute("aria-selected", String(on));
       });
-      dots.forEach((d, k) => d.setAttribute("aria-selected", k === i));
-
-      const card = cards[i];
-      brandfolio.dataset.active = card.dataset.brand;
-      document.getElementById("brandIndex").textContent = pad(i + 1);
-      document.getElementById("brandName").textContent = card.dataset.name;
-      document.getElementById("brandWhat").textContent = card.dataset.what;
-      const caseLink = document.getElementById("brandCase");
-      caseLink.hidden = !card.dataset.case;
-      if (card.dataset.case) {
-        caseLink.href = card.dataset.case;
-        caseLink.setAttribute("aria-label", `See our work for ${card.dataset.name}`);
-      }
-      const link = document.getElementById("brandLink");
-      link.href = card.dataset.url;
-      link.setAttribute("aria-label", `Visit ${card.dataset.name}`);
-      const on = card.dataset.stages.split(" ");
-      brandfolio.querySelectorAll("#brandStages li").forEach((li) => {
-        li.classList.toggle("is-on", on.includes(li.dataset.stage));
-      });
-
-      // replay the text entrance
-      info.classList.remove("is-swapping");
-      void info.offsetWidth;
-      info.classList.add("is-swapping");
-    };
+      brandfolio.dataset.active = slides[current].dataset.brand;
+    }
 
     document.getElementById("deckPrev").addEventListener("click", () => { show(current - 1); restart(); });
     document.getElementById("deckNext").addEventListener("click", () => { show(current + 1); restart(); });
@@ -322,68 +272,16 @@
       if (e.key === "ArrowRight") { show(current + 1); restart(); }
     });
 
-    // swipe or drag to change brand; a plain click flips the card
-    const deck = document.getElementById("deck");
+    // swipe on touch screens
+    const track = document.getElementById("bslides");
     let startX = null;
-    let swiped = false;
-    deck.addEventListener("pointerdown", (e) => { startX = e.clientX; swiped = false; });
-    deck.addEventListener("pointerup", (e) => {
+    track.addEventListener("touchstart", (e) => { startX = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener("touchend", (e) => {
       if (startX === null) return;
-      const dx = e.clientX - startX;
+      const dx = e.changedTouches[0].clientX - startX;
       startX = null;
-      if (Math.abs(dx) > 40) { swiped = true; show(current + (dx < 0 ? 1 : -1)); restart(); }
+      if (Math.abs(dx) > 50) { show(current + (dx < 0 ? 1 : -1)); restart(); }
     });
-    cards.forEach((card) => {
-      card.addEventListener("click", () => {
-        if (swiped || !card.classList.contains("is-active")) return;
-        // brands with a case study open it; the rest flip to show the back
-        if (card.dataset.case) { window.location.href = card.dataset.case; return; }
-        card.classList.toggle("is-flipped");
-        stop(); // hold on this brand while someone reads the back
-      });
-    });
-
-    // clicking the floating photo panel swaps it (and its caption) with the circle
-    brandfolio.querySelectorAll(".fp-photo").forEach((panel) => {
-      panel.addEventListener("click", (e) => {
-        e.stopPropagation();
-        const disc = panel.closest(".bcard").querySelector(".bcard__disc");
-        const img = panel.querySelector(".fp-img");
-        const cap = panel.querySelector("figcaption b");
-        const a = disc.style.getPropertyValue("--img");
-        const b = img.style.getPropertyValue("--img");
-        if (!a || !b) return; // only once both photos exist
-        disc.style.setProperty("--img", b);
-        img.style.setProperty("--img", a);
-        const discCap = disc.dataset.cap;
-        disc.dataset.cap = cap.textContent;
-        cap.textContent = discCap;
-        const discLabel = disc.getAttribute("aria-label");
-        disc.setAttribute("aria-label", img.getAttribute("aria-label"));
-        img.setAttribute("aria-label", discLabel);
-      });
-    });
-
-    // the active card leans toward the pointer
-    if (!reduceMotion) {
-      deck.addEventListener("pointermove", (e) => {
-        if (e.pointerType !== "mouse") return;
-        const card = cards[current];
-        const r = deck.getBoundingClientRect();
-        const x = (e.clientX - r.left) / r.width - 0.5;
-        const y = (e.clientY - r.top) / r.height - 0.5;
-        card.classList.add("is-tilting");
-        card.style.setProperty("--ry", `${(x * 12).toFixed(2)}deg`);
-        card.style.setProperty("--rx", `${(-y * 8).toFixed(2)}deg`);
-      });
-      deck.addEventListener("pointerleave", () => {
-        cards.forEach((card) => {
-          card.classList.remove("is-tilting");
-          card.style.removeProperty("--ry");
-          card.style.removeProperty("--rx");
-        });
-      });
-    }
 
     // autoplay only while the section is on screen and not hovered
     let timer = null;
@@ -392,10 +290,12 @@
     const stop = () => { clearInterval(timer); timer = null; };
     const restart = () => {
       stop();
-      if (inView && !hovered && !reduceMotion) timer = setInterval(() => show(current + 1), 4500);
+      if (inView && !hovered && !reduceMotion) timer = setInterval(() => show(current + 1), 6000);
     };
     brandfolio.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") { hovered = true; stop(); } });
     brandfolio.addEventListener("pointerleave", () => { hovered = false; restart(); });
+    brandfolio.addEventListener("focusin", () => { hovered = true; stop(); });
+    brandfolio.addEventListener("focusout", () => { hovered = false; restart(); });
     if ("IntersectionObserver" in window) {
       new IntersectionObserver(([entry]) => {
         inView = entry.isIntersecting;
