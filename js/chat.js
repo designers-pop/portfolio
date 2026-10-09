@@ -38,7 +38,7 @@
       answer: () => "We make kidswear, infantwear, menswear, womenswear, maternity, streetwear, loungewear and activewear.",
       chips: ["Brands you've built", "Start a project"] },
     { id: "brands", words: ["brands", "brand", "clients", "client", "portfolio", "work", "bumzee", "majestey", "majesty", "mom store", "momstore", "yunk", "modes", "example", "case study"],
-      answer: () => `A few we build with: ${link("brands/bumzee.html", "Bumzee")} (kidswear, end to end), ${link("brands/majestey.html", "Majestey London")} (identity, design and packaging), ${link("brands/momstore.html", "The Mom Store")} (kids and maternity) and ${link("brands/yunkmodes.html", "Yunk &amp; Modes")} (family lifestyle wear). Or browse them all in ${link("index.html#brandfolio", "Brandfolio")}.`,
+      answer: () => `A few we build with: ${link("brands/bumzee.html", "Bumzee")} (kidswear, end to end), ${link("brands/majestey.html", "Majestey London")} (identity, design and packaging), ${link("brands/momstore.html", "The Mom Store")} (kids and maternity) and ${link("brands/yunkmodes.html", "Yunk &amp; Modes")} (men's and kids' wear). Or browse them all in ${link("index.html#brandfolio", "Brandfolio")}.`,
       chips: ["See an example", "By the numbers", "Start a project"] },
     { id: "numbers", words: ["numbers", "experience", "years", "how many", "how long have", "scale", "big"],
       answer: () => "35+ years in manufacturing, 7+ years incubating brands, 40+ brands launched, 300+ vendors, and ₹2,000+ Cr in ARR impacted.",
