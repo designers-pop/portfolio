@@ -327,6 +327,20 @@
 .case--momstore .t-title { background: linear-gradient(160deg, #a9d3ec 0%, #8ec3e2 60%, #e8a4b4 140%); }
 .case--momstore .t-star img { width: auto; max-width: 70%; max-height: 82%; border-radius: 16px; }
 .case--momstore .sketch img { padding: 10px; }
+/* Yunk & Modes: ink and sand, with soft family pastels */
+.case--yunkmodes {
+  --bg: #1c1a18;
+  --tile: #f7f3ee;
+  --accent: #e3d2bf;
+  --accent-ink: #1a1a1a;
+  --cta: #e9bfc6;
+  --cta-ink: #1a1a1a;
+}
+.case--yunkmodes .t-title { background: linear-gradient(160deg, #efe4d6 0%, #e3d2bf 55%, #e9bfc6 140%); }
+.case--yunkmodes .t-star img { width: 92%; max-height: 82%; object-fit: contain; }
+.case--yunkmodes .t-logo__word { max-width: 52%; }
+.case--yunkmodes .look { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.case--yunkmodes .cta__pop { border-radius: 18px; }
 .t-pattern { padding: 0; }
 .t-pattern img { width: 100%; height: 100%; object-fit: cover; }
 .t-quote { grid-column: span 6; display: flex; flex-direction: column; justify-content: center; padding: clamp(22px, 3vw, 40px); }
